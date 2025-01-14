@@ -38,10 +38,10 @@ public class SingleSourceFileCompiler implements Compiler {
     public CompilationResult compile(Map<String, File> sourceFiles) throws CompilationException {
         String sourceKey = sourceFiles.keySet().iterator().next();
         File sourceFile = sourceFiles.get(sourceKey);
-        
+
         List<String> command = language.getCompilationCommand(sourceFile.getName());
         String executableFilename = language.getExecutableFilename(sourceFile.getName());
-        
+
         if (command.isEmpty()) {
             try {
                 FileUtils.copyFileToDirectory(sourceFile, compilationDir);

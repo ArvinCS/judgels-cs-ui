@@ -34,10 +34,10 @@ public class JffGradingLanguage implements GradingLanguage {
     public List<String> getExecutionCommand(String sourceFilename) {
         String executableFilename = getExecutableFilename(sourceFilename);
         return ImmutableList.of(
-            "/usr/bin/java", 
+            "/usr/bin/java",
             "-Djava.awt.headless=true",
-            "-jar", 
-            "/usr/bin/jflap-core.jar", 
+            "-jar",
+            "/usr/bin/jflap-core.jar",
             "runonce",
             executableFilename);
     }
