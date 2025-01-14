@@ -7,7 +7,7 @@
 
     - name: Pull judgels server image
       docker_image:
-        name: ghcr.io/ArvinCS/judgels-cs-ui/server
+        name: ghcr.io/arvincs/judgels-cs-ui/server
         tag: "{{ app_version | default('latest', true) }}"
         source: pull
         force_source: "{{ app_version | default('latest', true) == 'latest' }}"
@@ -15,7 +15,7 @@
     - name: Run a judgels server container to do db migration
       docker_container:
         name: judgels-server-migrate
-        image: "ghcr.io/ArvinCS/judgels-cs-ui/server:{{ app_version | default('latest', true) }}"
+        image: "ghcr.io/arvincs/judgels-cs-ui/server:{{ app_version | default('latest', true) }}"
         restart: yes
         network_mode: host
         volumes:
