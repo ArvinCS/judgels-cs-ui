@@ -8,21 +8,21 @@
     
     - name: Tag latest judgels client image with the release version
       docker_image:
-        name: ghcr.io/ia-toki/judgels/client
-        repository: ghcr.io/ia-toki/judgels/client:{{ app_version }}
+        name: ghcr.io/ArvinCS/judgels-cs-ui/client
+        repository: ghcr.io/ArvinCS/judgels-cs-ui/client:{{ app_version }}
         source: pull
         push: yes
 
     - name: Tag latest judgels server image with the release version
       docker_image:
-        name: ghcr.io/ia-toki/judgels/server
-        repository: ghcr.io/ia-toki/judgels/server:{{ app_version }}
+        name: ghcr.io/ArvinCS/judgels-cs-ui/server
+        repository: ghcr.io/ArvinCS/judgels-cs-ui/server:{{ app_version }}
         source: pull
         push: yes
 
     - name: Tag latest judgels grader image with the release version
       docker_image:
-        name: ghcr.io/ia-toki/judgels/grader
-        repository: ghcr.io/ia-toki/judgels/grader:{{ app_version }}
+        name: ghcr.io/ArvinCS/judgels-cs-ui/grader
+        repository: ghcr.io/ArvinCS/judgels-cs-ui/grader:{{ app_version }}
         source: pull
         push: yes
