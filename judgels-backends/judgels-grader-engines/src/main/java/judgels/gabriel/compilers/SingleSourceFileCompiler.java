@@ -42,6 +42,17 @@ public class SingleSourceFileCompiler implements Compiler {
         List<String> command = language.getCompilationCommand(sourceFile.getName());
         String executableFilename = language.getExecutableFilename(sourceFile.getName());
 
+        if (command.isEmpty()) {
+            try {
+                FileUtils.copyFileToDirectory(sourceFile, compilationDir);
+                return new CompilationResult.Builder()
+                    .isSuccessful(true)
+                    .build();
+            } catch (IOException e) {
+                throw new CompilationException(e);
+            }
+        }
+
         sandbox.addFile(sourceFile);
         SandboxExecutionResult result = sandbox.execute(command);
 

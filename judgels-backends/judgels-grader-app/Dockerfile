@@ -37,6 +37,7 @@ RUN apt-get update \
        openjdk-11-jre \
        pypy3 \
        python3 \
+    && curl -L -o /usr/bin/jflap-core.jar https://github.com/ArvinCS/jflap-cli/releases/download/1.0/jflap-core.jar \
     && ln -s /usr/bin/gcc-11 /usr/bin/gcc \
     && ln -s /usr/bin/g++-11 /usr/bin/g++ \
     && curl -sSf https://sh.rustup.rs/ | bash -s -- -y -q --default-toolchain=1.57.0 \
