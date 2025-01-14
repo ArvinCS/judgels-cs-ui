@@ -9,7 +9,7 @@
 
     - name: Pull judgels client image
       docker_image:
-        name: ghcr.io/ArvinCS/judgels-cs-ui/client
+        name: ghcr.io/arvincs/judgels-cs-ui/client
         tag: "{{ app_version | default('latest', true) }}"
         source: pull
         force_source: "{{ app_version | default('latest', true) == 'latest' }}"
@@ -18,7 +18,7 @@
     - name: Run a judgels client container
       docker_container:
         name: judgels-client
-        image: "ghcr.io/ArvinCS/judgels-cs-ui/client:{{ app_version | default('latest', true) }}"
+        image: "ghcr.io/arvincs/judgels-cs-ui/client:{{ app_version | default('latest', true) }}"
         restart: "{{ judgels_client_config.changed }}"
         restart_policy: on-failure
         restart_retries: 3

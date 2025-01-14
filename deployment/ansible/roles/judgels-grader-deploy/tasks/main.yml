@@ -9,7 +9,7 @@
 
     - name: Pull judgels grader image
       docker_image:
-        name: ghcr.io/ArvinCS/judgels-cs-ui/grader
+        name: ghcr.io/arvincs/judgels-cs-ui/grader
         tag: "{{ app_version | default('latest', true) }}"
         source: pull
         force_source: "{{ app_version | default('latest', true) == 'latest' }}"
@@ -18,7 +18,7 @@
     - name: Run a judgels grader container
       docker_container:
         name: judgels-grader
-        image: "ghcr.io/ArvinCS/judgels-cs-ui/grader:{{ app_version | default('latest', true) }}"
+        image: "ghcr.io/arvincs/judgels-cs-ui/grader:{{ app_version | default('latest', true) }}"
         privileged: yes
         restart: "{{ judgels_grader_config.changed }}"
         restart_policy: on-failure
