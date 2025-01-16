@@ -1,12 +1,9 @@
 package judgels.jophiel.user.account;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import java.util.Optional;
-
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-
 import judgels.jophiel.api.user.User;
 import judgels.jophiel.api.user.UserData;
 import judgels.jophiel.api.user.account.GoogleUserRegistrationData;

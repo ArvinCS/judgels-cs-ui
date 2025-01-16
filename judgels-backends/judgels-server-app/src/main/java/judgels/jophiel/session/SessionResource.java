@@ -4,9 +4,9 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static judgels.service.ServiceUtils.checkFound;
 
+import io.dropwizard.hibernate.UnitOfWork;
 import java.io.StringReader;
 import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.ForbiddenException;
@@ -16,12 +16,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-
-import io.dropwizard.hibernate.UnitOfWork;
 import judgels.jophiel.api.session.Credentials;
 import judgels.jophiel.api.session.GoogleCredentials;
 import judgels.jophiel.api.session.Session;
@@ -36,6 +30,9 @@ import judgels.jophiel.user.account.UserRegisterer;
 import judgels.jophiel.user.account.UserRegistrationEmailStore;
 import judgels.service.actor.ActorChecker;
 import judgels.service.api.actor.AuthHeader;
+import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 @Path("/api/v2/session")
 public class SessionResource {
