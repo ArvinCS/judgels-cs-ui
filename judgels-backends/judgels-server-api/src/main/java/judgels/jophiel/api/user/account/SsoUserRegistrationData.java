@@ -5,7 +5,7 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 @JsonDeserialize(as = ImmutableSSOUserRegistrationData.class)
-public interface SSOUserRegistrationData {
+public interface SsoUserRegistrationData {
     String getUsername();
     String getEmail();
 

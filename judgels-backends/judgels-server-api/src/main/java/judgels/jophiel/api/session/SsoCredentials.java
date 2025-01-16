@@ -5,11 +5,11 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 @JsonDeserialize(as = ImmutableSSOCredentials.class)
-public interface SSOCredentials {
+public interface SsoCredentials {
     String getTicket();
     String getServiceUrl();
 
-    static SSOCredentials of(String ticket, String serviceUrl) {
+    static SsoCredentials of(String ticket, String serviceUrl) {
         return ImmutableSSOCredentials.builder()
                 .ticket(ticket)
                 .serviceUrl(serviceUrl)

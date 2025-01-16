@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 
 import * as ssoAuthActions from '../../modules/ssoAuthActions';
 
-import './SSOAuth.scss';
+import './SsoAuth.scss';
 
-class SSOAuth extends Component {
+class SsoAuth extends Component {
   state = {
     isAuthorizing: false,
   };
@@ -52,4 +52,4 @@ const mapDispatchToProps = {
   onRegister: ssoAuthActions.register,
 };
 
-export default connect(undefined, mapDispatchToProps)(SSOAuth);
+export default connect(undefined, mapDispatchToProps)(SsoAuth);

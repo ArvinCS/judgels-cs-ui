@@ -24,11 +24,11 @@ import org.xml.sax.InputSource;
 
 import judgels.jophiel.api.session.Credentials;
 import judgels.jophiel.api.session.GoogleCredentials;
-import judgels.jophiel.api.session.SSOCredentials;
+import judgels.jophiel.api.session.SsoCredentials;
 import judgels.jophiel.api.session.Session;
 import judgels.jophiel.api.session.SessionErrors;
 import judgels.jophiel.api.user.User;
-import judgels.jophiel.api.user.account.SSOUserRegistrationData;
+import judgels.jophiel.api.user.account.SsoUserRegistrationData;
 import judgels.jophiel.auth.google.GoogleAuth;
 import judgels.jophiel.user.UserRoleChecker;
 import judgels.jophiel.user.UserStore;
@@ -94,7 +94,7 @@ public class SessionResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @UnitOfWork
-    public Session logInWithSSO(SSOCredentials credentials) {
+    public Session logInWithSSO(SsoCredentials credentials) {
         try {
             String serviceUrl = credentials.getServiceUrl();
             String validationUrl = "https://sso.ui.ac.id/cas2/serviceValidate?service=" + serviceUrl + "&ticket=" + credentials.getTicket();
@@ -105,15 +105,15 @@ public class SessionResource {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(response)));
-            
+
             if (doc.getElementsByTagName("cas:authenticationSuccess").getLength() > 0) {
                 String username = doc.getElementsByTagName("cas:user").item(0).getTextContent();
                 String email = username + "@ui.ac.id";
                 // String ldapCn = doc.getElementsByTagName("cas:ldap_cn").item(0).getTextContent();
                 // String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
-                
+
                 if (!userStore.getUserByEmail(email).isPresent()) {
-                    checkFound(userRegisterer).registerSSOUser(new SSOUserRegistrationData.Builder()
+                    checkFound(userRegisterer).registerSSOUser(new SsoUserRegistrationData.Builder()
                         .username(username)
                         .email(email)
                         .build());
