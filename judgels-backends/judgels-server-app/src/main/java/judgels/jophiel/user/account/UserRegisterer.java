@@ -1,10 +1,11 @@
 package judgels.jophiel.user.account;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-
 import java.util.Optional;
+
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 
 import judgels.jophiel.api.user.User;
 import judgels.jophiel.api.user.UserData;
@@ -88,7 +89,7 @@ public class UserRegisterer {
         return user;
     }
 
-    public User registerSSOUser(SsoUserRegistrationData data) {
+    public User registerSsoUser(SsoUserRegistrationData data) {
         User user = userStore.createUser(new UserData.Builder()
                 .username(data.getUsername())
                 .email(data.getEmail())

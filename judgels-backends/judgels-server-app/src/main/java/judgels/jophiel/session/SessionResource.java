@@ -4,10 +4,9 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static judgels.service.ServiceUtils.checkFound;
 
-import io.dropwizard.hibernate.UnitOfWork;
-
 import java.io.StringReader;
 import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.ForbiddenException;
@@ -22,11 +21,12 @@ import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import io.dropwizard.hibernate.UnitOfWork;
 import judgels.jophiel.api.session.Credentials;
 import judgels.jophiel.api.session.GoogleCredentials;
-import judgels.jophiel.api.session.SsoCredentials;
 import judgels.jophiel.api.session.Session;
 import judgels.jophiel.api.session.SessionErrors;
+import judgels.jophiel.api.session.SsoCredentials;
 import judgels.jophiel.api.user.User;
 import judgels.jophiel.api.user.account.SsoUserRegistrationData;
 import judgels.jophiel.auth.google.GoogleAuth;
@@ -94,7 +94,7 @@ public class SessionResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @UnitOfWork
-    public Session logInWithSSO(SsoCredentials credentials) {
+    public Session logInWithSso(SsoCredentials credentials) {
         try {
             String serviceUrl = credentials.getServiceUrl();
             String validationUrl = "https://sso.ui.ac.id/cas2/serviceValidate?service=" + serviceUrl + "&ticket=" + credentials.getTicket();
@@ -113,10 +113,10 @@ public class SessionResource {
                 // String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
 
                 if (!userStore.getUserByEmail(email).isPresent()) {
-                    checkFound(userRegisterer).registerSSOUser(new SsoUserRegistrationData.Builder()
-                        .username(username)
-                        .email(email)
-                        .build());
+                    checkFound(userRegisterer).registerSsoUser(new SsoUserRegistrationData.Builder()
+                            .username(username)
+                            .email(email)
+                            .build());
                 }
 
                 User user = userStore.getUserByEmail(email).orElseThrow(ForbiddenException::new);
@@ -126,7 +126,6 @@ public class SessionResource {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw SessionErrors.ticketInvalid();
         }
     }
