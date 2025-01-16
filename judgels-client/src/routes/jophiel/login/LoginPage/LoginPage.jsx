@@ -9,6 +9,7 @@ import LoginForm from '../LoginForm/LoginForm';
 import * as loginActions from '../modules/loginActions';
 
 import './LoginPage.scss';
+import SSOAuth from '../../components/SSOAuth/SSOAuth';
 
 class LoginPage extends Component {
   state = {
@@ -19,7 +20,8 @@ class LoginPage extends Component {
     return (
       <SingleColumnLayout>
         <Card title="Log in" className="card-login">
-          <GoogleAuth onToggleInternalAuth={this.toggleInternalAuth} />
+          {/* <GoogleAuth onToggleInternalAuth={this.toggleInternalAuth} /> */}
+          <SSOAuth onToggleInternalAuth={this.toggleInternalAuth} />
           {this.state.isInternalAuthEnabled && <LoginForm onSubmit={this.props.onLogIn} />}
         </Card>
       </SingleColumnLayout>
