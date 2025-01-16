@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 
 import { Card } from '../../../../components/Card/Card';
 import { SingleColumnLayout } from '../../../../components/SingleColumnLayout/SingleColumnLayout';
-import GoogleAuth from '../../components/GoogleAuth/GoogleAuth';
+import SsoAuth from '../../components/SsoAuth/SsoAuth';
 import LoginForm from '../LoginForm/LoginForm';
 
 import * as loginActions from '../modules/loginActions';
 
 import './LoginPage.scss';
-import SsoAuth from '../../components/SsoAuth/SsoAuth';
 
 class LoginPage extends Component {
   state = {

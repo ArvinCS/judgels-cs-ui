@@ -1,4 +1,3 @@
-import { Button } from '@blueprintjs/core';
 import { Component, useEffect } from 'react';
 import { connect } from 'react-redux';
 
@@ -14,11 +13,11 @@ class SsoAuth extends Component {
   render() {
     useEffect(async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const service = urlParams.get("service");
-      const ticket = urlParams.get("ticket");
+      const service = urlParams.get('service');
+      const ticket = urlParams.get('ticket');
 
       const { protocol, hostname, port, pathname } = window.location;
-      const baseUrl = `${protocol}//${hostname}${port ? `:${port}` : ""}${pathname}`;
+      const baseUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}`;
 
       if (ticket) {
         await this.props.onLogIn({
@@ -29,12 +28,8 @@ class SsoAuth extends Component {
     }, []);
 
     return (
-      <button
-        className='sso-auth'
-        onClick={this.logIn}
-        disabled={this.state.isAuthorizing}
-      >
-        <img src="/logos/makara_ui.png" alt="Makara UI" className='makara' />
+      <button className="sso-auth" onClick={this.logIn} disabled={this.state.isAuthorizing}>
+        <img src="/logos/makara_ui.png" alt="Makara UI" className="makara" />
         {this.state.isAuthorizing ? 'Authorizing...' : 'Log in with SSO UI'}
       </button>
     );
