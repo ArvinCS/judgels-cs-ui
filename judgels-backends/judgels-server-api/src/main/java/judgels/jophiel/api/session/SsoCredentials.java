@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@JsonDeserialize(as = ImmutableSSOCredentials.class)
+@JsonDeserialize(as = ImmutableSsoCredentials.class)
 public interface SsoCredentials {
     String getTicket();
     String getServiceUrl();
 
     static SsoCredentials of(String ticket, String serviceUrl) {
-        return ImmutableSSOCredentials.builder()
+        return ImmutableSsoCredentials.builder()
                 .ticket(ticket)
                 .serviceUrl(serviceUrl)
                 .build();

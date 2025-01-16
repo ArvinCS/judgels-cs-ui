@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.immutables.value.Value;
 
 @Value.Immutable
-@JsonDeserialize(as = ImmutableSSOUserRegistrationData.class)
+@JsonDeserialize(as = ImmutableSsoUserRegistrationData.class)
 public interface SsoUserRegistrationData {
     String getUsername();
     String getEmail();
 
-    class Builder extends ImmutableSSOUserRegistrationData.Builder {}
+    class Builder extends ImmutableSsoUserRegistrationData.Builder {}
 }
