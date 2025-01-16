@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Card } from '../../../../components/Card/Card';
 import { SingleColumnLayout } from '../../../../components/SingleColumnLayout/SingleColumnLayout';
-import GoogleAuth from '../../components/GoogleAuth/GoogleAuth';
+import SsoAuth from '../../components/SsoAuth/SsoAuth';
 import LoginForm from '../LoginForm/LoginForm';
 
 import * as loginActions from '../modules/loginActions';
@@ -19,7 +19,8 @@ class LoginPage extends Component {
     return (
       <SingleColumnLayout>
         <Card title="Log in" className="card-login">
-          <GoogleAuth onToggleInternalAuth={this.toggleInternalAuth} />
+          {/* <GoogleAuth onToggleInternalAuth={this.toggleInternalAuth} /> */}
+          <SsoAuth onToggleInternalAuth={this.toggleInternalAuth} />
           {this.state.isInternalAuthEnabled && <LoginForm onSubmit={this.props.onLogIn} />}
         </Card>
       </SingleColumnLayout>

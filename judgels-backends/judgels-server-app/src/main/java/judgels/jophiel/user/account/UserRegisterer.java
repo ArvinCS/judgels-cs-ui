@@ -7,6 +7,7 @@ import javax.ws.rs.NotFoundException;
 import judgels.jophiel.api.user.User;
 import judgels.jophiel.api.user.UserData;
 import judgels.jophiel.api.user.account.GoogleUserRegistrationData;
+import judgels.jophiel.api.user.account.SsoUserRegistrationData;
 import judgels.jophiel.api.user.account.UserRegistrationData;
 import judgels.jophiel.api.user.info.UserInfo;
 import judgels.jophiel.auth.google.GoogleAuth;
@@ -82,6 +83,17 @@ public class UserRegisterer {
                     .build());
         }
 
+        return user;
+    }
+
+    public User registerSsoUser(SsoUserRegistrationData data) {
+        User user = userStore.createUser(new UserData.Builder()
+                .username(data.getUsername())
+                .email(data.getEmail())
+                .build());
+        userInfoStore.upsertInfo(user.getJid(), new UserInfo.Builder()
+                .institutionName("Universitas Indonesia")
+                .build());
         return user;
     }
 

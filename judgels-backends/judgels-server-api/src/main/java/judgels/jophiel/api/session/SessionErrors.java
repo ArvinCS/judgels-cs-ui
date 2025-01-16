@@ -11,6 +11,7 @@ public class SessionErrors {
     public static final String USER_NOT_ACTIVATED = "Jophiel:UserNotActivated";
     public static final String USER_MAX_CONCURRENT_SESSIONS_EXCEEDED = "Jophiel:UserMaxConcurrentSessionsExceeded";
     public static final String LOGOUT_DISABLED = "Jophiel:LogoutDisabled";
+    public static final String TICKET_INVALID = "Jophiel:TicketInvalid";
 
     public static JudgelsServiceException userNotActivated(String email) {
         Map<String, Object> args = new HashMap<>();
@@ -24,5 +25,9 @@ public class SessionErrors {
 
     public static JudgelsServiceException logoutDisabled() {
         return new JudgelsServiceException(Status.FORBIDDEN, LOGOUT_DISABLED);
+    }
+
+    public static JudgelsServiceException ticketInvalid() {
+        return new JudgelsServiceException(Status.FORBIDDEN, TICKET_INVALID);
     }
 }
