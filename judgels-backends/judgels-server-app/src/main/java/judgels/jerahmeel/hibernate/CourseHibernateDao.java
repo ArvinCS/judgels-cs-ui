@@ -1,5 +1,6 @@
 package judgels.jerahmeel.hibernate;
 
+import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import judgels.jerahmeel.persistence.CourseDao;
@@ -17,5 +18,10 @@ public class CourseHibernateDao extends JudgelsHibernateDao<CourseModel> impleme
     @Override
     public Optional<CourseModel> selectBySlug(String courseSlug) {
         return select().where(columnEq(CourseModel_.slug, courseSlug)).unique();
+    }
+
+    @Override
+    public List<CourseModel> selectByGroup(String group) {
+        return select().where((cb, cq, root) -> cb.isMember(group, root.get(CourseModel_.groups))).all();
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="2025-02-04-01-create-user-group" author="your_name">
+        <createTable tableName="jophiel_user_group">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="userJid" type="VARCHAR(32)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="createdAt" type="datetime(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdBy" type="VARCHAR(32)"/>
+            <column name="createdIp" type="VARCHAR(100)"/>
+            <column name="updatedAt" type="datetime(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedBy" type="VARCHAR(32)"/>
+            <column name="updatedIp" type="VARCHAR(100)"/>
+        </createTable>
+
+        <createTable tableName="jophiel_user_group_group">
+            <column name="userGroupId" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="groupItem" type="VARCHAR(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="userGroupId"
+                                 baseTableName="jophiel_user_group_group"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jophiel_user_group"
+                                 constraintName="fk_user_group"/>
+
+        <createIndex catalogName="judgels" indexName="groupItem" schemaName="judgels" tableName="jophiel_user_group_group">
+            <column name="groupItem"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

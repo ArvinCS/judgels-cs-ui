@@ -17,6 +17,7 @@ import judgels.jerahmeel.persistence.ProblemSetProblemModel;
 import judgels.jerahmeel.persistence.StatsUserModel;
 import judgels.jerahmeel.persistence.StatsUserProblemModel;
 import judgels.jophiel.persistence.SessionModel;
+import judgels.jophiel.persistence.UserGroupModel;
 import judgels.jophiel.persistence.UserInfoModel;
 import judgels.jophiel.persistence.UserModel;
 import judgels.jophiel.persistence.UserRatingEventModel;
@@ -53,6 +54,7 @@ public class JudgelsServerHibernateBundle extends HibernateBundle<JudgelsServerA
                 // Jophiel
                 SessionModel.class,
                 UserModel.class,
+                UserGroupModel.class,
                 UserInfoModel.class,
                 UserRatingModel.class,
                 UserRatingEventModel.class,
