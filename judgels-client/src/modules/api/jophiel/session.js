@@ -5,6 +5,7 @@ export const SessionErrors = {
   UserNotActivated: 'Jophiel:UserNotActivated',
   UserMaxConcurrentSessionsExceeded: 'Jophiel:UserMaxConcurrentSessionsExceeded',
   LogoutDisabled: 'Jophiel:LogoutDisabled',
+  TicketInvalid: 'Jophiel:TicketInvalid',
 };
 
 const baseUrl = `${APP_CONFIG.apiUrl}/session`;
@@ -16,6 +17,10 @@ export const sessionAPI = {
 
   logInWithGoogle: idToken => {
     return post(`${baseUrl}/login-google`, undefined, { idToken });
+  },
+
+  logInWithSSO: data => {
+    return post(`${baseUrl}/login-sso`, undefined, data);
   },
 
   logOut: token => {

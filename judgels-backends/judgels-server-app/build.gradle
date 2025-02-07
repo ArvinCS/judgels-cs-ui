@@ -42,6 +42,10 @@ dependencies {
     implementation 'org.webjars.bower:roboto-fontface:0.7.0'
     implementation 'org.webjars.npm:katex:0.16.4'
 
+    implementation "org.jasig.cas.client:cas-client-core:3.6.2"
+    implementation "org.springframework.security:spring-security-config:$springSecurityVersion"
+    implementation "org.springframework.security:spring-security-web:$springSecurityVersion"
+
     runtimeOnly "mysql:mysql-connector-java:$mysqlConnectorJavaVersion"
 
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
