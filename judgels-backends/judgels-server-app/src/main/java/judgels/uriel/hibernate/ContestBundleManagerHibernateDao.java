@@ -3,9 +3,7 @@ package judgels.uriel.hibernate;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
-
 import javax.inject.Inject;
-
 import judgels.persistence.Model_;
 import judgels.persistence.QueryBuilder;
 import judgels.persistence.api.OrderDir;
@@ -40,7 +38,7 @@ public class ContestBundleManagerHibernateDao extends HibernateDao<ContestBundle
         List<ContestBundleManagerModel> results = selectByContestBundleJid(bundleJid)
                 .orderBy(Model_.ID, OrderDir.ASC)
                 .all();
-        
+
         if (results.isEmpty()) {
             return;
         }

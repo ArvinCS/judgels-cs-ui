@@ -43,7 +43,7 @@ public class ContestBundleHibernateDao extends JudgelsHibernateDao<ContestBundle
     }
 
     private static class ContestBundleHibernateQueryBuilder extends HibernateQueryBuilder<ContestBundleModel> implements ContestBundleQueryBuilder {
-        public ContestBundleHibernateQueryBuilder(Session currentSession) {
+        ContestBundleHibernateQueryBuilder(Session currentSession) {
             super(currentSession, ContestBundleModel.class);
         }
 

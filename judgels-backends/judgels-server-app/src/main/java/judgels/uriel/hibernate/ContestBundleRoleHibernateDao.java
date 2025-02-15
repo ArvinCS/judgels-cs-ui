@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-
 import judgels.persistence.CriteriaPredicate;
 import judgels.persistence.hibernate.HibernateDaoData;
 import judgels.persistence.hibernate.JudgelsHibernateDao;
@@ -27,7 +26,7 @@ public class ContestBundleRoleHibernateDao extends JudgelsHibernateDao<ContestBu
     public ContestBundleRoleHibernateDao(HibernateDaoData data) {
         super(data);
     }
-    
+
     @Override
     public boolean isManager(String userJid, String contestBundleJid) {
         return select()

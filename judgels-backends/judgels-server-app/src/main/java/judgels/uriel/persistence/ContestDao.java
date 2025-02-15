@@ -23,5 +23,6 @@ public interface ContestDao extends JudgelsDao<ContestModel> {
         ContestQueryBuilder whereUserCanView(String userJid);
         ContestQueryBuilder whereUserParticipated(String userJid);
         ContestQueryBuilder whereNameLike(String name);
+        ContestQueryBuilder whereBundleIs(String bundleJid);
     }
 }

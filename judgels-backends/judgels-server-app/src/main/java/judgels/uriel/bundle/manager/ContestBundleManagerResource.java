@@ -6,10 +6,11 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static judgels.service.ServiceUtils.checkAllowed;
 import static judgels.service.ServiceUtils.checkFound;
 
+import com.google.common.collect.Lists;
+import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -20,12 +21,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
-import org.glassfish.jersey.internal.guava.Sets;
-
-import com.google.common.collect.Lists;
-
-import io.dropwizard.hibernate.UnitOfWork;
 import judgels.jophiel.JophielClient;
 import judgels.jophiel.api.profile.Profile;
 import judgels.persistence.api.Page;
@@ -38,6 +33,7 @@ import judgels.uriel.api.bundle.manager.ContestBundleManagersDeleteResponse;
 import judgels.uriel.api.bundle.manager.ContestBundleManagersResponse;
 import judgels.uriel.api.bundle.manager.ContestBundleManagersUpsertResponse;
 import judgels.uriel.bundle.ContestBundleStore;
+import org.glassfish.jersey.internal.guava.Sets;
 
 @Path("/api/v2/contest-bundles/{bundleJid}/managers")
 public class ContestBundleManagerResource {
@@ -72,7 +68,7 @@ public class ContestBundleManagerResource {
         ContestBundleManagerConfig config = new ContestBundleManagerConfig.Builder()
                 .canManage(canManage)
                 .build();
-        
+
         return new ContestBundleManagersResponse.Builder()
                 .data(managers)
                 .profilesMap(profilesMap)
@@ -88,7 +84,7 @@ public class ContestBundleManagerResource {
     public ContestBundleManagersUpsertResponse batchUpsert(
             @HeaderParam(AUTHORIZATION) AuthHeader authHeader,
             @PathParam("bundleJid") String bundleJid,
-            Set<String> usernames){
+            Set<String> usernames) {
 
         String actorJid = actorChecker.check(authHeader);
         ContestBundle bundle = checkFound(contestBundleStore.getContestBundleByJid(bundleJid));

@@ -1,11 +1,8 @@
 package judgels.uriel.bundle.manager;
 
-import java.util.Optional;
-
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
-
+import java.util.Optional;
+import javax.inject.Inject;
 import judgels.persistence.api.Page;
 import judgels.uriel.api.bundle.manager.ContestBundleManager;
 import judgels.uriel.persistence.ContestBundleManagerDao;
@@ -30,7 +27,7 @@ public class ContestBundleManagerStore {
         model.bundleJid = contestBundleJid;
         model.userJid = userJid;
         contestBundleManagerDao.insert(model);
-        
+
         return true;
     }
 

@@ -245,9 +245,9 @@ public class ContestResource {
         String actorJid = actorChecker.check(authHeader);
 
         if (data.getBundleJid().isPresent()) {
-                checkAllowed(contestBundleRoleChecker.canManage(actorJid, data.getBundleJid().get()));
+            checkAllowed(contestBundleRoleChecker.canManage(actorJid, data.getBundleJid().get()));
         } else {
-                checkAllowed(contestRoleChecker.canAdminister(actorJid));
+            checkAllowed(contestRoleChecker.canAdminister(actorJid));
         }
 
         Contest contest = contestStore.createContest(data);

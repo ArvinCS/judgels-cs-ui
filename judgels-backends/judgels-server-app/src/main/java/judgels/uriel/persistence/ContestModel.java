@@ -28,13 +28,13 @@ public class ContestModel extends JudgelsModel {
 
     @Column(nullable = false)
     public String style;
-    
+
     @Column(nullable = false)
     public Instant beginTime;
-    
+
     @Column(nullable = false)
     public long duration;
 
-    @Column()
+    @Column
     public String bundleJid;
 }

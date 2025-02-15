@@ -1,12 +1,9 @@
 package judgels.uriel.bundle;
 
+import com.google.common.collect.Lists;
 import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.Lists;
-
 import judgels.persistence.api.OrderDir;
 import judgels.persistence.api.Page;
 import judgels.uriel.api.bundle.ContestBundle;
@@ -42,7 +39,7 @@ public class ContestBundleStore {
                 .paged(pageNumber, pageSize)
                 .mapPage(p -> Lists.transform(p, ContestBundleStore::fromModel));
     }
-    
+
     public Optional<ContestBundle> getContestBundleByJid(String jid) {
         return contestBundleDao.selectByJid(jid).map(ContestBundleStore::fromModel);
     }
@@ -60,7 +57,7 @@ public class ContestBundleStore {
         model.slug = contestBundleCreateData.getSlug();
         model.name = contestBundleCreateData.getSlug();
         model.description = "";
-        
+
         return fromModel(contestBundleDao.insert(model));
     }
 
@@ -74,7 +71,7 @@ public class ContestBundleStore {
                 }
             }
         }
-        
+
         data.getSlug().ifPresent(slug -> model.slug = slug);
         data.getName().ifPresent(name -> model.name = name);
         data.getDescription().ifPresent(description -> model.description = description);

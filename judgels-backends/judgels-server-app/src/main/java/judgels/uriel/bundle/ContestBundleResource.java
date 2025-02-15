@@ -5,10 +5,10 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static judgels.service.ServiceUtils.checkAllowed;
 import static judgels.service.ServiceUtils.checkFound;
 
+import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -19,8 +19,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
-import io.dropwizard.hibernate.UnitOfWork;
 import judgels.jophiel.JophielClient;
 import judgels.persistence.api.Page;
 import judgels.service.actor.ActorChecker;
