@@ -9,6 +9,7 @@ import judgels.gabriel.JudgelsGraderModule;
 import judgels.gabriel.cache.CacheModule;
 import judgels.gabriel.grading.GradingModule;
 import judgels.gabriel.isolate.IsolateModule;
+import judgels.gabriel.postgrelate.PostgrelateModule;
 import judgels.messaging.rabbitmq.RabbitMQModule;
 import judgels.service.JudgelsScheduler;
 
@@ -31,6 +32,7 @@ public class JudgelsGraderApplication extends Application<JudgelsGraderApplicati
                 .judgelsGraderModule(new JudgelsGraderModule(judgelsConfig))
                 .rabbitMQModule(new RabbitMQModule(judgelsConfig.getRabbitMQConfig()))
                 .isolateModule(new IsolateModule(gabrielConfig.getIsolateConfig()))
+                .postgrelateModule(new PostgrelateModule(gabrielConfig.getPostgrelateConfig()))
                 .gradingModule(new GradingModule(env.lifecycle(), gabrielConfig.getGradingConfig()))
                 .cacheModule(new CacheModule(gabrielConfig.getCacheConfig()))
                 .build();

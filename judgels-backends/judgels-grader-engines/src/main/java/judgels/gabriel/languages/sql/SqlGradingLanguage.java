@@ -1,13 +1,13 @@
-package judgels.gabriel.languages.jff;
+package judgels.gabriel.languages.sql;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import judgels.gabriel.api.GradingLanguage;
 
-public class JffGradingLanguage implements GradingLanguage {
+public class SqlGradingLanguage implements GradingLanguage {
     @Override
     public String getName() {
-        return "JFlap";
+        return "SQL";
     }
 
     @Override
@@ -17,7 +17,7 @@ public class JffGradingLanguage implements GradingLanguage {
 
     @Override
     public List<String> getAllowedExtensions() {
-        return ImmutableList.of("jff");
+        return ImmutableList.of("sql");
     }
 
     @Override
@@ -33,12 +33,6 @@ public class JffGradingLanguage implements GradingLanguage {
     @Override
     public List<String> getExecutionCommand(String sourceFilename) {
         String executableFilename = getExecutableFilename(sourceFilename);
-        return ImmutableList.of(
-            "/usr/bin/java",
-            "-Djava.awt.headless=true",
-            "-jar",
-            "/usr/bin/jflap-core.jar",
-            "runonce",
-            executableFilename);
+        return ImmutableList.of(executableFilename);
     }
 }
