@@ -10,6 +10,10 @@ import javax.persistence.criteria.Root;
 public interface CriteriaPredicate<M> {
     Predicate apply(CriteriaBuilder cb, CriteriaQuery<?> cq, Root<M> root);
 
+    default Predicate toPredicate(CriteriaBuilder cb, CriteriaQuery<?> cq, Root<M> root) {
+        return apply(cb, cq, root);
+    }
+    
     static <M> CriteriaPredicate<M> literalTrue() {
         return (cb, cq, root) -> cb.isTrue(cb.literal(true));
     }

@@ -3,6 +3,9 @@ package judgels.uriel.hibernate;
 import dagger.Module;
 import dagger.Provides;
 import judgels.uriel.persistence.ContestAnnouncementDao;
+import judgels.uriel.persistence.ContestBundleDao;
+import judgels.uriel.persistence.ContestBundleManagerDao;
+import judgels.uriel.persistence.ContestBundleRoleDao;
 import judgels.uriel.persistence.ContestBundleItemSubmissionDao;
 import judgels.uriel.persistence.ContestClarificationDao;
 import judgels.uriel.persistence.ContestContestantDao;
@@ -21,6 +24,21 @@ import judgels.uriel.persistence.ContestSupervisorDao;
 @Module
 public class UrielHibernateDaoModule {
     private UrielHibernateDaoModule() {}
+
+    @Provides
+    static ContestBundleDao contestBundleDao(ContestBundleHibernateDao dao) {
+        return dao;
+    }
+
+    @Provides
+    static ContestBundleManagerDao contestBundleManagerDao(ContestBundleManagerHibernateDao dao) {
+        return dao;
+    }
+
+    @Provides
+    static ContestBundleRoleDao contestBundleRoleDao(ContestBundleRoleHibernateDao dao) {
+        return dao;
+    }
 
     @Provides
     static ContestDao contestDao(ContestHibernateDao dao) {

@@ -16,6 +16,7 @@ public interface Contest {
     ContestStyle getStyle();
     Instant getBeginTime();
     Duration getDuration();
+    String getBundleJid();
 
     @JsonIgnore
     default Instant getEndTime() {

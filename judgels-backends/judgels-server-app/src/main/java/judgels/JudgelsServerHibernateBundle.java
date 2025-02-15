@@ -35,6 +35,8 @@ import judgels.sandalphon.persistence.ProblemSetterModel;
 import judgels.sandalphon.persistence.ProblemTagModel;
 import judgels.uriel.persistence.ContestAnnouncementModel;
 import judgels.uriel.persistence.ContestBundleItemSubmissionModel;
+import judgels.uriel.persistence.ContestBundleManagerModel;
+import judgels.uriel.persistence.ContestBundleModel;
 import judgels.uriel.persistence.ContestClarificationModel;
 import judgels.uriel.persistence.ContestContestantModel;
 import judgels.uriel.persistence.ContestLogModel;
@@ -75,6 +77,8 @@ public class JudgelsServerHibernateBundle extends HibernateBundle<JudgelsServerA
                 judgels.sandalphon.persistence.ProgrammingSubmissionModel.class,
 
                 // Uriel
+                ContestBundleModel.class,
+                ContestBundleManagerModel.class,
                 ContestModel.class,
                 ContestAnnouncementModel.class,
                 ContestBundleItemSubmissionModel.class,
