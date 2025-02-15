@@ -58,6 +58,9 @@ export class ContestCreateDialog extends Component {
   );
 
   createContest = async data => {
+    if (this.props.bundle !== undefined) {
+      data = { ...data, bundleJid: this.props.bundle.jid };
+    }
     await this.props.onCreateContest(data);
     this.setState({ isDialogOpen: false });
   };

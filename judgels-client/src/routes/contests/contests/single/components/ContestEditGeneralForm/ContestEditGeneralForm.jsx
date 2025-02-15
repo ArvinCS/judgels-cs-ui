@@ -21,7 +21,7 @@ export default function ContestEditGeneralForm({ onSubmit, initialValues, onCanc
     label: 'Name',
     validate: Required,
   };
-
+  
   const styleField = {
     name: 'style',
     label: 'Style',
@@ -35,18 +35,23 @@ export default function ContestEditGeneralForm({ onSubmit, initialValues, onCanc
       [ContestStyle.Bundle]: 'Bundle',
     },
   };
-
+  
   const beginTimeField = {
     name: 'beginTime',
     label: 'Begin time',
     validate: Required,
   };
-
+  
   const durationField = {
     name: 'duration',
     label: 'Duration',
     validate: Required,
     inputHelper: 'Example: 10d 5h 30m 15s',
+  };
+  
+  const bundleField = {
+    name: 'bundleJid',
+    label: 'Bundle JID',
   };
 
   return (
@@ -60,6 +65,7 @@ export default function ContestEditGeneralForm({ onSubmit, initialValues, onCanc
               <Field component={FormTableSelect2} {...styleField} />
               <Field component={FormTableDateInput} {...beginTimeField} />
               <Field component={FormTableTextInput} {...durationField} />
+              <Field component={FormTableTextInput} {...bundleField} />
             </tbody>
           </HTMLTable>
           <hr />

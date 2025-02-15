@@ -1,9 +1,10 @@
-import { Console } from '@blueprintjs/icons';
+import { Console, GroupItem } from '@blueprintjs/icons';
 import { Route, withRouter } from 'react-router';
 
 import ContentWithSidebar from '../../components/ContentWithSidebar/ContentWithSidebar';
 import { FullPageLayout } from '../../components/FullPageLayout/FullPageLayout';
 import ContestsPage from './contests/ContestsPage/ContestsPage';
+import BundlesPage from './bundles/BundlesPage/BundlesPage';
 
 function ContestsRoutes() {
   const sidebarItems = [
@@ -13,6 +14,13 @@ function ContestsRoutes() {
       title: 'Contests',
       routeComponent: Route,
       component: ContestsPage,
+    },
+    {
+      id: 'bundles',
+      titleIcon: <GroupItem />,
+      title: 'Bundles',
+      routeComponent: Route,
+      component: BundlesPage,
     },
   ];
 

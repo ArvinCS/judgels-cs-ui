@@ -1,0 +1,37 @@
+@import '../../../../styles/base';
+
+.bundle-card {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.bundle-card-name {
+    margin-right: 10px;
+}
+  
+.bundle-card-date {
+    margin-top: -4px;
+    margin-bottom: 0;
+}
+
+.bundle-card-status {
+    font-weight: normal;
+    float: right;
+}
+
+.bundle-card-chevron {
+    margin-left: 12px;
+}
+
+.bundle-card-contest-container {
+    margin: 0 0 0 20px;
+}
+
+.bundle-card-edit-icon {
+    margin: 0 8px 0 8px;
+}
+
+.bundle-card-add-icon {
+    margin: 0 8px 0 8px;
+}
