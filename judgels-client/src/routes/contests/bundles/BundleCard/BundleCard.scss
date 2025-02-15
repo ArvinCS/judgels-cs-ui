@@ -18,6 +18,9 @@
 .bundle-card-status {
     font-weight: normal;
     float: right;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .bundle-card-chevron {
@@ -28,10 +31,10 @@
     margin: 0 0 0 20px;
 }
 
-.bundle-card-edit-icon {
-    margin: 0 8px 0 8px;
-}
+// .bundle-card-edit-icon {
+//     margin: 0 8px 0 8px;
+// }
 
 .bundle-card-add-icon {
-    margin: 0 8px 0 8px;
+    margin-bottom: -15px;
 }

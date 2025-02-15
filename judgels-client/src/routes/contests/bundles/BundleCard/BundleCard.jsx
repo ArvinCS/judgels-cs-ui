@@ -38,7 +38,9 @@ export class BundleCard extends PureComponent {
                             <div className="bundle-card-status">
                                 <BundleEditDialog canManage={this.state.role === 'ADMIN'} bundle={this.state.bundle} onEditDone={this.fetchBundleData} />
                                 {(this.state.role === 'ADMIN' || this.state.role == 'MANAGER') && (
-                                    <ContestCreateDialog onCreateContest={this.props.onCreateContest} bundle={this.state.bundle} />
+                                    <div className='bundle-card-add-icon'>
+                                        <ContestCreateDialog compact onCreateContest={this.props.onCreateContest} bundle={this.state.bundle} />
+                                    </div>
                                 )}
                                 <ContestRoleTag role={this.state.role} />
                                 {this.state.isOpen ? (
