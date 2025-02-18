@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.persistence.criteria.Expression;
 import judgels.persistence.CriteriaPredicate;
 import judgels.persistence.Model_;
+import judgels.persistence.api.OrderDir;
 import judgels.persistence.hibernate.HibernateDaoData;
 import judgels.persistence.hibernate.HibernateQueryBuilder;
 import judgels.persistence.hibernate.JudgelsHibernateDao;
@@ -78,6 +79,23 @@ public class ContestHibernateDao extends JudgelsHibernateDao<ContestModel> imple
                 escape(m.updatedAt)));
     }
 
+    @Override
+    public List<ContestModel> selectAllByBundle(String bundleJid) {
+        return select()
+                .where((cb, cq, root) -> cb.equal(root.get(ContestModel_.bundleJid), bundleJid))
+                .orderBy(ContestModel_.BEGIN_TIME, OrderDir.DESC)
+                .all();
+    }
+
+    @Override
+    public List<ContestModel> selectAllByBundleAndCanView(String bundleJid, String userJid) {
+        return select()
+                .whereUserCanView(userJid)
+                .where((cb, cq, root) -> cb.equal(root.get(ContestModel_.bundleJid), bundleJid))
+                .orderBy(ContestModel_.BEGIN_TIME, OrderDir.DESC)
+                .all();
+    }
+
     private static class ContestHibernateQueryBuilder extends HibernateQueryBuilder<ContestModel> implements ContestQueryBuilder {
         private final Clock clock;
 
@@ -131,6 +149,12 @@ public class ContestHibernateDao extends JudgelsHibernateDao<ContestModel> imple
         @Override
         public ContestQueryBuilder whereNameLike(String name) {
             where(columnLike(ContestModel_.name, name));
+            return this;
+        }
+
+        @Override
+        public ContestQueryBuilder whereBundleIs(String bundleJid) {
+            where(columnEq(ContestModel_.bundleJid, bundleJid));
             return this;
         }
     }

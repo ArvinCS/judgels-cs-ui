@@ -23,6 +23,7 @@ export function CourseEditDialog({ course, isOpen, onUpdateCourse, onCloseDialog
     slug: course.slug,
     name: course.name,
     description: course.description,
+    groups: course.groups,
   };
   const props = {
     renderFormComponents: renderDialogForm,

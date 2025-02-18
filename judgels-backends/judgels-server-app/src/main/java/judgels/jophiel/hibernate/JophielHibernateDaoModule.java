@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import judgels.jophiel.persistence.SessionDao;
 import judgels.jophiel.persistence.UserDao;
+import judgels.jophiel.persistence.UserGroupDao;
 import judgels.jophiel.persistence.UserInfoDao;
 import judgels.jophiel.persistence.UserRatingDao;
 import judgels.jophiel.persistence.UserRatingEventDao;
@@ -22,6 +23,11 @@ public class JophielHibernateDaoModule {
 
     @Provides
     static UserDao userDao(UserHibernateDao dao) {
+        return dao;
+    }
+
+    @Provides
+    static UserGroupDao userGroupDao(UserGroupHibernateDao dao) {
         return dao;
     }
 

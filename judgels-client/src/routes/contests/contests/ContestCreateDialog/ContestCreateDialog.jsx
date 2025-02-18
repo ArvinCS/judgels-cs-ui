@@ -17,7 +17,15 @@ export class ContestCreateDialog extends Component {
   }
 
   renderButton = () => {
-    return (
+    return this.props.compact ? (
+      <Button
+        minimal
+        intent={Intent.PRIMARY}
+        icon={<Plus />}
+        onClick={this.toggleDialog}
+        disabled={this.state.isDialogOpen}
+      />
+    ) : (
       <Button intent={Intent.PRIMARY} icon={<Plus />} onClick={this.toggleDialog} disabled={this.state.isDialogOpen}>
         New contest
       </Button>
@@ -58,6 +66,9 @@ export class ContestCreateDialog extends Component {
   );
 
   createContest = async data => {
+    if (this.props.bundle !== undefined) {
+      data = { ...data, bundleJid: this.props.bundle.jid };
+    }
     await this.props.onCreateContest(data);
     this.setState({ isDialogOpen: false });
   };

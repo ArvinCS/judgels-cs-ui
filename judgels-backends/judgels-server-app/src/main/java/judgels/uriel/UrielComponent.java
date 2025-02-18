@@ -15,6 +15,8 @@ import judgels.service.JudgelsSchedulerModule;
 import judgels.service.gabriel.GabrielClientModule;
 import judgels.service.hibernate.JudgelsHibernateModule;
 import judgels.service.persistence.JudgelsPersistenceModule;
+import judgels.uriel.bundle.ContestBundleResource;
+import judgels.uriel.bundle.manager.ContestBundleManagerResource;
 import judgels.uriel.contest.ContestResource;
 import judgels.uriel.contest.announcement.ContestAnnouncementResource;
 import judgels.uriel.contest.clarification.ContestClarificationResource;
@@ -73,6 +75,8 @@ import judgels.uriel.submission.programming.SubmissionModule;
 @Singleton
 public interface UrielComponent {
     ContestAnnouncementResource contestAnnouncementResource();
+    ContestBundleResource contestBundleResource();
+    ContestBundleManagerResource contestBundleManagerResource();
     ContestClarificationResource contestClarificationResource();
     ContestContestantResource contestContestantResource();
     ContestEditorialResource contestEditorialResource();

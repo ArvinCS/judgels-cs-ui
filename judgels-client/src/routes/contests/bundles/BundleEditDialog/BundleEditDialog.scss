@@ -1,0 +1,132 @@
+@import '../../../../styles/base';
+
+.contest-edit-dialog {
+  width: 800px;
+  height: 650px;
+
+  *:focus {
+    outline: none;
+  }
+
+  .bp5-tab-list {
+    width: 150px;
+    margin-right: 15px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-right: 1px;
+  }
+
+  .bp5-tab-panel {
+    width: 100%;
+  }
+
+  .bp5-tab-indicator {
+    border-radius: 0 !important;
+  }
+
+  .bp5-tab {
+    position: relative;
+    padding-left: 20px !important;
+    line-height: 40px;
+    height: 40px;
+
+    &[aria-selected='true'] {
+      left: -3px;
+      border-radius: 0 !important;
+      font-weight: bold;
+
+      .bp5-light & {
+        background-color: white !important;
+        border-left: 3px solid $primary-color;
+        color: $text-color;
+      }
+
+      .bp5-dark & {
+        color: inherit !important;
+        background-color: $dark-secondary-background-color !important;
+        border-left: 3px solid $gray3;
+      }
+
+      svg {
+        display: initial;
+        height: 40px;
+      }
+    }
+
+    &[aria-selected='false'] {
+      svg {
+        display: none;
+      }
+    }
+
+    &:not([aria-disabled='true']):hover {
+      .bp5-dark & {
+        color: #48aff0;
+      }
+    }
+  }
+
+  .bp5-tab span:first-child {
+    width: 100%;
+  }
+
+  .contest-edit-dialog__arrow {
+    line-height: 0 !important;
+    float: right;
+
+    .bp5-light & {
+      color: $primary-color !important;
+    }
+  }
+
+  .right-action-button {
+    float: right;
+  }
+}
+
+.contest-edit-dialog-button {
+  margin-top: 5px;
+}
+
+.contest-edit-dialog__content {
+  max-height: 435px;
+  padding: 2px;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 750px) {
+  .contest-edit-dialog-button {
+    margin-top: -5px;
+
+    .bp5-icon {
+      margin-right: 0;
+    }
+  }
+
+  .contest-edit-dialog-button__text {
+    display: none;
+  }
+
+  .contest-edit-dialog {
+    width: initial;
+    min-width: 350px;
+    height: 850px;
+
+    .bp5-tabs {
+      display: block;
+    }
+
+    .bp5-tab-list {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    .bp5-tab-panel {
+      padding-left: 0 !important;
+    }
+  }
+
+  .contest-edit-dialog__content {
+    max-height: 460px;
+  }
+}

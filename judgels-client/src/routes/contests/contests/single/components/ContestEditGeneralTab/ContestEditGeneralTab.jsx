@@ -48,6 +48,7 @@ class ContestEditGeneralTab extends Component {
         style: contest.style,
         beginTime: new Date(contest.beginTime).toISOString(),
         duration: formatDuration(contest.duration),
+        bundleJid: contest.bundleJid,
       };
       const formProps = {
         onCancel: this.toggleEdit,
@@ -64,6 +65,7 @@ class ContestEditGeneralTab extends Component {
       style: data.style,
       beginTime: new Date(data.beginTime).getTime(),
       duration: parseDuration(data.duration),
+      bundleJid: data.bundleJid,
     };
     await this.props.onUpdateContest(this.props.contest.jid, this.props.contest.slug, updateData);
     await this.props.onGetContestByJidWithWebConfig(this.props.contest.jid);

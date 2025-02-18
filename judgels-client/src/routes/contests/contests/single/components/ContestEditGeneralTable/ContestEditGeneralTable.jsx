@@ -3,6 +3,7 @@ import { FormTable } from '../../../../../../components/forms/FormTable/FormTabl
 import { formatDateTime } from '../../../../../../utils/datetime';
 
 export function ContestEditGeneralTable({ contest }) {
+  console.log(contest);
   const rows = [
     { key: 'jid', title: 'JID', value: contest.jid },
     { key: 'slug', title: 'Slug', value: contest.slug },
@@ -10,6 +11,7 @@ export function ContestEditGeneralTable({ contest }) {
     { key: 'style', title: 'Style', value: contest.style },
     { key: 'beginTime', title: 'Begin time', value: formatDateTime(new Date(contest.beginTime), true) },
     { key: 'duration', title: 'Duration', value: <FormattedDuration value={contest.duration} /> },
+    { key: 'bundleJid', title: 'Bundle JID', value: contest.bundleJid },
   ];
 
   return <FormTable rows={rows} />;

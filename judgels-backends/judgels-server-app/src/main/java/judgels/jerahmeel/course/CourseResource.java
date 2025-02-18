@@ -7,6 +7,7 @@ import static judgels.service.ServiceUtils.checkFound;
 
 import com.google.common.collect.Lists;
 import io.dropwizard.hibernate.UnitOfWork;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import judgels.jerahmeel.api.curriculum.Curriculum;
 import judgels.jerahmeel.curriculum.CurriculumStore;
 import judgels.jerahmeel.role.RoleChecker;
 import judgels.jerahmeel.stats.StatsStore;
+import judgels.jophiel.user.group.UserGroupStore;
 import judgels.service.actor.ActorChecker;
 import judgels.service.api.actor.AuthHeader;
 
@@ -34,6 +36,7 @@ import judgels.service.api.actor.AuthHeader;
 public class CourseResource {
     @Inject protected ActorChecker actorChecker;
     @Inject protected RoleChecker roleChecker;
+    @Inject protected UserGroupStore userGroupStore;
     @Inject protected CourseStore courseStore;
     @Inject protected CurriculumStore curriculumStore;
     @Inject protected StatsStore statsStore;
@@ -46,7 +49,16 @@ public class CourseResource {
     public CoursesResponse getCourses(@HeaderParam(AUTHORIZATION) Optional<AuthHeader> authHeader) {
         String actorJid = actorChecker.check(authHeader);
 
-        List<Course> courses = courseStore.getCourses();
+        List<Course> courses = new ArrayList<>();
+
+        if (roleChecker.isAdmin(actorJid)) {
+            courses = courseStore.getCourses();
+        } else {
+            List<String> actorGroups = new ArrayList<>(userGroupStore.getGroup(actorJid).getGroups().orElseGet(ArrayList::new));
+            List<Course> groupedCourses = courseStore.getCoursesByGroup(actorGroups);
+            courses = groupedCourses;
+        }
+
         Optional<Curriculum> curriculum = curriculumStore.getCurriculum();
 
         var courseJids = Lists.transform(courses, Course::getJid);
@@ -66,7 +78,16 @@ public class CourseResource {
             @HeaderParam(AUTHORIZATION) Optional<AuthHeader> authHeader,
             @PathParam("courseSlug") String courseSlug) {
 
-        actorChecker.check(authHeader);
+        String actorJid = actorChecker.check(authHeader);
+
+        if (!roleChecker.isAdmin(actorJid)) {
+            List<String> courseGroups = courseStore.getCourseBySlug(courseSlug).get().getGroups();
+
+            if (!courseGroups.contains("public")) {
+                checkAllowed(courseStore.getCourseBySlug(courseSlug).get().getGroups().stream()
+                        .anyMatch(userGroupStore.getGroup(actorJid).getGroups().get()::contains));
+            }
+        }
 
         return checkFound(courseStore.getCourseBySlug(courseSlug));
     }

@@ -379,7 +379,6 @@ public class ContestModuleStore {
                 .map(model -> parseConfig(model.config, configClass));
     }
 
-    @SuppressWarnings("unchecked")
     private <T> Optional<T> getModuleConfig(String contestJid, ContestModuleType module, Class<T> configClass) {
         return moduleDao.selectEnabledByContestJidAndType(contestJid, module)
                 .map(model -> parseConfig(model.config, configClass));

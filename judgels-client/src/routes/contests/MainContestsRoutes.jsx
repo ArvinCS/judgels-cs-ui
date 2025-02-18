@@ -8,6 +8,7 @@ function MainContestRoutes() {
   return (
     <div>
       <Switch>
+        <Route path="/contests/bundles" component={ContestsRoutes} />
         <Route path="/contests/:contestSlug([a-zA-Z0-9-]+)" component={MainSingleContestRoutes} />
         <Route path="/contests" component={ContestsRoutes} />
       </Switch>
