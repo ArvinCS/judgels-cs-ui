@@ -98,7 +98,6 @@ public class SessionResource {
 
             RestTemplate restTemplate = new RestTemplate();
             String response = restTemplate.getForObject(validationUrl, String.class);
-
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(response)));
@@ -109,14 +108,15 @@ public class SessionResource {
                 // String ldapCn = doc.getElementsByTagName("cas:ldap_cn").item(0).getTextContent();
                 // String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
 
-                if (!userStore.getUserByEmail(email).isPresent()) {
+                if (!userStore.getUserByUsername(username).isPresent()) {
                     checkFound(userRegisterer).registerSsoUser(new SsoUserRegistrationData.Builder()
                             .username(username)
                             .email(email)
+                            .studentId(doc.getElementsByTagName("cas:npm").item(0).getTextContent())
                             .build());
                 }
 
-                User user = userStore.getUserByEmail(email).orElseThrow(ForbiddenException::new);
+                User user = userStore.getUserByUsername(username).orElseThrow(ForbiddenException::new);
                 return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
             } else {
                 throw SessionErrors.ticketInvalid();
