@@ -48,7 +48,6 @@ class BundleEditGeneralTab extends Component {
     if (this.state.loading) {
       return <Spinner />;
     }
-    console.log(this.state.managers);
     if (this.state.isEditing) {
       const initialValues = {
         slug: bundle.slug,
