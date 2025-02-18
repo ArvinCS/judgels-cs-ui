@@ -1,5 +1,5 @@
 import { Button, Callout, Intent, Switch } from '@blueprintjs/core';
-import { Pause, Refresh } from '@blueprintjs/icons';
+import { Export, Pause, Refresh } from '@blueprintjs/icons';
 import { push } from 'connected-react-router';
 import { parse, stringify } from 'query-string';
 import { Component, Fragment } from 'react';
@@ -176,18 +176,30 @@ export class ContestScoreboardPage extends Component {
     }
 
     return (
-      <Button
-        className="float-right"
-        intent="primary"
-        small
-        icon={<Refresh />}
-        onClick={this.forceRefreshScoreboard}
-        loading={!!this.state.isForceRefreshButtonLoading}
-      >
-        Force refresh
-      </Button>
+      <div className='contest-scoreboard-page__action-buttons'>
+        <Button
+          small
+          icon={<Export />}
+          onClick={this.exportCSV}
+        >
+          Export CSV
+        </Button>
+        <Button
+          intent="primary"
+          small
+          icon={<Refresh />}
+          onClick={this.forceRefreshScoreboard}
+          loading={!!this.state.isForceRefreshButtonLoading}
+        >
+          Force refresh
+        </Button>
+      </div>
     );
   };
+
+  exportCSV = async () => {
+    await this.props.onExportScoreboard(this.props.contest.jid);
+  }
 
   forceRefreshScoreboard = async () => {
     this.setState({ isForceRefreshButtonLoading: true });
@@ -307,6 +319,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  onExportScoreboard: contestScoreboardActions.exportScoreboard,
   onGetScoreboard: contestScoreboardActions.getScoreboard,
   onRefreshScoreboard: contestScoreboardActions.refreshScoreboard,
   onGetSubmissionSourceImage: contestScoreboardActions.getSubmissionSourceImage,

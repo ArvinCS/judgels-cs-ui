@@ -20,6 +20,14 @@ export function refreshScoreboard(contestJid) {
   };
 }
 
+export function exportScoreboard(contestJid) {
+  return async (dispatch, getState) => {
+    const token = selectToken(getState());
+    await contestScoreboardAPI.exportScoreboard(token, contestJid);
+    toastActions.showSuccessToast('Scoreboard downloading.');
+  };
+}
+
 export function getSubmissionSourceImage(contestJid, userJid, problemJid) {
   return async (dispatch, getState) => {
     const isDarkMode = selectIsDarkMode(getState());
