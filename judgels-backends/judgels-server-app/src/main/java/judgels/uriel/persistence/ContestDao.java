@@ -11,6 +11,8 @@ import judgels.persistence.QueryBuilder;
 public interface ContestDao extends JudgelsDao<ContestModel> {
     ContestQueryBuilder select();
     Optional<ContestModel> selectBySlug(String contestSlug);
+    List<ContestModel> selectAllByBundle(String bundleJid);
+    List<ContestModel> selectAllByBundleAndCanView(String bundleJid, String userJid);
     List<ContestModel> selectAllBySlugs(Collection<String> contestSlugs);
     void dump(PrintWriter output, String contestJid);
 
