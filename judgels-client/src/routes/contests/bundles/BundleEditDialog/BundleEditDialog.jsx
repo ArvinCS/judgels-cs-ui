@@ -63,6 +63,10 @@ export class BundleEditDialog extends Component {
               <span>Managers</span>
               <ChevronRight className="contest-edit-dialog__arrow" />
             </Tab>
+            <Tab id="export" panel={<BundleEditExportTab {...this.props} />}>
+              <span>Export</span>
+              <ChevronRight className="contest-edit-dialog__arrow" />
+            </Tab>
             {/* <Tab id="description" panel={<ContestEditDescriptionTab />}>
               <span>Description</span>
               <ChevronRight className="contest-edit-dialog__arrow" />

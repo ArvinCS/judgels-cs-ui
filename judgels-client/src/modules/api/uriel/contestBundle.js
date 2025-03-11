@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 
 import { APP_CONFIG } from '../../../conf';
-import { get, post, put } from '../http';
+import { get, post, download } from '../http';
 
 export const ContestBundleErrors = {
   SlugAlreadyExists: 'Uriel:BundleSlugAlreadyExists',
@@ -33,5 +33,9 @@ export const contestBundleAPI = {
 
   getContestBundleByJid: (token, bundleJid) => {
     return get(`${baseContestBundlesURL}/${bundleJid}`, token);
+  },
+
+  exportScoreboard: (token, bundleJid) => {
+    return download(`${baseContestBundlesURL}/${bundleJid}/scoreboard/export`, token);
   },
 };

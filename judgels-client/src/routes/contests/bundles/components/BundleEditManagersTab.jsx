@@ -9,7 +9,7 @@ import BundleEditManagerForm from './BundleEditManagersForm';
 
 import './BundleEditManagersTab.scss';
 
-class BundleEditGeneralTab extends Component {
+class BundleEditManagerTab extends Component {
   state = {
     isEditing: false,
     page: 1,
@@ -116,4 +116,4 @@ const mapDispatchToProps = {
   onUpsertManagers: bundleActions.upsertManagers,
   onDeleteManagers: bundleActions.deleteManagers,
 };
-export default connect(undefined, mapDispatchToProps)(BundleEditGeneralTab);
+export default connect(undefined, mapDispatchToProps)(BundleEditManagerTab);

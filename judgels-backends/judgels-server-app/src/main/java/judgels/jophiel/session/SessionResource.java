@@ -16,8 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-// import judgels.jophiel.api.session.Credentials;
-// import judgels.jophiel.api.session.GoogleCredentials;
+import judgels.jophiel.api.session.Credentials;
 import judgels.jophiel.api.session.Session;
 import judgels.jophiel.api.session.SessionErrors;
 import judgels.jophiel.api.session.SsoCredentials;
@@ -47,32 +46,32 @@ public class SessionResource {
 
     @Inject public SessionResource() {}
 
-    // @POST
-    // @Path("/login")
-    // @Consumes(APPLICATION_JSON)
-    // @Produces(APPLICATION_JSON)
-    // @UnitOfWork
-    // public Session logIn(Credentials credentials) {
-    //     User user = userStore.getUserByUsernameAndPassword(credentials.getUsernameOrEmail(), credentials.getPassword())
-    //             .orElseGet(() ->
-    //                 userStore.getUserByEmailAndPassword(credentials.getUsernameOrEmail(), credentials.getPassword())
-    //                 .orElseThrow(ForbiddenException::new));
+    @POST
+    @Path("/login")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    @UnitOfWork
+    public Session logIn(Credentials credentials) {
+        User user = userStore.getUserByUsernameAndPassword(credentials.getUsernameOrEmail(), credentials.getPassword())
+                .orElseGet(() ->
+                    userStore.getUserByEmailAndPassword(credentials.getUsernameOrEmail(), credentials.getPassword())
+                    .orElseThrow(ForbiddenException::new));
 
-    //     if (!userRegistrationEmailStore.isUserActivated(user.getJid())) {
-    //         throw SessionErrors.userNotActivated(user.getEmail());
-    //     }
+        if (!userRegistrationEmailStore.isUserActivated(user.getJid())) {
+            throw SessionErrors.userNotActivated(user.getEmail());
+        }
 
-    //     if (!roleChecker.canAdminister(user.getJid())) {
-    //         int maxConcurrentSessionsPerUser = sessionConfiguration.getMaxConcurrentSessionsPerUser();
-    //         if (maxConcurrentSessionsPerUser >= 0) {
-    //             if (sessionStore.getSessionsByUserJid(user.getJid()).size() >= maxConcurrentSessionsPerUser) {
-    //                 throw SessionErrors.userMaxConcurrentSessionsExceeded();
-    //             }
-    //         }
-    //     }
+        if (!roleChecker.canAdminister(user.getJid())) {
+            int maxConcurrentSessionsPerUser = sessionConfiguration.getMaxConcurrentSessionsPerUser();
+            if (maxConcurrentSessionsPerUser >= 0) {
+                if (sessionStore.getSessionsByUserJid(user.getJid()).size() >= maxConcurrentSessionsPerUser) {
+                    throw SessionErrors.userMaxConcurrentSessionsExceeded();
+                }
+            }
+        }
 
-    //     return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
-    // }
+        return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
+    }
 
     // @POST
     // @Path("/login-google")

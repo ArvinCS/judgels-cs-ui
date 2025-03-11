@@ -198,6 +198,7 @@ public class JudgelsServerApplication extends Application<JudgelsServerApplicati
 
         env.jersey().register(component.contestBundleResource());
         env.jersey().register(component.contestBundleManagerResource());
+        env.jersey().register(component.contestBundleScoreboardResource());
         env.jersey().register(component.contestResource());
         env.jersey().register(component.contestWebResource());
         env.jersey().register(component.contestAnnouncementResource());

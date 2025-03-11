@@ -10,11 +10,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-// import javax.ws.rs.Produces;
 import judgels.jophiel.api.user.User;
-// import judgels.jophiel.api.user.account.GoogleUserRegistrationData;
 import judgels.jophiel.api.user.account.PasswordResetData;
-// import judgels.jophiel.api.user.account.UserRegistrationData;
 import judgels.jophiel.user.UserStore;
 
 @Path("/api/v2/user-account")

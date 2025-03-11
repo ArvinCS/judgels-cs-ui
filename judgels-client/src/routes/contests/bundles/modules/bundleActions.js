@@ -94,3 +94,11 @@ export function deleteManagers(bundleJid, usernames) {
     return response;
   };
 }
+
+export function exportScoreboard(bundleJid) {
+  return async (dispatch, getState) => {
+    const token = selectToken(getState());
+    await contestBundleAPI.exportScoreboard(token, bundleJid);
+    toastActions.showSuccessToast('Scoreboard downloading.');
+  };
+}
