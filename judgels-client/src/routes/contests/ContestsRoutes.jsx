@@ -16,7 +16,7 @@ function ContestsRoutes() {
       component: ContestsPage,
     },
     {
-      id: 'bundles',
+      id: 'bundle',
       titleIcon: <GroupItem />,
       title: 'Bundles',
       routeComponent: Route,

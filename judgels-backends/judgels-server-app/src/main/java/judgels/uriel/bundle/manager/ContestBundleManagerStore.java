@@ -7,18 +7,18 @@ import judgels.persistence.api.Page;
 import judgels.uriel.api.bundle.manager.ContestBundleManager;
 import judgels.uriel.persistence.ContestBundleManagerDao;
 import judgels.uriel.persistence.ContestBundleManagerModel;
-import judgels.uriel.persistence.ContestManagerDao;
 
 public class ContestBundleManagerStore {
     private final ContestBundleManagerDao contestBundleManagerDao;
 
     @Inject
-    public ContestBundleManagerStore(ContestBundleManagerDao contestBundleManagerDao, ContestManagerDao contestManagerDao) {
+    public ContestBundleManagerStore(ContestBundleManagerDao contestBundleManagerDao) {
         this.contestBundleManagerDao = contestBundleManagerDao;
     }
 
     public boolean upsertManager(String contestBundleJid, String userJid) {
-        Optional<ContestBundleManagerModel> maybeModel = contestBundleManagerDao.selectByContestBundleJidAndUserJid(contestBundleJid, userJid);
+        Optional<ContestBundleManagerModel> maybeModel = contestBundleManagerDao
+                .selectByContestBundleJidAndUserJid(contestBundleJid, userJid);
         if (maybeModel.isPresent()) {
             return false;
         }
@@ -32,7 +32,8 @@ public class ContestBundleManagerStore {
     }
 
     public boolean deleteManager(String contestBundleJid, String userJid) {
-        Optional<ContestBundleManagerModel> maybeModel = contestBundleManagerDao.selectByContestBundleJidAndUserJid(contestBundleJid, userJid);
+        Optional<ContestBundleManagerModel> maybeModel = contestBundleManagerDao
+                .selectByContestBundleJidAndUserJid(contestBundleJid, userJid);
         if (!maybeModel.isPresent()) {
             return false;
         }

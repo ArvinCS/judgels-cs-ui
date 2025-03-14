@@ -1,4 +1,4 @@
-package judgels.uriel.bundle.manager;
+package judgels.uriel.bundle.supervisor;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
@@ -6,11 +6,10 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static judgels.service.ServiceUtils.checkAllowed;
 import static judgels.service.ServiceUtils.checkFound;
 
-import com.google.common.collect.Lists;
-import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -21,22 +20,26 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import org.glassfish.jersey.internal.guava.Sets;
+
+import com.google.common.collect.Lists;
+
+import io.dropwizard.hibernate.UnitOfWork;
 import judgels.jophiel.JophielClient;
 import judgels.jophiel.api.profile.Profile;
 import judgels.persistence.api.Page;
 import judgels.service.actor.ActorChecker;
 import judgels.service.api.actor.AuthHeader;
 import judgels.uriel.api.bundle.ContestBundle;
-import judgels.uriel.api.bundle.manager.ContestBundleManager;
-import judgels.uriel.api.bundle.manager.ContestBundleManagerConfig;
-import judgels.uriel.api.bundle.manager.ContestBundleManagersDeleteResponse;
-import judgels.uriel.api.bundle.manager.ContestBundleManagersResponse;
-import judgels.uriel.api.bundle.manager.ContestBundleManagersUpsertResponse;
+import judgels.uriel.api.bundle.supervisor.ContestBundleSupervisor;
+import judgels.uriel.api.bundle.supervisor.ContestBundleSupervisorsDeleteResponse;
+import judgels.uriel.api.bundle.supervisor.ContestBundleSupervisorsResponse;
+import judgels.uriel.api.bundle.supervisor.ContestBundleSupervisorsUpsertResponse;
 import judgels.uriel.bundle.ContestBundleStore;
-import org.glassfish.jersey.internal.guava.Sets;
 
-@Path("/api/v2/contest-bundles/{bundleJid}/managers")
-public class ContestBundleManagerResource {
+@Path("/api/v2/contest-bundles/{bundleJid}/supervisors")
+public class ContestBundleSupervisorResource {
     private static final int PAGE_SIZE = 10;
 
     @Inject
@@ -44,41 +47,35 @@ public class ContestBundleManagerResource {
     @Inject
     protected ContestBundleStore contestBundleStore;
     @Inject
-    protected ContestBundleManagerRoleChecker managerRoleChecker;
+    protected ContestBundleSupervisorRoleChecker supervisorRoleChecker;
     @Inject
-    protected ContestBundleManagerStore managerStore;
+    protected ContestBundleSupervisorStore supervisorStore;
     @Inject
     protected JophielClient jophielClient;
 
     @Inject
-    public ContestBundleManagerResource() {}
+    public ContestBundleSupervisorResource() {
+    }
 
     @GET
     @Produces(APPLICATION_JSON)
     @UnitOfWork(readOnly = true)
-    public ContestBundleManagersResponse getManagers(
+    public ContestBundleSupervisorsResponse getSupervisors(
             @HeaderParam(AUTHORIZATION) AuthHeader authHeader,
             @PathParam("bundleJid") String bundleJid,
             @QueryParam("page") @DefaultValue("1") int pageNumber) {
-
         String actorJid = actorChecker.check(authHeader);
         ContestBundle bundle = checkFound(contestBundleStore.getContestBundleByJid(bundleJid));
-        checkAllowed(managerRoleChecker.canView(actorJid, bundle));
+        checkAllowed(supervisorRoleChecker.canView(actorJid, bundle));
 
-        Page<ContestBundleManager> managers = managerStore.getManagers(bundleJid, pageNumber, PAGE_SIZE);
+        Page<ContestBundleSupervisor> supervisors = supervisorStore.getSupervisors(bundleJid, pageNumber, PAGE_SIZE);
 
-        var userJids = Lists.transform(managers.getPage(), ContestBundleManager::getUserJid);
+        var userJids = Lists.transform(supervisors.getPage(), ContestBundleSupervisor::getUserJid);
         Map<String, Profile> profilesMap = jophielClient.getProfiles(userJids);
 
-        boolean canManage = managerRoleChecker.canManage(actorJid);
-        ContestBundleManagerConfig config = new ContestBundleManagerConfig.Builder()
-                .canManage(canManage)
-                .build();
-
-        return new ContestBundleManagersResponse.Builder()
-                .data(managers)
+        return new ContestBundleSupervisorsResponse.Builder()
+                .data(supervisors)
                 .profilesMap(profilesMap)
-                .config(config)
                 .build();
     }
 
@@ -87,40 +84,40 @@ public class ContestBundleManagerResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @UnitOfWork
-    public ContestBundleManagersUpsertResponse batchUpsert(
+    public ContestBundleSupervisorsUpsertResponse batchUpsert(
             @HeaderParam(AUTHORIZATION) AuthHeader authHeader,
             @PathParam("bundleJid") String bundleJid,
             Set<String> usernames) {
 
         String actorJid = actorChecker.check(authHeader);
         ContestBundle bundle = checkFound(contestBundleStore.getContestBundleByJid(bundleJid));
-        checkAllowed(managerRoleChecker.canManage(actorJid));
+        checkAllowed(supervisorRoleChecker.canManage(actorJid, bundle));
 
         checkArgument(usernames.size() <= 100, "Cannot add more than 100 users.");
 
         Map<String, String> usernameToJidMap = jophielClient.translateUsernamesToJids(usernames);
 
-        Set<String> insertedManagerUsernames = Sets.newHashSet();
-        Set<String> alreadyManagerUsernames = Sets.newHashSet();
+        Set<String> insertedSupervisorUsernames = Sets.newHashSet();
+        Set<String> alreadySupervisorUsernames = Sets.newHashSet();
         usernameToJidMap.forEach((username, userJid) -> {
-            if (managerStore.upsertManager(bundle.getJid(), userJid)) {
-                insertedManagerUsernames.add(username);
+            if (supervisorStore.upsertSupervisor(bundle.getJid(), userJid)) {
+                insertedSupervisorUsernames.add(username);
             } else {
-                alreadyManagerUsernames.add(username);
+                alreadySupervisorUsernames.add(username);
             }
         });
 
         Map<String, Profile> userJidToProfileMap = jophielClient.getProfiles(usernameToJidMap.values());
-        Map<String, Profile> insertedManagerProfilesMap = insertedManagerUsernames
+        Map<String, Profile> insertedSupervisorProfilesMap = insertedSupervisorUsernames
                 .stream()
                 .collect(Collectors.toMap(u -> u, u -> userJidToProfileMap.get(usernameToJidMap.get(u))));
-        Map<String, Profile> alreadyManagerProfilesMap = alreadyManagerUsernames
+        Map<String, Profile> alreadySupervisorProfilesMap = alreadySupervisorUsernames
                 .stream()
                 .collect(Collectors.toMap(u -> u, u -> userJidToProfileMap.get(usernameToJidMap.get(u))));
 
-        return new ContestBundleManagersUpsertResponse.Builder()
-                .insertedManagerProfilesMap(insertedManagerProfilesMap)
-                .alreadyManagerProfilesMap(alreadyManagerProfilesMap)
+        return new ContestBundleSupervisorsUpsertResponse.Builder()
+                .insertedManagerProfilesMap(insertedSupervisorProfilesMap)
+                .alreadyManagerProfilesMap(alreadySupervisorProfilesMap)
                 .build();
     }
 
@@ -129,40 +126,40 @@ public class ContestBundleManagerResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @UnitOfWork
-    public ContestBundleManagersDeleteResponse deleteManagers(
+    public ContestBundleSupervisorsDeleteResponse deleteSupervisors(
             @HeaderParam(AUTHORIZATION) AuthHeader authHeader,
             @PathParam("bundleJid") String bundleJid,
             Set<String> usernames) {
 
         String actorJid = actorChecker.check(authHeader);
         ContestBundle bundle = checkFound(contestBundleStore.getContestBundleByJid(bundleJid));
-        checkAllowed(managerRoleChecker.canManage(actorJid));
+        checkAllowed(supervisorRoleChecker.canManage(actorJid, bundle));
 
-        checkArgument(usernames.size() <= 100, "Cannot delete more than 100 users.");
+        checkArgument(usernames.size() <= 100, "Cannot add more than 100 users.");
 
         Map<String, String> usernameToJidMap = jophielClient.translateUsernamesToJids(usernames);
 
-        Set<String> deletedManagerUsernames = Sets.newHashSet();
-        Set<String> notManagerUsernames = Sets.newHashSet();
+        Set<String> deletedSupervisorUsernames = Sets.newHashSet();
+        Set<String> notSupervisorUsernames = Sets.newHashSet();
         usernameToJidMap.forEach((username, userJid) -> {
-            if (managerStore.deleteManager(bundle.getJid(), userJid)) {
-                deletedManagerUsernames.add(username);
+            if (supervisorStore.deleteSupervisor(bundle.getJid(), userJid)) {
+                deletedSupervisorUsernames.add(username);
             } else {
-                notManagerUsernames.add(username);
+                notSupervisorUsernames.add(username);
             }
         });
 
         Map<String, Profile> userJidToProfileMap = jophielClient.getProfiles(usernameToJidMap.values());
-        Map<String, Profile> deletedManagerProfilesMap = deletedManagerUsernames
+        Map<String, Profile> deletedSupervisorProfilesMap = deletedSupervisorUsernames
                 .stream()
                 .collect(Collectors.toMap(u -> u, u -> userJidToProfileMap.get(usernameToJidMap.get(u))));
-        Map<String, Profile> notManagerProfilesMap = notManagerUsernames
+        Map<String, Profile> notSupervisorProfilesMap = notSupervisorUsernames
                 .stream()
                 .collect(Collectors.toMap(u -> u, u -> userJidToProfileMap.get(usernameToJidMap.get(u))));
 
-        return new ContestBundleManagersDeleteResponse.Builder()
-                .deletedManagerProfilesMap(deletedManagerProfilesMap)
-                .notManagerProfilesMap(notManagerProfilesMap)
+        return new ContestBundleSupervisorsDeleteResponse.Builder()
+                .deletedManagerProfilesMap(deletedSupervisorProfilesMap)
+                .notManagerProfilesMap(notSupervisorProfilesMap)
                 .build();
     }
 }

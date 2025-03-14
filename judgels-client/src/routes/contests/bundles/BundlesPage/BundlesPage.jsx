@@ -7,7 +7,7 @@ import { LoadingContentCard } from '../../../../components/LoadingContentCard/Lo
 import Pagination from '../../../../components/Pagination/Pagination';
 import SearchBox from '../../../../components/SearchBox/SearchBox';
 import { BundleCreateDialog } from '../BundleCreateDialog/BundleCreateDialog';
-import { BundleCard } from '../BundleCard/BundleCard';
+import BundleCard from '../BundleCard/BundleCard';
 
 import * as bundleActions from '../modules/bundleActions';
 import * as contestActions from '../../contests/modules/contestActions';
@@ -108,9 +108,11 @@ class BundlesPage extends Component {
         );
       }
   
-      return bundles.page.map(bundle => (
-        <BundleCard key={bundle.jid} bundle={bundle} role={rolesMap[bundle.jid]} onGetContestsInBundle={this.props.onGetContestsInBundle} onGetBundleByJid={this.props.onGetBundleByJid} onGetBundleManagersByJid={this.props.onGetBundleManagersByJid} onCreateContest={this.props.onCreateContest} />
-      ));
+      return <>
+        {bundles.page.map(bundle => (
+          <BundleCard key={bundle.jid} bundle={bundle} role={rolesMap[bundle.jid]} />
+        ))}
+      </>;
     };
   
     renderPagination = () => {
@@ -158,7 +160,6 @@ const mapDispatchToProps = {
     onGetBundles: bundleActions.getContestBundles,
     onCreateBundle: bundleActions.createContestBundle,
     onGetBundleByJid: bundleActions.getContestBundleByJid,
-    onGetBundleManagersByJid: bundleActions.getContestBundleManagersByJid,
     onGetContestsInBundle: contestActions.getContestsInBundle,
     onCreateContest: contestActions.createContest,
 };

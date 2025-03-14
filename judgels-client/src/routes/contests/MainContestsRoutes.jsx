@@ -3,14 +3,16 @@ import { Route, Switch, withRouter } from 'react-router';
 import { withBreadcrumb } from '../../components/BreadcrumbWrapper/BreadcrumbWrapper';
 import ContestsRoutes from './ContestsRoutes';
 import MainSingleContestRoutes from './contests/single/MainSingleContestRoutes';
+import MainContestsWrapperRoutes from './MainContestsWrapperRoutes';
 
 function MainContestRoutes() {
   return (
     <div>
       <Switch>
-        <Route path="/contests/bundles" component={ContestsRoutes} />
+        {/* <Route exact path="/contests" component={ContestsRoutes} /> */}
+        <Route exact path="/contests" component={MainContestsWrapperRoutes} />
+        <Route path="/contests/bundle" component={MainContestsWrapperRoutes} />
         <Route path="/contests/:contestSlug([a-zA-Z0-9-]+)" component={MainSingleContestRoutes} />
-        <Route path="/contests" component={ContestsRoutes} />
       </Switch>
     </div>
   );

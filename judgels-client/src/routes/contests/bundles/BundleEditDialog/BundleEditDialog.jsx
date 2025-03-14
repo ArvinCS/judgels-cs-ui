@@ -5,6 +5,8 @@ import { Component } from 'react';
 import './BundleEditDialog.scss';
 import BundleEditGeneralTab from '../components/BundleEditGeneralTab';
 import BundleEditManagersTab from '../components/BundleEditManagersTab';
+import BundleEditSupervisorTab from '../components/BundleEditSupervisorTab';
+import BundleEditContestantTab from '../components/BundleEditContestantTab';
 
 export class BundleEditDialog extends Component {
   state = {
@@ -39,7 +41,8 @@ export class BundleEditDialog extends Component {
     );
   };
 
-  toggleDialog = () => {
+  toggleDialog = (e) => {
+    e.stopPropagation();
     this.setState(prevState => ({ isDialogOpen: !prevState.isDialogOpen }));
   };
     
@@ -61,6 +64,14 @@ export class BundleEditDialog extends Component {
             </Tab>
             <Tab id="managers" panel={<BundleEditManagersTab {...this.props} />}>
               <span>Managers</span>
+              <ChevronRight className="contest-edit-dialog__arrow" />
+            </Tab>
+            <Tab id="supervisors" panel={<BundleEditSupervisorTab {...this.props} />}>
+              <span>Supervisors</span>
+              <ChevronRight className="contest-edit-dialog__arrow" />
+            </Tab>
+            <Tab id="contestants" panel={<BundleEditContestantTab {...this.props} />}>
+              <span>Contestants</span>
               <ChevronRight className="contest-edit-dialog__arrow" />
             </Tab>
             {/* <Tab id="description" panel={<ContestEditDescriptionTab />}>

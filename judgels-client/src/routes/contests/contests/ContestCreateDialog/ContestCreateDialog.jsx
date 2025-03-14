@@ -3,9 +3,15 @@ import { Plus } from '@blueprintjs/icons';
 import { Component } from 'react';
 
 import ContestCreateForm from '../ContestCreateForm/ContestCreateForm';
+import { SupervisorManagementPermission } from '../../../../modules/api/uriel/contestSupervisor';
 
 export class ContestCreateDialog extends Component {
-  state = { isDialogOpen: false };
+  state = { isDialogOpen: false, hasBundle: false, isInsertDefaultSupervisor: false, isInsertDefaultContestant: false };
+
+  constructor(props) {
+    super(props);
+    this.state.hasBundle = props.bundle !== undefined;
+  }
 
   render() {
     return (
@@ -32,12 +38,14 @@ export class ContestCreateDialog extends Component {
     );
   };
 
-  toggleDialog = () => {
+  toggleDialog = (e) => {
+    e.stopPropagation();
     this.setState(prevState => ({ isDialogOpen: !prevState.isDialogOpen }));
   };
 
   renderDialog = () => {
     const props = {
+      hasBundle: this.props.bundle !== undefined,
       renderFormComponents: this.renderDialogForm,
       onSubmit: this.createContest,
     };
@@ -65,9 +73,19 @@ export class ContestCreateDialog extends Component {
     </>
   );
 
+  getPermissionList(managementPermissions) {
+    return !managementPermissions
+      ? []
+      : Object.keys(managementPermissions)
+          .filter(p => managementPermissions[p])
+          .map(p => SupervisorManagementPermission[p]);
+  }
+
   createContest = async data => {
-    if (this.props.bundle !== undefined) {
-      data = { ...data, bundleJid: this.props.bundle.jid };
+    console.log(data);
+    if (this.state.hasBundle) {
+      const { supervisorPermissions, ...restData } = data;
+      data = { ...restData, supervisorPermissions: this.getPermissionList(supervisorPermissions), bundleJid: this.props.bundle.jid };
     }
     await this.props.onCreateContest(data);
     this.setState({ isDialogOpen: false });
