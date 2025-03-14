@@ -3,6 +3,7 @@ package judgels.jerahmeel.api;
 import static judgels.jerahmeel.api.course.CourseErrors.SLUG_ALREADY_EXISTS;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
 import judgels.jerahmeel.api.course.Course;
 import judgels.jerahmeel.api.course.CourseCreateData;
 import judgels.jerahmeel.api.course.CourseUpdateData;
@@ -17,6 +18,7 @@ class CourseApiIntegrationTests extends BaseJerahmeelApiIntegrationTests {
                 .slug("course-a")
                 .name("Course A")
                 .description("This is course A")
+                .groups(Collections.singletonList("public"))
                 .build());
 
         assertThat(courseA.getSlug()).isEqualTo("course-a");
@@ -26,6 +28,7 @@ class CourseApiIntegrationTests extends BaseJerahmeelApiIntegrationTests {
         Course courseB = courseClient.createCourse(adminToken, new CourseCreateData.Builder()
                 .slug("course-b")
                 .name("Course B")
+                .groups(Collections.singletonList("public"))
                 .build());
 
         assertThat(courseB.getSlug()).isEqualTo("course-b");
