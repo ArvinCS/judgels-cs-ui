@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
-
 import judgels.persistence.Model;
 
 @SuppressWarnings("checkstyle:visibilitymodifier")
@@ -15,5 +14,5 @@ public class ContestBundleSupervisorModel extends Model {
     public String bundleJid;
 
     @Column(nullable = false)
-    public String userJid;   
+    public String userJid;
 }

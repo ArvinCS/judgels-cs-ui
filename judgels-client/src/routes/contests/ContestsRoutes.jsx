@@ -3,8 +3,8 @@ import { Route, withRouter } from 'react-router';
 
 import ContentWithSidebar from '../../components/ContentWithSidebar/ContentWithSidebar';
 import { FullPageLayout } from '../../components/FullPageLayout/FullPageLayout';
-import ContestsPage from './contests/ContestsPage/ContestsPage';
 import BundlesPage from './bundles/BundlesPage/BundlesPage';
+import ContestsPage from './contests/ContestsPage/ContestsPage';
 
 function ContestsRoutes() {
   const sidebarItems = [

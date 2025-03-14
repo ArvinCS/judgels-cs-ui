@@ -2,6 +2,7 @@ import { Button, Intent } from '@blueprintjs/core';
 import { Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+
 import BundleEditGeneralForm from './BundleEditGeneralForm';
 import { BundleEditGeneralTable } from './BundleEditGeneralTable';
 

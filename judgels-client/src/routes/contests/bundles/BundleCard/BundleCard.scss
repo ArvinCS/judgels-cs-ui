@@ -1,34 +1,34 @@
 @import '../../../../styles/base';
 
 .bundle-card {
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .bundle-card-name {
-    margin-right: 10px;
+  margin-right: 10px;
 }
-  
+
 .bundle-card-date {
-    margin-top: -4px;
-    margin-bottom: 0;
+  margin-top: -4px;
+  margin-bottom: 0;
 }
 
 .bundle-card-status {
-    font-weight: normal;
-    float: right;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  font-weight: normal;
+  float: right;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .bundle-card-chevron {
-    margin-left: 12px;
+  margin-left: 12px;
 }
 
 .bundle-card-contest-container {
-    margin: 0 0 0 20px;
+  margin: 0 0 0 20px;
 }
 
 // .bundle-card-edit-icon {
@@ -36,9 +36,9 @@
 // }
 
 .bundle-card-add-icon {
-    margin-bottom: -15px;
+  margin-bottom: -15px;
 }
 
 .bundle-card-pagination-container {
-    margin: 0 0 0 20px;
+  margin: 0 0 0 20px;
 }

@@ -83,10 +83,9 @@ class PaginationContainer extends Component {
   componentDidMount() {
     this.refreshPagination();
   }
-  
+
   componentDidUpdate() {
-    if (this.props.forceUpdate || 
-        this.state.currentPage !== this.state.previousPage) {
+    if (this.props.forceUpdate || this.state.currentPage !== this.state.previousPage) {
       this.refreshPagination();
     }
   }
@@ -95,12 +94,11 @@ class PaginationContainer extends Component {
     const { currentPage, totalCount } = this.state;
     const { pageSize } = this.props;
 
-    if (totalCount ==- 0) {
+    if (totalCount == -0) {
       return null;
     }
 
     const props = {
-      
       currentPage,
       pageSize,
       totalCount,

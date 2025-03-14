@@ -2,9 +2,7 @@ package judgels.uriel.api.bundle;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.ws.rs.core.Response.Status;
-
 import judgels.service.api.JudgelsServiceException;
 
 public class ContestBundleErrors {

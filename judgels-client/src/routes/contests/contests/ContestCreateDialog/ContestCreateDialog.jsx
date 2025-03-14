@@ -2,8 +2,8 @@ import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { Plus } from '@blueprintjs/icons';
 import { Component } from 'react';
 
-import ContestCreateForm from '../ContestCreateForm/ContestCreateForm';
 import { SupervisorManagementPermission } from '../../../../modules/api/uriel/contestSupervisor';
+import ContestCreateForm from '../ContestCreateForm/ContestCreateForm';
 
 export class ContestCreateDialog extends Component {
   state = { isDialogOpen: false, hasBundle: false, isInsertDefaultSupervisor: false, isInsertDefaultContestant: false };
@@ -38,7 +38,7 @@ export class ContestCreateDialog extends Component {
     );
   };
 
-  toggleDialog = (e) => {
+  toggleDialog = e => {
     e.stopPropagation();
     this.setState(prevState => ({ isDialogOpen: !prevState.isDialogOpen }));
   };
@@ -85,7 +85,11 @@ export class ContestCreateDialog extends Component {
     console.log(data);
     if (this.state.hasBundle) {
       const { supervisorPermissions, ...restData } = data;
-      data = { ...restData, supervisorPermissions: this.getPermissionList(supervisorPermissions), bundleJid: this.props.bundle.jid };
+      data = {
+        ...restData,
+        supervisorPermissions: this.getPermissionList(supervisorPermissions),
+        bundleJid: this.props.bundle.jid,
+      };
     }
     await this.props.onCreateContest(data);
     this.setState({ isDialogOpen: false });

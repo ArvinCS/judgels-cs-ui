@@ -1,12 +1,12 @@
+import { Button, HTMLTable, Intent, Spinner } from '@blueprintjs/core';
+import { Trash } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { HTMLTable, Button, Intent, Spinner } from '@blueprintjs/core';
-import { Trash } from '@blueprintjs/icons';
+import PaginationTable from '../../../../components/PaginationTable/PaginationTable';
+import { UserRef } from '../../../../components/UserRef/UserRef';
 
 import * as bundleManagerAction from '../modules/bundleManagerActions';
-import { UserRef } from '../../../../components/UserRef/UserRef';
-import PaginationTable from '../../../../components/PaginationTable/PaginationTable';
 
 class BundleEditManagersTable extends Component {
   static PAGE_SIZE = 10;
@@ -21,14 +21,16 @@ class BundleEditManagersTable extends Component {
       managers: undefined,
       loading: true,
       profilesMap: undefined,
-    }
+    };
   }
 
   render() {
-    return <>
-      {this.renderTable()}
-      {this.renderPagination()}
-    </>
+    return (
+      <>
+        {this.renderTable()}
+        {this.renderPagination()}
+      </>
+    );
   }
 
   renderTable = () => {
@@ -42,8 +44,8 @@ class BundleEditManagersTable extends Component {
         {this.renderRows()}
       </HTMLTable>
     );
-  }
-  
+  };
+
   renderHeader = () => {
     return (
       <thead>
@@ -69,9 +71,16 @@ class BundleEditManagersTable extends Component {
         <td>
           <UserRef profile={profilesMap[manager.userJid]} />
         </td>
-        {this.props.canDelete && <td>
-          <Button small intent={Intent.DANGER} icon={<Trash />} onClick={async () => await this.deleteManager(profilesMap[manager.userJid].username)} />
-        </td>}
+        {this.props.canDelete && (
+          <td>
+            <Button
+              small
+              intent={Intent.DANGER}
+              icon={<Trash />}
+              onClick={async () => await this.deleteManager(profilesMap[manager.userJid].username)}
+            />
+          </td>
+        )}
       </tr>
     ));
 
@@ -102,11 +111,11 @@ class BundleEditManagersTable extends Component {
     return response.data.totalCount;
   };
 
-  deleteManager = async (username) => {
+  deleteManager = async username => {
     this.setState({ loading: true });
-    await this.props.onEditManagers('remove', {'usernames': username});
+    await this.props.onEditManagers('remove', { usernames: username });
     this.setState({ loading: false, forceUpdate: true });
-  }
+  };
 }
 
 const mapDispatchToProps = {

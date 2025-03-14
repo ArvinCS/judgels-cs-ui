@@ -2,11 +2,12 @@ import { Button, Classes, Dialog, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { ChevronRight, Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 
-import './BundleEditDialog.scss';
+import BundleEditContestantTab from '../components/BundleEditContestantTab';
 import BundleEditGeneralTab from '../components/BundleEditGeneralTab';
 import BundleEditManagersTab from '../components/BundleEditManagersTab';
 import BundleEditSupervisorTab from '../components/BundleEditSupervisorTab';
-import BundleEditContestantTab from '../components/BundleEditContestantTab';
+
+import './BundleEditDialog.scss';
 
 export class BundleEditDialog extends Component {
   state = {
@@ -32,20 +33,14 @@ export class BundleEditDialog extends Component {
     if (!this.props.canManage) {
       return null;
     }
-    return (
-        <Edit 
-            className='bundle-card-edit-icon' 
-            onClick={this.toggleDialog}
-            disabled={this.state.isDialogOpen}
-        />
-    );
+    return <Edit className="bundle-card-edit-icon" onClick={this.toggleDialog} disabled={this.state.isDialogOpen} />;
   };
 
-  toggleDialog = (e) => {
+  toggleDialog = e => {
     e.stopPropagation();
     this.setState(prevState => ({ isDialogOpen: !prevState.isDialogOpen }));
   };
-    
+
   renderDialog = () => {
     return (
       <Dialog

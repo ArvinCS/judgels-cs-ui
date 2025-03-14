@@ -1,13 +1,12 @@
+import { Button, HTMLTable, Intent, Spinner } from '@blueprintjs/core';
+import { Trash } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { HTMLTable, Button, Intent, Spinner } from '@blueprintjs/core';
-import { Trash } from '@blueprintjs/icons';
-
+import PaginationTable from '../../../../components/PaginationTable/PaginationTable';
 import { UserRef } from '../../../../components/UserRef/UserRef';
 
 import * as bundleContestantAction from '../modules/bundleContestantActions';
-import PaginationTable from '../../../../components/PaginationTable/PaginationTable';
 
 class BundleEditContestantTable extends Component {
   static PAGE_SIZE = 10;
@@ -16,7 +15,7 @@ class BundleEditContestantTable extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       response: undefined,
       supervisors: undefined,
@@ -24,13 +23,15 @@ class BundleEditContestantTable extends Component {
       profilesMap: undefined,
     };
   }
-  
+
   render() {
-    return <>
-      {this.renderTable()}
-      {this.renderPagination()}
-    </>
-  };
+    return (
+      <>
+        {this.renderTable()}
+        {this.renderPagination()}
+      </>
+    );
+  }
 
   renderTable = () => {
     if (this.state.loading) {
@@ -43,7 +44,7 @@ class BundleEditContestantTable extends Component {
         {this.renderRows()}
       </HTMLTable>
     );
-  }
+  };
 
   renderHeader = () => {
     return (
@@ -71,7 +72,12 @@ class BundleEditContestantTable extends Component {
           <UserRef profile={profilesMap[supervisor.userJid]} />
         </td>
         <td>
-          <Button small intent={Intent.DANGER} icon={<Trash />} onClick={async () => await this.deleteContestant(profilesMap[supervisor.userJid].username)} />
+          <Button
+            small
+            intent={Intent.DANGER}
+            icon={<Trash />}
+            onClick={async () => await this.deleteContestant(profilesMap[supervisor.userJid].username)}
+          />
         </td>
       </tr>
     ));
@@ -103,11 +109,11 @@ class BundleEditContestantTable extends Component {
     return response.data.totalCount;
   };
 
-  deleteContestant = async (username) => {
+  deleteContestant = async username => {
     this.setState({ loading: true });
-    await this.props.onEditContestants('remove', {'usernames': username});
+    await this.props.onEditContestants('remove', { usernames: username });
     this.setState({ loading: false, forceUpdate: true });
-  }
+  };
 }
 
 const mapDispatchToProps = {

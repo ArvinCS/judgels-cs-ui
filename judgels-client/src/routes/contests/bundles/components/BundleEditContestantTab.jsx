@@ -3,11 +3,12 @@ import { Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import BundleEditContestantForm from './BundleEditContestantForm';
+import BundleEditContestantTable from './BundleEditContestantTable';
+
 import * as bundleContestantActions from '../modules/bundleContestantActions';
 
 import './BundleEditContestantTab.scss';
-import BundleEditContestantTable from './BundleEditContestantTable';
-import BundleEditContestantForm from './BundleEditContestantForm';
 
 class BundleEditContestantTab extends Component {
   state = {
@@ -47,16 +48,16 @@ class BundleEditContestantTab extends Component {
       };
       return <BundleEditContestantForm {...formProps} />;
     }
-    return <BundleEditContestantTable bundleJid={this.props.bundle.jid} onEditContestants={this.editContestants}/>;
+    return <BundleEditContestantTable bundleJid={this.props.bundle.jid} onEditContestants={this.editContestants} />;
   };
 
   renderDialogForm = (fields, addButton, removeButton) => (
     <>
       <div>{fields}</div>
       <div>
-        <div className='bundle-contestant-dialog-footer'>
+        <div className="bundle-contestant-dialog-footer">
           <Button text="Cancel" onClick={this.toggleEdit} />
-          <div className='bundle-contestant-dialog-footer-actions'>
+          <div className="bundle-contestant-dialog-footer-actions">
             {removeButton}
             {addButton}
           </div>

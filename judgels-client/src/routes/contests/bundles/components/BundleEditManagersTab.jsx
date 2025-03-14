@@ -3,9 +3,10 @@ import { Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as bundleManagerAction from '../modules/bundleManagerActions';
-import BundleEditManagersTable from './BundleEditManagersTable';
 import BundleEditManagerForm from './BundleEditManagersForm';
+import BundleEditManagersTable from './BundleEditManagersTable';
+
+import * as bundleManagerAction from '../modules/bundleManagerActions';
 
 import './BundleEditManagersTab.scss';
 
@@ -47,16 +48,22 @@ class BundleEditManagersTab extends Component {
       };
       return <BundleEditManagerForm {...formProps} />;
     }
-    return <BundleEditManagersTable bundleJid={this.props.bundle.jid} onEditManagers={this.editManagers} canDelete={this.props.role === 'ADMIN'} />;
+    return (
+      <BundleEditManagersTable
+        bundleJid={this.props.bundle.jid}
+        onEditManagers={this.editManagers}
+        canDelete={this.props.role === 'ADMIN'}
+      />
+    );
   };
 
   renderDialogForm = (fields, addButton, removeButton) => (
     <>
       <div>{fields}</div>
       <div>
-        <div className='bundle-manager-dialog-footer'>
+        <div className="bundle-manager-dialog-footer">
           <Button text="Cancel" onClick={this.toggleEdit} />
-          <div className='bundle-manager-dialog-footer-actions'>
+          <div className="bundle-manager-dialog-footer-actions">
             {removeButton}
             {addButton}
           </div>

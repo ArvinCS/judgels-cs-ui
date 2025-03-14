@@ -1,7 +1,6 @@
 package judgels.uriel.bundle.contestant;
 
 import javax.inject.Inject;
-
 import judgels.uriel.api.bundle.ContestBundle;
 import judgels.uriel.bundle.ContestBundleRoleChecker;
 

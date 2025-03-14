@@ -3,11 +3,12 @@ import { Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import BundleEditSupervisorForm from './BundleEditSupervisorForm';
+import BundleEditSupervisorTable from './BundleEditSupervisorTable';
+
 import * as bundleSupervisorAction from '../modules/bundleSupervisorActions';
 
 import './BundleEditSupervisorTab.scss';
-import BundleEditSupervisorTable from './BundleEditSupervisorTable';
-import BundleEditSupervisorForm from './BundleEditSupervisorForm';
 
 class BundleEditSupervisorTab extends Component {
   state = {
@@ -47,16 +48,16 @@ class BundleEditSupervisorTab extends Component {
       };
       return <BundleEditSupervisorForm {...formProps} />;
     }
-    return <BundleEditSupervisorTable bundleJid={this.props.bundle.jid} onEditSupervisors={this.editSupervisors}/>;
+    return <BundleEditSupervisorTable bundleJid={this.props.bundle.jid} onEditSupervisors={this.editSupervisors} />;
   };
 
   renderDialogForm = (fields, addButton, removeButton) => (
     <>
       <div>{fields}</div>
       <div>
-        <div className='bundle-supervisor-dialog-footer'>
+        <div className="bundle-supervisor-dialog-footer">
           <Button text="Cancel" onClick={this.toggleEdit} />
-          <div className='bundle-supervisor-dialog-footer-actions'>
+          <div className="bundle-supervisor-dialog-footer-actions">
             {removeButton}
             {addButton}
           </div>

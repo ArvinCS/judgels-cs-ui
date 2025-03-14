@@ -1,6 +1,6 @@
 import { Button, Intent } from '@blueprintjs/core';
+import { useCallback, useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
-import { useState, useEffect, useCallback } from 'react';
 
 import { FormTextArea } from '../../../../components/forms/FormTextArea/FormTextArea';
 import { Max100Lines, Required, composeValidators } from '../../../../components/forms/validations';
@@ -8,7 +8,7 @@ import { Max100Lines, Required, composeValidators } from '../../../../components
 export default function BundleEditContestantForm({ onCancel, onSubmit, renderFormComponents }) {
   const [submitAction, setSubmitAction] = useState(null);
   const [formData, setFormData] = useState(null);
-    
+
   const usernamesField = {
     name: 'usernames',
     label: 'Usernames',
@@ -32,14 +32,34 @@ export default function BundleEditContestantForm({ onCancel, onSubmit, renderFor
   }, [submitAction, formData, handleFormSubmit]);
 
   return (
-    <Form onSubmit={(data) => setFormData(data)}>
+    <Form onSubmit={data => setFormData(data)}>
       {({ handleSubmit, submitting }) => {
-        const addButton = <Button type="submit" text="Add" intent={Intent.PRIMARY} loading={submitting} onClick={(e) => {
-          e.preventDefault();
-          setSubmitAction('add');
-          handleSubmit();
-        }} />;
-        const removeButton = <Button type="submit" text="Remove" intent={Intent.DANGER} loading={submitting} onClick={(e) => { e.preventDefault(); setSubmitAction('remove'); handleSubmit(); }} />;
+        const addButton = (
+          <Button
+            type="submit"
+            text="Add"
+            intent={Intent.PRIMARY}
+            loading={submitting}
+            onClick={e => {
+              e.preventDefault();
+              setSubmitAction('add');
+              handleSubmit();
+            }}
+          />
+        );
+        const removeButton = (
+          <Button
+            type="submit"
+            text="Remove"
+            intent={Intent.DANGER}
+            loading={submitting}
+            onClick={e => {
+              e.preventDefault();
+              setSubmitAction('remove');
+              handleSubmit();
+            }}
+          />
+        );
         return <form>{renderFormComponents(fields, addButton, removeButton)}</form>;
       }}
     </Form>

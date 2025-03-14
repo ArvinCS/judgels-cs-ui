@@ -4,12 +4,12 @@ import { selectToken } from '../../../../modules/session/sessionSelectors';
 import * as toastActions from '../../../../modules/toast/toastActions';
 
 export function getContestBundleSupervisorsByJid(contestBundleJid, page) {
-    return async (dispatch, getState) => {
-        const token = selectToken(getState());
-        const supervisors = await contestBundleSupervisorAPI.getSupervisors(token, contestBundleJid, page);
+  return async (dispatch, getState) => {
+    const token = selectToken(getState());
+    const supervisors = await contestBundleSupervisorAPI.getSupervisors(token, contestBundleJid, page);
 
-        return supervisors;
-    }
+    return supervisors;
+  };
 }
 
 export function upsertSupervisors(bundleJid, usernames) {

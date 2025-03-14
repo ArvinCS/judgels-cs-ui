@@ -1,13 +1,10 @@
 package judgels.uriel.api.bundle;
 
-import java.util.Map;
-
-import org.immutables.value.Value;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
+import java.util.Map;
 import judgels.persistence.api.Page;
 import judgels.uriel.api.bundle.role.ContestBundleRole;
+import org.immutables.value.Value;
 
 @Value.Immutable
 @JsonDeserialize(as = ImmutableContestBundlesResponse.class)

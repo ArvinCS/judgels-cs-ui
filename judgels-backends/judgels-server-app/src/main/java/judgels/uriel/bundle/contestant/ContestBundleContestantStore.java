@@ -1,11 +1,8 @@
 package judgels.uriel.bundle.contestant;
 
-import java.util.Optional;
-
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
-
+import java.util.Optional;
+import javax.inject.Inject;
 import judgels.persistence.api.Page;
 import judgels.uriel.api.bundle.contestant.ContestBundleContestant;
 import judgels.uriel.persistence.ContestBundleContestantDao;

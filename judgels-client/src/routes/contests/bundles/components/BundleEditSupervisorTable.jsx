@@ -1,13 +1,12 @@
+import { Button, HTMLTable, Intent, Spinner } from '@blueprintjs/core';
+import { Trash } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { HTMLTable, Button, Intent, Spinner } from '@blueprintjs/core';
-import { Trash } from '@blueprintjs/icons';
-
+import PaginationTable from '../../../../components/PaginationTable/PaginationTable';
 import { UserRef } from '../../../../components/UserRef/UserRef';
 
 import * as bundleSupervisorAction from '../modules/bundleSupervisorActions';
-import PaginationTable from '../../../../components/PaginationTable/PaginationTable';
 
 class BundleEditSupervisorTable extends Component {
   static PAGE_SIZE = 10;
@@ -16,22 +15,24 @@ class BundleEditSupervisorTable extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       response: undefined,
       supervisors: undefined,
       loading: true,
       profilesMap: undefined,
-      page: 1
+      page: 1,
     };
   }
-  
+
   render() {
-    return <>
-      {this.renderTable()}
-      {this.renderPagination()}
-    </>
-  };
+    return (
+      <>
+        {this.renderTable()}
+        {this.renderPagination()}
+      </>
+    );
+  }
 
   renderTable = () => {
     if (this.state.loading) {
@@ -44,7 +45,7 @@ class BundleEditSupervisorTable extends Component {
         {this.renderRows()}
       </HTMLTable>
     );
-  }
+  };
 
   renderHeader = () => {
     return (
@@ -72,7 +73,12 @@ class BundleEditSupervisorTable extends Component {
           <UserRef profile={profilesMap[supervisor.userJid]} />
         </td>
         <td>
-          <Button small intent={Intent.DANGER} icon={<Trash />} onClick={async () => await this.deleteSupervisor(profilesMap[supervisor.userJid].username)} />
+          <Button
+            small
+            intent={Intent.DANGER}
+            icon={<Trash />}
+            onClick={async () => await this.deleteSupervisor(profilesMap[supervisor.userJid].username)}
+          />
         </td>
       </tr>
     ));
@@ -104,11 +110,11 @@ class BundleEditSupervisorTable extends Component {
     return response.data.totalCount;
   };
 
-  deleteSupervisor = async (username) => {
+  deleteSupervisor = async username => {
     this.setState({ loading: true });
-    await this.props.onEditSupervisors('remove', {'usernames': username});
+    await this.props.onEditSupervisors('remove', { usernames: username });
     this.setState({ loading: false, forceUpdate: true });
-  }
+  };
 }
 
 const mapDispatchToProps = {
