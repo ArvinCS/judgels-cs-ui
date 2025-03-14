@@ -26,6 +26,15 @@ public class DiffScorer implements Scorer {
                 output.getAbsolutePath(),
                 evaluationOutput.getAbsolutePath())};
 
+        // print out the content of output and evaluation output file
+        try {
+            System.out.println("Output file content:");
+            System.out.println(new String(java.nio.file.Files.readAllBytes(output.toPath())));
+            System.out.println("Evaluation output file content:");
+            System.out.println(new String(java.nio.file.Files.readAllBytes(evaluationOutput.toPath())));
+        } catch (IOException e) {
+            // throw new Exception("Failed to read files");
+        }
         ProcessBuilder pb = new ProcessBuilder(scoringCommand);
         pb.directory(evaluationDir);
 
