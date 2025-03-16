@@ -5,7 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import judgels.gabriel.api.AutomatonMachine;
 import judgels.gabriel.api.GradingLanguage;
+import judgels.gabriel.languages.automatons.FiniteStateAutomatonMachine;
+import judgels.gabriel.languages.automatons.MealyMachine;
+import judgels.gabriel.languages.automatons.MooreMachine;
+import judgels.gabriel.languages.automatons.PushDownAutomatonMachine;
+import judgels.gabriel.languages.automatons.TuringMachine;
+import judgels.gabriel.languages.automatons.UnboundGrammarMachine;
 import judgels.gabriel.languages.c.CGradingLanguage;
 import judgels.gabriel.languages.cpp.Cpp11GradingLanguage;
 import judgels.gabriel.languages.cpp.Cpp17GradingLanguage;
@@ -37,24 +44,44 @@ public class GradingLanguageRegistry {
             new Rust2021GradingLanguage(),
             new OutputOnlyGradingLanguage());
 
+    private static final List<AutomatonMachine> AUTOMATONS = ImmutableList.of(
+            new FiniteStateAutomatonMachine(),
+            new MealyMachine(),
+            new MooreMachine(),
+            new PushDownAutomatonMachine(),
+            new TuringMachine(),
+            new UnboundGrammarMachine());
+
     private static final List<GradingLanguage> VISIBLE_LANGUAGES = LANGUAGES.stream()
-            .filter(GradingLanguage::isVisible)
-            .collect(Collectors.toList());
+                    .filter(GradingLanguage::isVisible)
+                    .collect(Collectors.toList());
+    private static final List<AutomatonMachine> VISIBLE_AUTOMATONS = AUTOMATONS.stream()
+                    .filter(AutomatonMachine::isAutomaton)
+                    .collect(Collectors.toList());
 
-    private static final Map<String, GradingLanguage> LANGUAGES_BY_SIMPLE_NAME = LANGUAGES.stream().collect(
-            LinkedHashMap::new,
-            (map, language) -> map.put(getSimpleName(language), language),
-            Map::putAll);
+    private static final Map<String, GradingLanguage> LANGUAGES_BY_SIMPLE_NAME = new LinkedHashMap<>();
+    private static final Map<String, AutomatonMachine> AUTOMATONS_BY_SIMPLE_NAME = new LinkedHashMap<>();
+    private static final Map<String, String> LANGUAGE_NAMES_BY_SIMPLE_NAME = new LinkedHashMap<>();
+    private static final Map<String, String> AUTOMATONS_NAMES_BY_SIMPLE_NAME = new LinkedHashMap<>();
+    private static final Map<String, String> VISIBLE_LANGUAGE_NAMES_BY_SIMPLE_NAME = new LinkedHashMap<>();
+    private static final Map<String, String> VISIBLE_AUTOMATONS_NAMES_BY_SIMPLE_NAME = new LinkedHashMap<>();
 
-    private static final Map<String, String> LANGUAGE_NAMES_BY_SIMPLE_NAME = LANGUAGES.stream().collect(
-            LinkedHashMap::new,
-            (map, language) -> map.put(getSimpleName(language), language.getName()),
-            Map::putAll);
-
-    private static final Map<String, String> VISIBLE_LANGUAGE_NAMES_BY_SIMPLE_NAME = VISIBLE_LANGUAGES.stream().collect(
-            LinkedHashMap::new,
-            (map, language) -> map.put(getSimpleName(language), language.getName()),
-            Map::putAll);
+    static {
+        LANGUAGES.stream().forEach(language -> {
+            LANGUAGES_BY_SIMPLE_NAME.put(getSimpleNameGradingLanguage(language), language);
+            LANGUAGE_NAMES_BY_SIMPLE_NAME.put(getSimpleNameGradingLanguage(language), language.getName());
+        });
+        AUTOMATONS.stream().forEach(automaton -> {
+            AUTOMATONS_BY_SIMPLE_NAME.put(getSimpleNameAutomatonMachine(automaton), automaton);
+            AUTOMATONS_NAMES_BY_SIMPLE_NAME.put(getSimpleNameAutomatonMachine(automaton), automaton.getName());
+        });
+        VISIBLE_LANGUAGES.stream().forEach(language -> {
+            VISIBLE_LANGUAGE_NAMES_BY_SIMPLE_NAME.put(getSimpleNameGradingLanguage(language), language.getName());
+        });
+        VISIBLE_AUTOMATONS.stream().forEach(automata -> {
+            VISIBLE_AUTOMATONS_NAMES_BY_SIMPLE_NAME.put(getSimpleNameAutomatonMachine(automata), automata.getName());
+        });
+    }
 
     private GradingLanguageRegistry() {}
 
@@ -65,6 +92,9 @@ public class GradingLanguageRegistry {
     public GradingLanguage get(String simpleName) {
         GradingLanguage language = LANGUAGES_BY_SIMPLE_NAME.get(simpleName);
         if (language == null) {
+            language = (GradingLanguage) AUTOMATONS_BY_SIMPLE_NAME.get(simpleName);
+        }
+        if (language == null) {
             throw new IllegalArgumentException("Grading language " + simpleName + " not found");
         }
         return language;
@@ -74,12 +104,25 @@ public class GradingLanguageRegistry {
         return LANGUAGE_NAMES_BY_SIMPLE_NAME;
     }
 
+    public Map<String, String> getAutomatons() {
+        return AUTOMATONS_NAMES_BY_SIMPLE_NAME;
+    }
+
     public Map<String, String> getVisibleLanguages() {
         return VISIBLE_LANGUAGE_NAMES_BY_SIMPLE_NAME;
     }
 
-    private static String getSimpleName(GradingLanguage language) {
+    public Map<String, String> getVisibleAutomatons() {
+        return VISIBLE_AUTOMATONS_NAMES_BY_SIMPLE_NAME;
+    }
+
+    private static String getSimpleNameGradingLanguage(GradingLanguage language) {
         String name = language.getClass().getSimpleName();
         return name.substring(0, name.length() - "GradingLanguage".length());
+    }
+
+    private static String getSimpleNameAutomatonMachine(AutomatonMachine machine) {
+        String name = machine.getClass().getSimpleName();
+        return name.substring(0, name.length() - "Machine".length());
     }
 }

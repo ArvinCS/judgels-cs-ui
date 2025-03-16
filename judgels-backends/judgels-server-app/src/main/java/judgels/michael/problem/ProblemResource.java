@@ -33,6 +33,7 @@ import judgels.persistence.api.Page;
 import judgels.sandalphon.api.problem.Problem;
 import judgels.sandalphon.api.problem.ProblemSetterRole;
 import judgels.sandalphon.api.problem.ProblemType;
+import judgels.sandalphon.problem.automaton.AutomatonProblemStore;
 import judgels.sandalphon.problem.base.tag.ProblemTagStore;
 import judgels.sandalphon.problem.bundle.BundleProblemStore;
 import judgels.sandalphon.problem.programming.ProgrammingProblemStore;
@@ -41,6 +42,7 @@ import judgels.sandalphon.problem.programming.ProgrammingProblemStore;
 public class ProblemResource extends BaseProblemResource {
     private static final int PAGE_SIZE = 20;
 
+    @Inject protected AutomatonProblemStore automatonProblemStore;
     @Inject protected BundleProblemStore bundleProblemStore;
     @Inject protected ProgrammingProblemStore programmingProblemStore;
     @Inject protected ProblemTagStore tagStore;
@@ -84,7 +86,7 @@ public class ProblemResource extends BaseProblemResource {
 
         NewProblemForm form = new NewProblemForm();
         form.gradingEngine = "Batch";
-        form.initialLanguage = "en-US";
+        form.initialLanguage = "id-ID";
 
         return renderNewProblem(actor, form);
     }
@@ -108,12 +110,16 @@ public class ProblemResource extends BaseProblemResource {
         }
 
         ProblemType type = form.gradingEngine.equals("Bundle") ? ProblemType.BUNDLE : ProblemType.PROGRAMMING;
+
         Problem problem = problemStore.createProblem(type, form.slug, form.additionalNote);
 
         statementStore.initStatements(problem.getJid(), type, form.initialLanguage);
 
         if (type == ProblemType.BUNDLE) {
             bundleProblemStore.initBundleProblem(problem.getJid());
+        } else if (type == ProblemType.AUTOMATON) { // WONT BE USED FOR A WHILE
+            automatonProblemStore.initAutomatonProblem(problem.getJid(), form.gradingEngine);
+            tagStore.refreshDerivedTags(problem.getJid());
         } else {
             programmingProblemStore.initProgrammingProblem(problem.getJid(), form.gradingEngine);
             tagStore.refreshDerivedTags(problem.getJid());

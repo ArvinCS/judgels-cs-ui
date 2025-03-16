@@ -13,7 +13,7 @@ import judgels.persistence.JudgelsModel;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy"),
         @Index(columnList = "updatedAt")})
-@JidChildPrefixes({"PROG", "BUND"})
+@JidChildPrefixes({"AUTOM", "PROG", "BUND"})
 public final class ProblemModel extends JudgelsModel {
     @Column(unique = true, nullable = false)
     public String slug;

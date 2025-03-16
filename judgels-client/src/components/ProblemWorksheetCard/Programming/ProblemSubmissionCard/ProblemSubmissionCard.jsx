@@ -20,7 +20,6 @@ export function ProblemSubmissionCard({
         </Callout>
       );
     }
-
     const gradingLanguages = getAllowedGradingLanguages(gradingEngine, gradingLanguageRestriction);
 
     let defaultGradingLanguage = preferredGradingLanguage;

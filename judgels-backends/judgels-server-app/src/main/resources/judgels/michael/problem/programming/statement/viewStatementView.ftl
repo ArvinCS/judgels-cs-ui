@@ -52,6 +52,8 @@
 
       <#if isOutputOnly>
         <input type="hidden" name="gradingLanguage" value="${outputOnlyGradingLanguage}">
+      <#elseif isAutomaton>
+        <@forms.select name="gradingLanguage" label="Automaton" options=allowedAutomatons/>
       <#else>
         <@forms.select name="gradingLanguage" label="Language" options=allowedGradingLanguages/>
       </#if>

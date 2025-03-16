@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import judgels.gabriel.api.GradingEngine;
+import judgels.gabriel.engines.automata.AutomataGradingEngine;
+import judgels.gabriel.engines.automata.AutomataWithSubtasksGradingEngine;
 import judgels.gabriel.engines.batch.BatchGradingEngine;
 import judgels.gabriel.engines.batch.BatchWithSubtasksGradingEngine;
 import judgels.gabriel.engines.functional.FunctionalGradingEngine;
@@ -19,6 +21,8 @@ public class GradingEngineRegistry {
     private static final Class<? extends GradingEngine> DEFAULT_CLASS = BatchGradingEngine.class;
 
     private static final List<Class<? extends GradingEngine>> CLASSES = ImmutableList.of(
+            AutomataGradingEngine.class,
+            AutomataWithSubtasksGradingEngine.class,
             BatchGradingEngine.class,
             BatchWithSubtasksGradingEngine.class,
             InteractiveGradingEngine.class,
