@@ -1,0 +1,176 @@
+package judgels.sandalphon.problem.automaton;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.util.List;
+import javax.inject.Inject;
+import judgels.fs.FileInfo;
+import judgels.fs.FileSystem;
+import judgels.gabriel.api.AutomatonRestriction;
+import judgels.gabriel.api.GradingConfig;
+import judgels.gabriel.api.ScoringConfig;
+import judgels.gabriel.engines.GradingEngineRegistry;
+import judgels.sandalphon.api.problem.automaton.AutomatonSubmissionConfig;
+import judgels.sandalphon.problem.base.BaseProblemStore;
+import judgels.sandalphon.problem.base.ProblemFs;
+
+public final class AutomatonProblemStore extends BaseProblemStore {
+    @Inject
+    public AutomatonProblemStore(ObjectMapper mapper, @ProblemFs FileSystem problemFs) {
+        super(mapper, problemFs);
+    }
+
+    public void initAutomatonProblem(String problemJid, String gradingEngine) {
+        problemFs.createDirectory(getGradingDirPath(null, problemJid));
+
+        problemFs.createDirectory(getGradingTestDataDirPath(null, problemJid));
+        problemFs.createFile(getGradingTestDataDirPath(null, problemJid).resolve(".gitkeep"));
+
+        problemFs.createDirectory(getGradingHelpersDirPath(null, problemJid));
+        problemFs.createFile(getGradingHelpersDirPath(null, problemJid).resolve(".gitkeep"));
+
+        problemFs.writeToFile(getGradingEngineFilePath(null, problemJid), gradingEngine);
+        problemFs.writeToFile(getAutomatonRestrictionFilePath(null, problemJid), writeObj(AutomatonRestriction.noRestriction()));
+
+        GradingConfig config = GradingEngineRegistry.getInstance().get(gradingEngine).createDefaultConfig();
+        problemFs.writeToFile(getGradingConfigFilePath(null, problemJid), writeObj(config));
+
+        updateGradingLastUpdateTime(null, problemJid);
+    }
+
+    public Instant getGradingLastUpdateTime(String userJid, String problemJid) {
+        String lastUpdateTime = problemFs.readFromFile(getGradingLastUpdateTimeFilePath(userJid, problemJid));
+        return Instant.ofEpochMilli(Long.parseLong(lastUpdateTime));
+    }
+
+    public GradingConfig getGradingConfig(String userJid, String problemJid) {
+        String gradingEngine = problemFs.readFromFile(getGradingEngineFilePath(userJid, problemJid));
+        String gradingConfig = problemFs.readFromFile(getGradingConfigFilePath(userJid, problemJid));
+
+        try {
+            return GradingEngineRegistry.getInstance().get(gradingEngine).parseConfig(mapper, gradingConfig);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateGradingConfig(String userJid, String problemJid, GradingConfig gradingConfig) {
+        problemFs.writeToFile(getGradingConfigFilePath(userJid, problemJid), writeObj(gradingConfig));
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public String getGradingEngine(String userJid, String problemJid) {
+        return problemFs.readFromFile(getGradingEngineFilePath(userJid, problemJid));
+    }
+
+    public void updateGradingEngine(String userJid, String problemJid, String gradingEngine) {
+        problemFs.writeToFile(getGradingEngineFilePath(userJid, problemJid), gradingEngine);
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public AutomatonRestriction getAutomatonRestriction(String userJid, String problemJid) {
+        String automaton = problemFs.readFromFile(getAutomatonRestrictionFilePath(userJid, problemJid));
+        try {
+            return mapper.readValue(automaton, AutomatonRestriction.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateAutomatonRestriction(String userJid, String problemJid, AutomatonRestriction automatonRestriction) {
+        problemFs.writeToFile(getAutomatonRestrictionFilePath(userJid, problemJid), writeObj(automatonRestriction));
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public void uploadGradingTestDataFile(String userJid, String problemJid, InputStream testDataFile, String filename) {
+        problemFs.uploadPublicFile(getGradingTestDataDirPath(userJid, problemJid).resolve(filename), testDataFile);
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public void uploadGradingTestDataFileZipped(String userJid, String problemJid, InputStream testDataFileZipped) {
+        problemFs.uploadZippedFiles(getGradingTestDataDirPath(userJid, problemJid), testDataFileZipped);
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public void uploadGradingHelperFile(String userJid, String problemJid, InputStream helperFile, String filename) {
+        problemFs.uploadPublicFile(getGradingHelpersDirPath(userJid, problemJid).resolve(filename), helperFile);
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public void uploadGradingHelperFileZipped(String userJid, String problemJid, InputStream helperFileZipped) {
+        problemFs.uploadZippedFiles(getGradingHelpersDirPath(userJid, problemJid), helperFileZipped);
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public List<FileInfo> getGradingTestDataFiles(String userJid, String problemJid) {
+        return problemFs.listFilesInDirectory(getGradingTestDataDirPath(userJid, problemJid));
+    }
+
+    public List<FileInfo> getGradingHelperFiles(String userJid, String problemJid) {
+        return problemFs.listFilesInDirectory(getGradingHelpersDirPath(userJid, problemJid));
+    }
+
+    public String getGradingTestDataFileURL(String userJid, String problemJid, String filename) {
+        return problemFs.getPublicFileUrl(getGradingTestDataDirPath(userJid, problemJid).resolve(filename));
+    }
+
+
+    public String getGradingHelperFileURL(String userJid, String problemJid, String filename) {
+        return problemFs.getPublicFileUrl(getGradingHelpersDirPath(userJid, problemJid).resolve(filename));
+    }
+
+    public AutomatonSubmissionConfig getProgrammingProblemSubmissionConfig(String problemJid) {
+        return new AutomatonSubmissionConfig.Builder()
+                .sourceKeys(getGradingConfig(null, problemJid).getSourceFileFields())
+                .gradingEngine(getGradingEngine(null, problemJid))
+                .automatonRestriction(getAutomatonRestriction(null, problemJid))
+                .gradingLastUpdateTime(getGradingLastUpdateTime(null, problemJid))
+                .build();
+    }
+
+    public ScoringConfig getProgrammingProblemScoringConfig(String problemJid) {
+        return getGradingConfig(null, problemJid).getScoringConfig().orElse(ScoringConfig.DEFAULT);
+    }
+
+    private void updateGradingLastUpdateTime(String userJid, String problemJid) {
+        problemFs.writeToFile(getGradingLastUpdateTimeFilePath(userJid, problemJid), "" + System.currentTimeMillis());
+    }
+
+    private Path getGradingDirPath(String userJid, String problemJid) {
+        return getRootDirPath(userJid, problemJid).resolve("grading");
+    }
+
+    private Path getGradingTestDataDirPath(String userJid, String problemJid) {
+        return getGradingDirPath(userJid, problemJid).resolve("testdata");
+    }
+
+    private Path getGradingHelpersDirPath(String userJid, String problemJid) {
+        return getGradingDirPath(userJid, problemJid).resolve("helpers");
+    }
+
+    private Path getGradingConfigFilePath(String userJid, String problemJid) {
+        return getGradingDirPath(userJid, problemJid).resolve("config.json");
+    }
+
+    private Path getGradingEngineFilePath(String userJid, String problemJid) {
+        return getGradingDirPath(userJid, problemJid).resolve("engine.txt");
+    }
+
+    private Path getAutomatonRestrictionFilePath(String userJid, String problemJid) {
+        return getGradingDirPath(userJid, problemJid).resolve("automatonRestriction.txt");
+    }
+
+    private Path getGradingLastUpdateTimeFilePath(String userJid, String problemJid) {
+        return getGradingDirPath(userJid, problemJid).resolve("lastUpdateTime.txt");
+    }
+}
