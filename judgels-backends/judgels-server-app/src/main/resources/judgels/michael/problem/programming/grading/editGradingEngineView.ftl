@@ -7,7 +7,7 @@
   <@forms.form>
     <@forms.select
       name="gradingEngine"
-      label="Grading engine"
+      label="Problem type"
       options=gradingEngines
       disabled=!canEdit
       help="Changing grading engine will reset grading config."/>
