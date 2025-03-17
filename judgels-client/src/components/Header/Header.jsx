@@ -1,7 +1,7 @@
 import { Alignment, Navbar } from '@blueprintjs/core';
 import { Link } from 'react-router-dom';
 
-import logo from '../../assets/images/logo-header.png';
+import logo from '../../assets/images/fasilkom-logo-header.png';
 import { APP_CONFIG } from '../../conf';
 import DarkModeWidget from '../DarkModeWidget/DarkModeWidget';
 import Menubar from '../Menubar/Menubar';
