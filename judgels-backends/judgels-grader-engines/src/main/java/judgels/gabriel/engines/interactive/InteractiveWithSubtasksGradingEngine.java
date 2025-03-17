@@ -38,7 +38,7 @@ public class InteractiveWithSubtasksGradingEngine extends BlackboxGradingEngine 
 
     @Override
     public String getName() {
-        return "Interactive with Subtasks";
+        return "Interactive (Subtasks)";
     }
 
     @Override

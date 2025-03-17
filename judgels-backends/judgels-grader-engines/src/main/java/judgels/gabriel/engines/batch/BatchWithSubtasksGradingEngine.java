@@ -39,7 +39,7 @@ public class BatchWithSubtasksGradingEngine extends BlackboxGradingEngine {
 
     @Override
     public String getName() {
-        return "Batch with Subtasks";
+        return "Programming (Subtasks)";
     }
 
     @Override

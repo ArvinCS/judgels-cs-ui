@@ -40,7 +40,7 @@ public class FunctionalWithSubtasksGradingEngine extends BlackboxGradingEngine {
 
     @Override
     public String getName() {
-        return "Functional with Subtasks";
+        return "Functional (Subtasks)";
     }
 
     @Override

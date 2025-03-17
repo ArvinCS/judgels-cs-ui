@@ -37,7 +37,7 @@ public class OutputOnlyWithSubtasksGradingEngine extends BlackboxGradingEngine {
 
     @Override
     public String getName() {
-        return "Output Only with Subtasks";
+        return "Output Only (Subtasks)";
     }
 
     @Override

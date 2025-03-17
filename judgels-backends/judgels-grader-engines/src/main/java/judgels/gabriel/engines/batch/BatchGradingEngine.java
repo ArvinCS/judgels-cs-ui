@@ -39,7 +39,7 @@ public class BatchGradingEngine extends BlackboxGradingEngine {
 
     @Override
     public String getName() {
-        return "Batch";
+        return "Programming";
     }
 
     @Override
