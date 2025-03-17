@@ -18,8 +18,7 @@ export function createContestBundle(data) {
       throw error;
     }
     toastActions.showSuccessToast('Contest Bundle created.');
-    dispatch(push(`/contest-bundles/${data.slug}`));
-    // dispatch(EditContest(true));
+    dispatch(push('/contests/bundle'));
   };
 }
 
@@ -35,10 +34,6 @@ export function updateContestBundle(bundleJid, bundleSlug, data) {
       throw error;
     }
     toastActions.showSuccessToast('Contest Bundle updated.');
-
-    // if (data.slug && data.slug !== bundleSlug) {
-    //     dispatch(push(`/contest-bundles/${data.slug}`));
-    // }
   };
 }
 
@@ -53,7 +48,6 @@ export function getContestBundleBySlug(contestBundleSlug) {
   return async (dispatch, getState) => {
     const token = selectToken(getState());
     const contestBundle = await contestBundleAPI.getContestBundleBySlug(token, contestBundleSlug);
-    // dispatch(PutContest(contest));
     return contestBundle;
   };
 }
@@ -62,7 +56,6 @@ export function getContestBundleByJid(contestBundleJid) {
   return async (dispatch, getState) => {
     const token = selectToken(getState());
     const contestBundle = await contestBundleAPI.getContestBundleByJid(token, contestBundleJid);
-    // dispatch(PutContest(contest));
     return contestBundle;
   };
 }
