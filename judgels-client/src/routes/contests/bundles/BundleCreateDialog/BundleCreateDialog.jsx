@@ -37,7 +37,7 @@ export class BundleCreateDialog extends Component {
       <Dialog
         isOpen={this.state.isDialogOpen}
         onClose={this.toggleDialog}
-        title="Create new contest"
+        title="Create new bundle"
         canOutsideClickClose={false}
       >
         <BundleCreateForm {...props} />
