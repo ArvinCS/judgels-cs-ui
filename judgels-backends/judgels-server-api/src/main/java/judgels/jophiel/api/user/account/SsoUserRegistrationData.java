@@ -8,6 +8,7 @@ import org.immutables.value.Value;
 public interface SsoUserRegistrationData {
     String getUsername();
     String getEmail();
+    String getStudentId();
 
     class Builder extends ImmutableSsoUserRegistrationData.Builder {}
 }

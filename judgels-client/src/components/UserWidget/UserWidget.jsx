@@ -111,13 +111,6 @@ export class UserWidget extends PureComponent {
             Log in
           </Link>
         </div>
-        {isTLX() && (
-          <div className="widget-user__link">
-            <Link data-key="register" to="/register">
-              Register
-            </Link>
-          </div>
-        )}
         {this.renderGuestResponsiveMenu()}
       </Navbar.Group>
     );

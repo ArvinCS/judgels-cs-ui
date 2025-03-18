@@ -1,6 +1,6 @@
 import { stringify } from 'query-string';
 
-import { get, post } from '../http';
+import { download, get, post } from '../http';
 import { baseContestURL } from './contest';
 
 export const ContestScoreboardType = {
@@ -18,5 +18,9 @@ export const contestScoreboardAPI = {
 
   refreshScoreboard: (token, contestJid) => {
     return post(`${baseURL(contestJid)}/refresh`, token);
+  },
+
+  exportScoreboard: (token, contestJid) => {
+    return download(`${baseURL(contestJid)}/export`, token);
   },
 };

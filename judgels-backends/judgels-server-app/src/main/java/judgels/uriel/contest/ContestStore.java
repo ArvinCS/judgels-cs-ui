@@ -99,6 +99,21 @@ public class ContestStore {
                 .all(), ContestStore::fromModel);
     }
 
+    public Page<Contest> getAllContestsByBundle(String bundleJid, Optional<String> userJid, int pageNumber, int pageSize) {
+        ContestQueryBuilder query = contestDao
+                .select()
+                .whereBundleIs(bundleJid);
+
+        if (userJid.isPresent()) {
+            query.whereUserCanView(userJid.get());
+        }
+
+        return query
+                .orderBy(ContestModel_.BEGIN_TIME, OrderDir.DESC)
+                .paged(pageNumber, pageSize)
+                .mapPage(p -> Lists.transform(p, ContestStore::fromModel));
+    }
+
     public List<Contest> getPubliclyParticipatedContests(String userJid) {
         return Lists.transform(contestDao
                 .select()
@@ -131,6 +146,7 @@ public class ContestStore {
         model.style = ContestStyle.ICPC.name();
         model.beginTime = Instant.ofEpochSecond(4102444800L); // 1 January 2100
         model.duration = Duration.ofHours(5).toMillis();
+        model.bundleJid = contestCreateData.getBundleJid().orElse(null);
 
         return fromModel(contestDao.insert(model));
     }
@@ -151,6 +167,7 @@ public class ContestStore {
         data.getStyle().ifPresent(style -> model.style = style.name());
         data.getBeginTime().ifPresent(time -> model.beginTime = time);
         data.getDuration().ifPresent(duration -> model.duration = duration.toMillis());
+        data.getBundleJid().ifPresent(bundleJid -> model.bundleJid = bundleJid);
         return fromModel(contestDao.update(model));
     }
 
@@ -174,6 +191,7 @@ public class ContestStore {
                 .style(ContestStyle.valueOf(model.style))
                 .beginTime(model.beginTime)
                 .duration(Duration.of(model.duration, MILLIS))
+                .bundleJid(Optional.ofNullable(model.bundleJid).orElse(""))
                 .build();
     }
 }

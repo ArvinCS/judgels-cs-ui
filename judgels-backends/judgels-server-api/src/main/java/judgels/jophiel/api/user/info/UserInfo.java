@@ -20,5 +20,7 @@ public interface UserInfo {
     Optional<String> getInstitutionProvince();
     Optional<String> getInstitutionCountry();
 
+    Optional<String> getStudentId();
+
     class Builder extends ImmutableUserInfo.Builder {}
 }

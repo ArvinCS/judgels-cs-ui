@@ -28,3 +28,10 @@
   float: left;
   margin-right: 25px;
 }
+
+.contest-scoreboard-page__action-buttons {
+  float: right;
+  > * {
+    margin-left: 10px;
+  }
+}

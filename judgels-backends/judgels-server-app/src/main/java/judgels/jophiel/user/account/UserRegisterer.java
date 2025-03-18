@@ -93,6 +93,7 @@ public class UserRegisterer {
                 .build());
         userInfoStore.upsertInfo(user.getJid(), new UserInfo.Builder()
                 .institutionName("Universitas Indonesia")
+                .studentId(data.getStudentId())
                 .build());
         return user;
     }

@@ -49,6 +49,11 @@ export default function ContestEditGeneralForm({ onSubmit, initialValues, onCanc
     inputHelper: 'Example: 10d 5h 30m 15s',
   };
 
+  const bundleField = {
+    name: 'bundleJid',
+    label: 'Bundle JID',
+  };
+
   return (
     <Form onSubmit={withSubmissionError(onSubmit)} initialValues={initialValues}>
       {({ handleSubmit, submitting }) => (
@@ -60,6 +65,7 @@ export default function ContestEditGeneralForm({ onSubmit, initialValues, onCanc
               <Field component={FormTableSelect2} {...styleField} />
               <Field component={FormTableDateInput} {...beginTimeField} />
               <Field component={FormTableTextInput} {...durationField} />
+              <Field component={FormTableTextInput} {...bundleField} />
             </tbody>
           </HTMLTable>
           <hr />
