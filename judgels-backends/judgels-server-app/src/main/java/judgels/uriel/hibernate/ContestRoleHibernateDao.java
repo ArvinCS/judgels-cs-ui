@@ -13,6 +13,8 @@ import judgels.persistence.CriteriaPredicate;
 import judgels.persistence.hibernate.HibernateDaoData;
 import judgels.persistence.hibernate.JudgelsHibernateDao;
 import judgels.uriel.api.contest.module.ContestModuleType;
+import judgels.uriel.persistence.ContestBundleManagerModel;
+import judgels.uriel.persistence.ContestBundleManagerModel_;
 import judgels.uriel.persistence.ContestContestantModel;
 import judgels.uriel.persistence.ContestContestantModel_;
 import judgels.uriel.persistence.ContestManagerModel;
@@ -76,7 +78,8 @@ public class ContestRoleHibernateDao extends JudgelsHibernateDao<ContestModel> i
         return or(
                 isPublic(),
                 userCanViewAsContestant(userJid),
-                userCanViewAsSupervisorOrAbove(userJid));
+                userCanViewAsSupervisorOrAbove(userJid)
+                );
     }
 
     static CriteriaPredicate<ContestModel> isPublic() {
@@ -100,7 +103,8 @@ public class ContestRoleHibernateDao extends JudgelsHibernateDao<ContestModel> i
     static CriteriaPredicate<ContestModel> userCanViewAsSupervisorOrAbove(String userJid) {
         return or(
                 isVisibleAsSupervisor(userJid),
-                userIsManager(userJid));
+                userIsManager(userJid),
+                userIsBundleManager(userJid));
     }
 
     static CriteriaPredicate<ContestModel> userIsContestant(String userJid) {
@@ -155,6 +159,19 @@ public class ContestRoleHibernateDao extends JudgelsHibernateDao<ContestModel> i
                     .where(
                             cb.equal(subroot.get(ContestManagerModel_.contestJid), root.get(ContestModel_.jid)),
                             cb.equal(subroot.get(ContestManagerModel_.userJid), userJid)));
+        };
+    }
+
+    static CriteriaPredicate<ContestModel> userIsBundleManager(String userJid) {
+        return (cb, cq, root) -> {
+            Subquery<ContestBundleManagerModel> subquery = cq.subquery(ContestBundleManagerModel.class);
+            Root<ContestBundleManagerModel> subroot = subquery.from(ContestBundleManagerModel.class);
+
+            return cb.exists(subquery
+                    .select(subroot)
+                    .where(
+                            cb.equal(subroot.get(ContestBundleManagerModel_.bundleJid), root.get(ContestModel_.bundleJid)),
+                            cb.equal(subroot.get(ContestBundleManagerModel_.userJid), userJid)));
         };
     }
 

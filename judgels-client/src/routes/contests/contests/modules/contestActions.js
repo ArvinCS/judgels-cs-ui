@@ -53,6 +53,13 @@ export function getContests(name, page) {
   };
 }
 
+export function getContestsInBundle(bundleJid, page) {
+  return async (dispatch, getState) => {
+    const token = selectToken(getState());
+    return await contestAPI.getContestsInBundle(token, bundleJid, page);
+  };
+}
+
 export function getActiveContests() {
   return async (dispatch, getState) => {
     const token = selectToken(getState());
