@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Optional;
 import org.immutables.value.Value;
 
 @Value.Immutable
@@ -16,6 +17,7 @@ public interface Contest {
     ContestStyle getStyle();
     Instant getBeginTime();
     Duration getDuration();
+    Optional<String> getBundleJid();
 
     @JsonIgnore
     default Instant getEndTime() {

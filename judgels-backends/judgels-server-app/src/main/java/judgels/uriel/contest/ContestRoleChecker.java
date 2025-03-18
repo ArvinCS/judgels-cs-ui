@@ -3,17 +3,20 @@ package judgels.uriel.contest;
 import javax.inject.Inject;
 import judgels.uriel.api.contest.Contest;
 import judgels.uriel.api.contest.role.ContestRole;
+import judgels.uriel.persistence.ContestBundleRoleDao;
 import judgels.uriel.persistence.ContestRoleDao;
 import judgels.uriel.role.RoleChecker;
 
 public class ContestRoleChecker {
     private final RoleChecker roleChecker;
+    private final ContestBundleRoleDao contestBundleRoleDao;
     private final ContestRoleDao contestRoleDao;
     private final ContestTimer contestTimer;
 
     @Inject
-    public ContestRoleChecker(RoleChecker roleChecker, ContestRoleDao contestRoleDao, ContestTimer contestTimer) {
+    public ContestRoleChecker(RoleChecker roleChecker, ContestBundleRoleDao contestBundleRoleDao, ContestRoleDao contestRoleDao, ContestTimer contestTimer) {
         this.roleChecker = roleChecker;
+        this.contestBundleRoleDao = contestBundleRoleDao;
         this.contestTimer = contestTimer;
         this.contestRoleDao = contestRoleDao;
     }
@@ -23,15 +26,15 @@ public class ContestRoleChecker {
     }
 
     public boolean canView(String userJid, Contest contest) {
-        return roleChecker.isAdmin(userJid) || contestRoleDao.isViewerOrAbove(userJid, contest.getJid());
+        return roleChecker.isAdmin(userJid) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get())) || contestRoleDao.isViewerOrAbove(userJid, contest.getJid());
     }
 
     public boolean canSupervise(String userJid, Contest contest) {
-        return roleChecker.isAdmin(userJid) || contestRoleDao.isSupervisorOrAbove(userJid, contest.getJid());
+        return roleChecker.isAdmin(userJid) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get())) || contestRoleDao.isSupervisorOrAbove(userJid, contest.getJid());
     }
 
     public boolean canManage(String userJid, Contest contest) {
-        return roleChecker.isAdmin(userJid) || contestRoleDao.isManager(userJid, contest.getJid());
+        return roleChecker.isAdmin(userJid) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get())) || contestRoleDao.isManager(userJid, contest.getJid());
     }
 
     public boolean canStartVirtual(String userJid, Contest contest) {
@@ -48,7 +51,7 @@ public class ContestRoleChecker {
     public ContestRole getRole(String userJid, Contest contest) {
         if (roleChecker.isAdmin(userJid)) {
             return ContestRole.ADMIN;
-        } else if (contestRoleDao.isManager(userJid, contest.getJid())) {
+        } else if (contestRoleDao.isManager(userJid, contest.getJid()) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get()))) {
             return ContestRole.MANAGER;
         } else if (contestRoleDao.isSupervisorOrAbove(userJid, contest.getJid())) {
             return ContestRole.SUPERVISOR;

@@ -145,6 +145,7 @@ public class JudgelsServerApplication extends Application<JudgelsServerApplicati
         env.jersey().register(component.userResource());
         env.jersey().register(component.userAccountResource());
         env.jersey().register(component.userAvatarResource());
+        env.jersey().register(component.userGroupResource());
         env.jersey().register(component.userProfileResource());
         env.jersey().register(component.userRegistrationWebResource());
         env.jersey().register(component.userRatingResource());
@@ -195,6 +196,11 @@ public class JudgelsServerApplication extends Application<JudgelsServerApplicati
                 .submissionModule(new judgels.uriel.submission.programming.SubmissionModule(urielConfig.getSubmissionConfig()))
                 .build();
 
+        env.jersey().register(component.contestBundleContestantResource());
+        env.jersey().register(component.contestBundleResource());
+        env.jersey().register(component.contestBundleManagerResource());
+        env.jersey().register(component.contestBundleScoreboardResource());
+        env.jersey().register(component.contestBundleSupervisorResource());
         env.jersey().register(component.contestResource());
         env.jersey().register(component.contestWebResource());
         env.jersey().register(component.contestAnnouncementResource());

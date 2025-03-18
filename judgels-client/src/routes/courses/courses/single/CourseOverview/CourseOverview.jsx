@@ -1,5 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import { SendMessage } from '@blueprintjs/icons';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import { ButtonLink } from '../../../../../components/ButtonLink/ButtonLink';

@@ -17,6 +17,7 @@ import judgels.jerahmeel.persistence.ProblemSetProblemModel;
 import judgels.jerahmeel.persistence.StatsUserModel;
 import judgels.jerahmeel.persistence.StatsUserProblemModel;
 import judgels.jophiel.persistence.SessionModel;
+import judgels.jophiel.persistence.UserGroupModel;
 import judgels.jophiel.persistence.UserInfoModel;
 import judgels.jophiel.persistence.UserModel;
 import judgels.jophiel.persistence.UserRatingEventModel;
@@ -33,7 +34,11 @@ import judgels.sandalphon.persistence.ProblemPartnerModel;
 import judgels.sandalphon.persistence.ProblemSetterModel;
 import judgels.sandalphon.persistence.ProblemTagModel;
 import judgels.uriel.persistence.ContestAnnouncementModel;
+import judgels.uriel.persistence.ContestBundleContestantModel;
 import judgels.uriel.persistence.ContestBundleItemSubmissionModel;
+import judgels.uriel.persistence.ContestBundleManagerModel;
+import judgels.uriel.persistence.ContestBundleModel;
+import judgels.uriel.persistence.ContestBundleSupervisorModel;
 import judgels.uriel.persistence.ContestClarificationModel;
 import judgels.uriel.persistence.ContestContestantModel;
 import judgels.uriel.persistence.ContestLogModel;
@@ -53,6 +58,7 @@ public class JudgelsServerHibernateBundle extends HibernateBundle<JudgelsServerA
                 // Jophiel
                 SessionModel.class,
                 UserModel.class,
+                UserGroupModel.class,
                 UserInfoModel.class,
                 UserRatingModel.class,
                 UserRatingEventModel.class,
@@ -73,6 +79,10 @@ public class JudgelsServerHibernateBundle extends HibernateBundle<JudgelsServerA
                 judgels.sandalphon.persistence.ProgrammingSubmissionModel.class,
 
                 // Uriel
+                ContestBundleContestantModel.class,
+                ContestBundleModel.class,
+                ContestBundleManagerModel.class,
+                ContestBundleSupervisorModel.class,
                 ContestModel.class,
                 ContestAnnouncementModel.class,
                 ContestBundleItemSubmissionModel.class,

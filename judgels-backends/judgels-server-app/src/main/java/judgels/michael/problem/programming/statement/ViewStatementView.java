@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import judgels.gabriel.api.GradingConfig;
 import judgels.gabriel.api.OutputOnlyOverrides;
+import judgels.gabriel.engines.automata.AutomataGradingConfig;
+import judgels.gabriel.engines.automata.AutomataWithSubtasksGradingConfig;
 import judgels.gabriel.engines.outputonly.OutputOnlyGradingConfig;
 import judgels.gabriel.engines.outputonly.OutputOnlyWithSubtasksGradingConfig;
 import judgels.gabriel.languages.GradingLanguageRegistry;
@@ -69,6 +71,10 @@ public class ViewStatementView extends TemplateView {
         return gradingConfig instanceof OutputOnlyGradingConfig || gradingConfig instanceof OutputOnlyWithSubtasksGradingConfig;
     }
 
+    public boolean getIsAutomaton() {
+        return gradingConfig instanceof AutomataGradingConfig || gradingConfig instanceof AutomataWithSubtasksGradingConfig;
+    }
+
     public String getOutputOnlyGradingLanguage() {
         return OutputOnlyOverrides.KEY;
     }
@@ -85,6 +91,14 @@ public class ViewStatementView extends TemplateView {
         Map<String, String> languages = new LinkedHashMap<>();
         for (String lang : allowedGradingLanguages) {
             languages.put(lang, GradingLanguageRegistry.getInstance().getLanguages().get(lang));
+        }
+        return languages;
+    }
+
+    public Map<String, String> getAllowedAutomatons() {
+        Map<String, String> languages = new LinkedHashMap<>();
+        for (String lang : allowedGradingLanguages) {
+            languages.put(lang, GradingLanguageRegistry.getInstance().getAutomatons().get(lang));
         }
         return languages;
     }
