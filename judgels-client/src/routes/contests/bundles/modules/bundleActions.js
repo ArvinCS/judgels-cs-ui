@@ -59,3 +59,11 @@ export function getContestBundleByJid(contestBundleJid) {
     return contestBundle;
   };
 }
+
+export function exportScoreboard(bundleJid) {
+  return async (dispatch, getState) => {
+    const token = selectToken(getState());
+    await contestBundleAPI.exportScoreboard(token, bundleJid);
+    toastActions.showSuccessToast('Scoreboard downloading.');
+  };
+}
