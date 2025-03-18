@@ -3,29 +3,25 @@ import { Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as bundleActions from '../modules/bundleActions';
-import { BundleEditManagersTable } from './BundleEditManagersTable';
 import BundleEditManagerForm from './BundleEditManagersForm';
+import BundleEditManagersTable from './BundleEditManagersTable';
+
+import * as bundleManagerAction from '../modules/bundleManagerActions';
 
 import './BundleEditManagersTab.scss';
 
-class BundleEditManagerTab extends Component {
+class BundleEditManagersTab extends Component {
   state = {
     isEditing: false,
-    page: 1,
     loading: true,
   };
-
-  componentDidMount() {
-    this.fetchBundleManagersData();
-  }
 
   render() {
     return (
       <>
         <h4>
           Managers settings
-          {this.renderEditButton()}
+          {this.props.role === 'ADMIN' && this.renderEditButton()}
         </h4>
         <hr />
         {this.renderContent()}
@@ -44,16 +40,7 @@ class BundleEditManagerTab extends Component {
   };
 
   renderContent = () => {
-    const { bundle } = this.props;
-    if (this.state.loading) {
-      return <Spinner />;
-    }
     if (this.state.isEditing) {
-      const initialValues = {
-        slug: bundle.slug,
-        name: bundle.name,
-        description: bundle.description,
-      };
       const formProps = {
         onCancel: this.toggleEdit,
         renderFormComponents: this.renderDialogForm,
@@ -61,16 +48,22 @@ class BundleEditManagerTab extends Component {
       };
       return <BundleEditManagerForm {...formProps} />;
     }
-    return <BundleEditManagersTable managers={this.state.managers} profilesMap={this.state.profilesMap} onRemoveManager={this.editManagers} />;
+    return (
+      <BundleEditManagersTable
+        bundleJid={this.props.bundle.jid}
+        onEditManagers={this.editManagers}
+        canDelete={this.props.role === 'ADMIN'}
+      />
+    );
   };
 
   renderDialogForm = (fields, addButton, removeButton) => (
     <>
       <div>{fields}</div>
       <div>
-        <div className='bundle-manager-dialog-footer'>
+        <div className="bundle-manager-dialog-footer">
           <Button text="Cancel" onClick={this.toggleEdit} />
-          <div className='bundle-manager-dialog-footer-actions'>
+          <div className="bundle-manager-dialog-footer-actions">
             {removeButton}
             {addButton}
           </div>
@@ -89,7 +82,6 @@ class BundleEditManagerTab extends Component {
     } else if (action === 'remove') {
       await this.props.onDeleteManagers(this.props.bundle.jid, usernames);
     }
-    this.fetchBundleManagersData();
     if (this.state.isEditing) {
       this.toggleEdit();
     }
@@ -100,20 +92,10 @@ class BundleEditManagerTab extends Component {
       isEditing: !prevState.isEditing,
     }));
   };
-
-  fetchBundleManagersData = async () => {
-    const response = await this.props.onGetBundleManagersByJid(this.props.bundle.jid, this.state.page);
-
-    const managers = response.data;
-    const profilesMap = response.profilesMap;
-
-    this.setState({ managers, profilesMap, loading: false });
-  }
 }
 
 const mapDispatchToProps = {
-  onGetBundleManagersByJid: bundleActions.getContestBundleManagersByJid,
-  onUpsertManagers: bundleActions.upsertManagers,
-  onDeleteManagers: bundleActions.deleteManagers,
+  onUpsertManagers: bundleManagerAction.upsertManagers,
+  onDeleteManagers: bundleManagerAction.deleteManagers,
 };
-export default connect(undefined, mapDispatchToProps)(BundleEditManagerTab);
+export default connect(undefined, mapDispatchToProps)(BundleEditManagersTab);

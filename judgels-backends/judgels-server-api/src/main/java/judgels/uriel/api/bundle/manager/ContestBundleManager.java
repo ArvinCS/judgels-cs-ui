@@ -1,8 +1,7 @@
 package judgels.uriel.api.bundle.manager;
 
-import org.immutables.value.Value;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.immutables.value.Value;
 
 @Value.Immutable
 @JsonDeserialize(as = ImmutableContestBundleManager.class)

@@ -2,8 +2,8 @@ import { Button, HTMLTable, Intent } from '@blueprintjs/core';
 import { Field, Form } from 'react-final-form';
 
 import { ActionButtons } from '../../../../components/ActionButtons/ActionButtons';
-import { FormTableTextInput } from '../../../../components/forms/FormTableTextInput/FormTableTextInput';
 import { FormTableTextArea } from '../../../../components/forms/FormTableTextArea/FormTableTextArea';
+import { FormTableTextInput } from '../../../../components/forms/FormTableTextInput/FormTableTextInput';
 import { Required, Slug, composeValidators } from '../../../../components/forms/validations';
 import { withSubmissionError } from '../../../../modules/form/submissionError';
 

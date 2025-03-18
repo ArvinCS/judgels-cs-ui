@@ -37,21 +37,29 @@ import judgels.uriel.api.contest.module.IcpcStyleModuleConfig;
 import judgels.uriel.api.contest.role.ContestRole;
 import judgels.uriel.bundle.ContestBundleRoleChecker;
 import judgels.uriel.bundle.ContestBundleStore;
+import judgels.uriel.bundle.contestant.ContestBundleContestantStore;
+import judgels.uriel.bundle.supervisor.ContestBundleSupervisorStore;
 import judgels.uriel.contest.contestant.ContestContestantStore;
 import judgels.uriel.contest.log.ContestLogger;
 import judgels.uriel.contest.module.ContestModuleStore;
+import judgels.uriel.contest.supervisor.ContestSupervisorStore;
 
 @Path("/api/v2/contests")
 public class ContestResource {
     private static final int PAGE_SIZE = 20;
-    private static final int BUNDLE_PAGE_SIZE = 5;
+    private static final int BUNDLE_PAGE_SIZE = 6;
+    private static final int MAX_BOUND_AUTO_INSERT = 1000;
 
     @Inject protected ActorChecker actorChecker;
     @Inject protected ContestBundleStore contestBundleStore;
+    @Inject protected ContestBundleSupervisorStore contestBundleSupervisorStore;
+    @Inject protected ContestBundleContestantStore contestBundleContestantStore;
     @Inject protected ContestBundleRoleChecker contestBundleRoleChecker;
     @Inject protected ContestRoleChecker contestRoleChecker;
     @Inject protected ContestStore contestStore;
     @Inject protected ContestLogger contestLogger;
+    @Inject protected ContestSupervisorStore contestSupervisorStore;
+    @Inject protected ContestContestantStore contestContestantStore;
     @Inject protected ContestModuleStore moduleStore;
     @Inject protected ContestContestantStore contestantStore;
     @Inject protected JophielClient jophielClient;
@@ -252,6 +260,25 @@ public class ContestResource {
 
         Contest contest = contestStore.createContest(data);
         moduleStore.upsertIcpcStyleModule(contest.getJid(), new IcpcStyleModuleConfig.Builder().build());
+        if (data.getBundleJid().isPresent()) {
+            String bundleJid = data.getBundleJid().get();
+            if (data.getIsInsertDefaultSupervisor().orElse(false) && data.getSupervisorPermissions().isPresent()) {
+                for (String supervisorJid : contestBundleSupervisorStore.getSupervisors(bundleJid, 1, MAX_BOUND_AUTO_INSERT).getPage()
+                        .stream()
+                        .map(s -> s.getUserJid())
+                        .collect(Collectors.toList())) {
+                    contestSupervisorStore.upsertSupervisor(contest.getJid(), supervisorJid, data.getSupervisorPermissions().get());
+                }
+            }
+            if (data.getIsInsertDefaultContestant().orElse(false)) {
+                for (String contestantJid : contestBundleContestantStore.getContestants(bundleJid, 1, MAX_BOUND_AUTO_INSERT).getPage()
+                        .stream()
+                        .map(c -> c.getUserJid())
+                        .collect(Collectors.toList())) {
+                    contestContestantStore.upsertContestant(contest.getJid(), contestantJid);
+                }
+            }
+        }
 
         contestLogger.log(contest.getJid(), "CREATE_CONTEST");
 

@@ -33,7 +33,7 @@ const appRoutes = [
     visible: role => role.jophiel === JophielRole.Superadmin || role.jophiel === JophielRole.Admin,
   },
   {
-    id: 'bundles',
+    id: 'contests',
     icon: <Console />,
     title: 'Contests',
     route: {

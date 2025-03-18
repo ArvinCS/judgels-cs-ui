@@ -1,0 +1,13 @@
+@import '../../../../styles/base';
+
+.bundle-contestant-dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.bundle-contestant-dialog-footer-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

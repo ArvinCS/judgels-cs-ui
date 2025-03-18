@@ -37,15 +37,21 @@ import org.glassfish.jersey.internal.guava.Sets;
 
 @Path("/api/v2/contest-bundles/{bundleJid}/managers")
 public class ContestBundleManagerResource {
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 10;
 
-    @Inject protected ActorChecker actorChecker;
-    @Inject protected ContestBundleStore contestBundleStore;
-    @Inject protected ContestBundleManagerRoleChecker managerRoleChecker;
-    @Inject protected ContestBundleManagerStore managerStore;
-    @Inject protected JophielClient jophielClient;
+    @Inject
+    protected ActorChecker actorChecker;
+    @Inject
+    protected ContestBundleStore contestBundleStore;
+    @Inject
+    protected ContestBundleManagerRoleChecker managerRoleChecker;
+    @Inject
+    protected ContestBundleManagerStore managerStore;
+    @Inject
+    protected JophielClient jophielClient;
 
-    @Inject public ContestBundleManagerResource() {}
+    @Inject
+    public ContestBundleManagerResource() {}
 
     @GET
     @Produces(APPLICATION_JSON)

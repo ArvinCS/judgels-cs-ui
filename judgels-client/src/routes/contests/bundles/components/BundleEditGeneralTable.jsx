@@ -1,6 +1,5 @@
 import { FormTable } from '../../../../components/forms/FormTable/FormTable';
 
-
 export function BundleEditGeneralTable({ bundle }) {
   const rows = [
     { key: 'jid', title: 'JID', value: bundle.jid },

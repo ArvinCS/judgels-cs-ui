@@ -37,8 +37,9 @@ export const contestAPI = {
     return get(`${baseContestsURL}?${params}`, token);
   },
 
-  getContestsInBundle: (token, bundleSlug) => {
-    return get(`${baseContestsURL}/bundle/${bundleSlug}`, token);
+  getContestsInBundle: (token, bundleSlug, page) => {
+    const params = stringify({ page });
+    return get(`${baseContestsURL}/bundle/${bundleSlug}?${params}`, token);
   },
 
   getActiveContests: token => {
