@@ -18,7 +18,11 @@ export function createContestBundle(data) {
       throw error;
     }
     toastActions.showSuccessToast('Contest Bundle created.');
-    dispatch(push('/contests/bundle'));
+    if (window.location.pathname === '/contests/bundle') {
+      window.location.reload();
+    } else {
+      dispatch(push('/contests/bundle'));
+    }
   };
 }
 
