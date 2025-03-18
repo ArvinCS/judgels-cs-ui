@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 
 import { APP_CONFIG } from '../../../conf';
-import { get, post, download } from '../http';
+import { download, get, post } from '../http';
 
 export const ContestBundleErrors = {
   SlugAlreadyExists: 'Uriel:BundleSlugAlreadyExists',

@@ -3,9 +3,9 @@ import { ChevronRight, Edit } from '@blueprintjs/icons';
 import { Component } from 'react';
 
 import BundleEditContestantTab from '../components/BundleEditContestantTab';
+import BundleEditExportTab from '../components/BundleEditExportTab';
 import BundleEditGeneralTab from '../components/BundleEditGeneralTab';
 import BundleEditManagersTab from '../components/BundleEditManagersTab';
-import BundleEditExportTab from '../components/BundleEditExportTab';
 import BundleEditSupervisorTab from '../components/BundleEditSupervisorTab';
 
 import './BundleEditDialog.scss';

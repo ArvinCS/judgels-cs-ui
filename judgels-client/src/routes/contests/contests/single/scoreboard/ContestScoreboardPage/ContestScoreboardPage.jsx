@@ -176,12 +176,8 @@ export class ContestScoreboardPage extends Component {
     }
 
     return (
-      <div className='contest-scoreboard-page__action-buttons'>
-        <Button
-          small
-          icon={<Export />}
-          onClick={this.exportCSV}
-        >
+      <div className="contest-scoreboard-page__action-buttons">
+        <Button small icon={<Export />} onClick={this.exportCSV}>
           Export CSV
         </Button>
         <Button
@@ -199,7 +195,7 @@ export class ContestScoreboardPage extends Component {
 
   exportCSV = async () => {
     await this.props.onExportScoreboard(this.props.contest.jid);
-  }
+  };
 
   forceRefreshScoreboard = async () => {
     this.setState({ isForceRefreshButtonLoading: true });
