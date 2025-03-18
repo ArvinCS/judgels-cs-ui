@@ -84,7 +84,7 @@ public class ProblemResource extends BaseProblemResource {
 
         NewProblemForm form = new NewProblemForm();
         form.gradingEngine = "Batch";
-        form.initialLanguage = "en-US";
+        form.initialLanguage = "id-ID";
 
         return renderNewProblem(actor, form);
     }
@@ -108,6 +108,7 @@ public class ProblemResource extends BaseProblemResource {
         }
 
         ProblemType type = form.gradingEngine.equals("Bundle") ? ProblemType.BUNDLE : ProblemType.PROGRAMMING;
+
         Problem problem = problemStore.createProblem(type, form.slug, form.additionalNote);
 
         statementStore.initStatements(problem.getJid(), type, form.initialLanguage);

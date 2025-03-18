@@ -175,6 +175,8 @@ public class ProblemStore extends BaseProblemStore {
             return ProblemType.PROGRAMMING;
         } else if (model.jid.startsWith("JIDBUND")) {
             return ProblemType.BUNDLE;
+        } else if (model.jid.startsWith("JIDAUTOM")) {
+            return ProblemType.AUTOMATON;
         } else {
             throw new IllegalStateException("Unknown problem type: " + model.jid);
         }
