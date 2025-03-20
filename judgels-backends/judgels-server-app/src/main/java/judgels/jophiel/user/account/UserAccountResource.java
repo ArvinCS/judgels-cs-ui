@@ -10,11 +10,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import judgels.jophiel.api.user.User;
-import judgels.jophiel.api.user.account.GoogleUserRegistrationData;
 import judgels.jophiel.api.user.account.PasswordResetData;
-import judgels.jophiel.api.user.account.UserRegistrationData;
 import judgels.jophiel.user.UserStore;
 
 @Path("/api/v2/user-account")
@@ -26,30 +23,30 @@ public class UserAccountResource {
 
     @Inject public UserAccountResource() {}
 
-    @POST
-    @Path("/register")
-    @Consumes(APPLICATION_JSON)
-    @Produces(APPLICATION_JSON)
-    @UnitOfWork
-    public User registerUser(UserRegistrationData data) {
-        return checkFound(userRegisterer).register(data);
-    }
+    // @POST
+    // @Path("/register")
+    // @Consumes(APPLICATION_JSON)
+    // @Produces(APPLICATION_JSON)
+    // @UnitOfWork
+    // public User registerUser(UserRegistrationData data) {
+    //     return checkFound(userRegisterer).register(data);
+    // }
 
-    @POST
-    @Path("/register-google")
-    @Consumes(APPLICATION_JSON)
-    @Produces(APPLICATION_JSON)
-    @UnitOfWork
-    public User registerGoogleUser(GoogleUserRegistrationData data) {
-        return checkFound(userRegisterer).registerGoogleUser(data);
-    }
+    // @POST
+    // @Path("/register-google")
+    // @Consumes(APPLICATION_JSON)
+    // @Produces(APPLICATION_JSON)
+    // @UnitOfWork
+    // public User registerGoogleUser(GoogleUserRegistrationData data) {
+    //     return checkFound(userRegisterer).registerGoogleUser(data);
+    // }
 
-    @POST
-    @Path("/activate/{emailCode}")
-    @UnitOfWork
-    public void activateUser(@PathParam("emailCode") String emailCode) {
-        checkFound(userRegisterer).activate(emailCode);
-    }
+    // @POST
+    // @Path("/activate/{emailCode}")
+    // @UnitOfWork
+    // public void activateUser(@PathParam("emailCode") String emailCode) {
+    //     checkFound(userRegisterer).activate(emailCode);
+    // }
 
     @POST
     @Path("/request-reset-password/{email}")

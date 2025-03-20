@@ -19,6 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import judgels.fs.FileInfo;
+import judgels.gabriel.api.AutomatonRestriction;
 import judgels.gabriel.api.GradingConfig;
 import judgels.gabriel.api.LanguageRestriction;
 import judgels.gabriel.engines.GradingEngineRegistry;
@@ -31,6 +32,7 @@ import judgels.michael.problem.programming.grading.config.GradingConfigForm;
 import judgels.michael.resource.ListFilesView;
 import judgels.michael.template.HtmlTemplate;
 import judgels.sandalphon.api.problem.Problem;
+import judgels.sandalphon.api.problem.ProblemType;
 import judgels.service.ServiceUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -275,15 +277,28 @@ public class ProgrammingProblemGradingResource extends BaseProgrammingProblemRes
         Problem problem = checkFound(problemStore.getProblemById(problemId));
         checkAllowed(roleChecker.canView(actor, problem));
 
-        LanguageRestriction languageRestriction = programmingProblemStore.getLanguageRestriction(actor.getUserJid(), problem.getJid());
+        String engineName = programmingProblemStore.getGradingEngine(actor.getUserJid(), problem.getJid());
 
-        EditGradingLanguageRestrictionForm form = new EditGradingLanguageRestrictionForm();
-        form.isAllowedAll = languageRestriction.isAllowedAll();
-        form.allowedLanguages = languageRestriction.getAllowedLanguages();
+        if (engineName.equals("Automata") || engineName.equals("AutomataWithSubtasks")) {
+            AutomatonRestriction automatonRestriction = programmingProblemStore.getAutomatonRestriction(actor.getUserJid(), problem.getJid());
+            EditAutomatonRestrictionForm form = new EditAutomatonRestrictionForm();
+            form.isAllowedAll = automatonRestriction.isAllowedAll();
+            form.allowedAutomatons = automatonRestriction.getAllowedAutomatons();
 
-        HtmlTemplate template = newProblemGradingTemplate(actor, problem);
-        template.setActiveSecondaryTab("languageRestriction");
-        return new EditGradingLanguageRestrictionView(template, form, roleChecker.canEdit(actor, problem));
+            HtmlTemplate template = newProblemGradingTemplate(actor, problem);
+            template.setActiveSecondaryTab("languageRestriction");
+            return new EditAutomatonRestrictionView(template, form, roleChecker.canEdit(actor, problem));
+        } else {
+            LanguageRestriction languageRestriction = programmingProblemStore.getLanguageRestriction(actor.getUserJid(), problem.getJid());
+            EditGradingLanguageRestrictionForm form = new EditGradingLanguageRestrictionForm();
+            form.isAllowedAll = languageRestriction.isAllowedAll();
+            form.allowedLanguages = languageRestriction.getAllowedLanguages();
+
+            HtmlTemplate template = newProblemGradingTemplate(actor, problem);
+            template.setActiveSecondaryTab("languageRestriction");
+            return new EditGradingLanguageRestrictionView(template, form, roleChecker.canEdit(actor, problem));
+        }
+
     }
 
     @POST
@@ -306,6 +321,26 @@ public class ProgrammingProblemGradingResource extends BaseProgrammingProblemRes
         return redirect("/problems/programming/" + problemId + "/grading/languageRestriction");
     }
 
+    @POST
+    @Path("/automatonRestriction")
+    @UnitOfWork
+    public Response updateAutomatonRestriction(
+            @Context HttpServletRequest req,
+            @PathParam("problemId") int problemId,
+            @BeanParam EditAutomatonRestrictionForm form) {
+
+        Actor actor = actorChecker.check(req);
+        Problem problem = checkFound(problemStore.getProblemById(problemId));
+        checkAllowed(roleChecker.canEdit(actor, problem));
+
+        problemStore.createUserCloneIfNotExists(actor.getUserJid(), problem.getJid());
+
+        AutomatonRestriction languageRestriction = AutomatonRestrictionAdapter.getAutomatonRestriction(form.isAllowedAll, form.allowedAutomatons);
+        programmingProblemStore.updateAutomatonRestriction(actor.getUserJid(), problem.getJid(), languageRestriction);
+
+        return redirect("/problems/programming/" + problemId + "/grading/languageRestriction");
+    }
+
     protected HtmlTemplate newProblemGradingTemplate(Actor actor, Problem problem) {
         HtmlTemplate template = newProblemTemplate(actor, problem);
         template.setActiveMainTab("grading");
@@ -313,7 +348,11 @@ public class ProgrammingProblemGradingResource extends BaseProgrammingProblemRes
         template.addSecondaryTab("config", "Config", "/problems/programming/" + problem.getId() + "/grading/config");
         template.addSecondaryTab("testdata", "Test data", "/problems/programming/" + problem.getId() + "/grading/testdata");
         template.addSecondaryTab("helpers", "Helpers", "/problems/programming/" + problem.getId() + "/grading/helpers");
-        template.addSecondaryTab("languageRestriction", "Language restriction", "/problems/programming/" + problem.getId() + "/grading/languageRestriction");
+        if (problem.getType() == ProblemType.AUTOMATON) {
+            template.addSecondaryTab("automatonRestriction", "Automaton restriction", "/problems/programming/" + problem.getId() + "/grading/automatonRestriction");
+        } else {
+            template.addSecondaryTab("languageRestriction", "Language restriction", "/problems/programming/" + problem.getId() + "/grading/languageRestriction");
+        }
         return template;
     }
 }

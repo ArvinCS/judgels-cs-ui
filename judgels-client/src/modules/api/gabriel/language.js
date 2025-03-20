@@ -16,6 +16,22 @@ export const gradingLanguageNamesMap = {
   PyPy3: 'PyPy 3',
   Rust2021: 'Rust 2021',
   OutputOnly: '-',
+  // for automaton engine
+  FiniteStateAutomaton: 'Finite State Automaton',
+  Mealy: 'Mealy',
+  Moore: 'Moore',
+  PushDownAutomaton: 'Push Down Automaton',
+  Turing: 'Turing Machine',
+  UnboundGrammar: 'Unbound Grammar',
+};
+
+export const automatonNamesMap = {
+  FiniteStateAutomaton: 'Finite State Automaton',
+  Mealy: 'Mealy',
+  Moore: 'Moore',
+  PushDownAutomaton: 'Push Down Automaton',
+  Turing: 'Turing Machine',
+  UnboundGrammar: 'Unbound Grammar',
 };
 
 export const gradingLanguageFamiliesMap = {
@@ -30,6 +46,22 @@ export const gradingLanguageFamiliesMap = {
   Python3: 'Python',
   PyPy3: 'Python',
   Rust2021: 'Rust',
+  // for automaton engine
+  FiniteStateAutomaton: 'Finite State Automaton',
+  Mealy: 'Mealy',
+  Moore: 'Moore',
+  PushDownAutomaton: 'Push Down Automaton',
+  Turing: 'Turing Machine',
+  UnboundGrammar: 'Unbound Grammar',
+};
+
+export const automatonFamiliesMap = {
+  FiniteStateAutomaton: 'Finite State Automaton',
+  Mealy: 'Mealy',
+  Moore: 'Moore',
+  PushDownAutomaton: 'Push Down Automaton',
+  Turing: 'Turing Machine',
+  UnboundGrammar: 'Unbound Grammar',
 };
 
 export const gradingLanguageFilenameExtensionsMap = {
@@ -45,6 +77,22 @@ export const gradingLanguageFilenameExtensionsMap = {
   PyPy3: ['py'],
   Rust2021: ['rs'],
   OutputOnly: ['zip'],
+  // for automaton engine
+  FiniteStateAutomaton: ['jff'],
+  Mealy: ['jff'],
+  Moore: ['jff'],
+  PushDownAutomaton: ['jff'],
+  Turing: ['jff'],
+  UnboundGrammar: ['jff'],
+};
+
+export const automatonFilenameExtensionsMap = {
+  FiniteStateAutomaton: ['jff'],
+  Mealy: ['jff'],
+  Moore: ['jff'],
+  PushDownAutomaton: ['jff'],
+  Turing: ['jff'],
+  UnboundGrammar: ['jff'],
 };
 
 export const gradingLanguageSyntaxHighlighterValueMap = {
@@ -60,6 +108,13 @@ export const gradingLanguageSyntaxHighlighterValueMap = {
   PyPy3: 'python',
   Rust2021: 'rust',
   OutputOnly: '',
+  // for automaton engine
+  FiniteStateAutomaton: 'xml',
+  Mealy: 'xml',
+  Moore: 'xml',
+  PushDownAutomaton: 'xml',
+  Turing: 'xml',
+  UnboundGrammar: 'xml',
 };
 
 export const gradingLanguageEditorSubmissionFilenamesMap = {
@@ -74,6 +129,13 @@ export const gradingLanguageEditorSubmissionFilenamesMap = {
   Python3: 'solution.py',
   PyPy3: 'solution.py',
   Rust2021: 'solution.rs',
+  // for automaton engine
+  FiniteStateAutomaton: 'solution.jff',
+  Mealy: 'solution.jff',
+  Moore: 'solution.jff',
+  PushDownAutomaton: 'solution.jff',
+  Turing: 'solution.jff',
+  UnboundGrammar: 'solution.jff',
 };
 
 export const gradingLanguageEditorSubmissionHintsMap = {
@@ -88,20 +150,40 @@ export function getGradingLanguageName(code) {
   return gradingLanguageNamesMap[code] || code;
 }
 
+export function getAutomatonName(code) {
+  return automatonNamesMap[code] || code;
+}
+
 export function getGradingLanguageFamily(code) {
   return gradingLanguageFamiliesMap[code];
+}
+
+export function getAutomatonFamily(code) {
+  return automatonFamiliesMap[code];
 }
 
 export function getGradingLanguageFilenameExtensions(code) {
   return gradingLanguageFilenameExtensionsMap[code] || [];
 }
 
+export function getAutomatonFilenameExtensions(code) {
+  return ['.jff'];
+}
+
 export function getGradingLanguageSyntaxHighlighterValue(code) {
   return gradingLanguageSyntaxHighlighterValueMap[code] || code;
 }
 
+export function getAutomatonSyntaxHighlighterValue(code) {
+  return 'xml';
+}
+
 export function getGradingLanguageEditorSubmissionFilename(code) {
   return gradingLanguageEditorSubmissionFilenamesMap[code];
+}
+
+export function getAutomatonEditorSubmissionFilename(code) {
+  return 'solution.jff';
 }
 
 export function getGradingLanguageEditorSubmissionHint(code) {
@@ -113,11 +195,30 @@ export function getAllowedGradingLanguages(gradingEngine, restriction) {
     return [OutputOnlyOverrides.KEY];
   }
   if (restriction.allowedLanguageNames.length === 0) {
-    return gradingLanguages;
+    if (gradingEngine.startsWith('Automata')) {
+      return Object.keys(gradingLanguageNamesMap)
+        .filter(l => l !== OutputOnlyOverrides.KEY)
+        .slice(-6);
+    } else {
+      return Object.keys(gradingLanguageNamesMap)
+        .filter(l => l !== OutputOnlyOverrides.KEY)
+        .slice(0, -6);
+    }
   }
   return restriction.allowedLanguageNames;
 }
 
+// export function getAllowedAutomatons(gradingEngine, restriction) {
+//   if (restriction.allowedAutomatonNames.length === 0) {
+//     return automatons;
+//   }
+//   return restriction.allowedAutomatonNames;
+// }
+
 export function allLanguagesAllowed(r) {
   return !r.allowedLanguageNames || r.allowedLanguageNames.length === 0;
+}
+
+export function allAutomatonsAllowed(r) {
+  return !r.allowedAutomatonNames || r.allowedAutomatonNames.length === 0;
 }

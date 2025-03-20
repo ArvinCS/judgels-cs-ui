@@ -19,8 +19,7 @@ public class EditGradingConfigView extends TemplateView {
             List<FileInfo> testDataFiles,
             List<FileInfo> helperFiles,
             boolean canEdit) {
-
-        super(engine + "GradingConfigView.ftl", template, form);
+        super(engine.replace("Automata", "Batch") + "GradingConfigView.ftl", template, form);
         this.testDataFiles = testDataFiles;
         this.helperFiles = helperFiles;
         this.canEdit = canEdit;

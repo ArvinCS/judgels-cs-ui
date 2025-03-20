@@ -53,6 +53,7 @@ public class UserInfoStore {
         model.institutionProvince = profile.getInstitutionProvince().orElse(null);
         model.institutionCity = profile.getInstitutionCity().orElse(null);
         model.shirtSize = profile.getShirtSize().orElse(null);
+        model.studentId = profile.getStudentId().orElse(null);
     }
 
     private static UserInfo fromModel(UserInfoModel model) {
@@ -66,6 +67,7 @@ public class UserInfoStore {
                 .institutionProvince(Optional.ofNullable(model.institutionProvince))
                 .institutionCity(Optional.ofNullable(model.institutionCity))
                 .shirtSize(Optional.ofNullable(model.shirtSize))
+                .studentId(Optional.ofNullable(model.studentId))
                 .build();
     }
 }

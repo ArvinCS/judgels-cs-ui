@@ -26,15 +26,15 @@ public class ContestRoleChecker {
     }
 
     public boolean canView(String userJid, Contest contest) {
-        return roleChecker.isAdmin(userJid) || contestBundleRoleDao.isManager(userJid, contest.getBundleJid()) || contestRoleDao.isViewerOrAbove(userJid, contest.getJid());
+        return roleChecker.isAdmin(userJid) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get())) || contestRoleDao.isViewerOrAbove(userJid, contest.getJid());
     }
 
     public boolean canSupervise(String userJid, Contest contest) {
-        return roleChecker.isAdmin(userJid) || contestBundleRoleDao.isManager(userJid, contest.getBundleJid()) || contestRoleDao.isSupervisorOrAbove(userJid, contest.getJid());
+        return roleChecker.isAdmin(userJid) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get())) || contestRoleDao.isSupervisorOrAbove(userJid, contest.getJid());
     }
 
     public boolean canManage(String userJid, Contest contest) {
-        return roleChecker.isAdmin(userJid) || contestBundleRoleDao.isManager(userJid, contest.getBundleJid()) || contestRoleDao.isManager(userJid, contest.getJid());
+        return roleChecker.isAdmin(userJid) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get())) || contestRoleDao.isManager(userJid, contest.getJid());
     }
 
     public boolean canStartVirtual(String userJid, Contest contest) {
@@ -51,7 +51,7 @@ public class ContestRoleChecker {
     public ContestRole getRole(String userJid, Contest contest) {
         if (roleChecker.isAdmin(userJid)) {
             return ContestRole.ADMIN;
-        } else if (contestRoleDao.isManager(userJid, contest.getJid()) || contestBundleRoleDao.isManager(userJid, contest.getBundleJid())) {
+        } else if (contestRoleDao.isManager(userJid, contest.getJid()) || (contest.getBundleJid().isPresent() && contestBundleRoleDao.isManager(userJid, contest.getBundleJid().get()))) {
             return ContestRole.MANAGER;
         } else if (contestRoleDao.isSupervisorOrAbove(userJid, contest.getJid())) {
             return ContestRole.SUPERVISOR;

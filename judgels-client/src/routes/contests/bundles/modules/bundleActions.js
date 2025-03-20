@@ -18,7 +18,11 @@ export function createContestBundle(data) {
       throw error;
     }
     toastActions.showSuccessToast('Contest Bundle created.');
-    dispatch(push('/contests/bundle'));
+    if (window.location.pathname === '/contests/bundle') {
+      window.location.reload();
+    } else {
+      dispatch(push('/contests/bundle'));
+    }
   };
 }
 
@@ -57,5 +61,13 @@ export function getContestBundleByJid(contestBundleJid) {
     const token = selectToken(getState());
     const contestBundle = await contestBundleAPI.getContestBundleByJid(token, contestBundleJid);
     return contestBundle;
+  };
+}
+
+export function exportScoreboard(bundleJid) {
+  return async (dispatch, getState) => {
+    const token = selectToken(getState());
+    await contestBundleAPI.exportScoreboard(token, bundleJid);
+    toastActions.showSuccessToast('Scoreboard downloading.');
   };
 }

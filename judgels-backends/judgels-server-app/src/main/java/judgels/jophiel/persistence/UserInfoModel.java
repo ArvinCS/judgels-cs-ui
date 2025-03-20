@@ -12,6 +12,7 @@ import judgels.persistence.Model;
         @Index(columnList = "name"),
         @Index(columnList = "gender"),
         @Index(columnList = "country"),
+        @Index(columnList = "studentId"),
         @Index(columnList = "institutionName"),
         @Index(columnList = "institutionCountry"),
         @Index(columnList = "institutionProvince"),
@@ -38,4 +39,6 @@ public class UserInfoModel extends Model {
     public String institutionProvince;
 
     public String institutionCity;
+
+    public String studentId;
 }

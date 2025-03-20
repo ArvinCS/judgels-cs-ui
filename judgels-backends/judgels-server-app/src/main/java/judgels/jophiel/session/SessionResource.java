@@ -17,7 +17,6 @@ import javax.ws.rs.Produces;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import judgels.jophiel.api.session.Credentials;
-import judgels.jophiel.api.session.GoogleCredentials;
 import judgels.jophiel.api.session.Session;
 import judgels.jophiel.api.session.SessionErrors;
 import judgels.jophiel.api.session.SsoCredentials;
@@ -74,17 +73,17 @@ public class SessionResource {
         return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
     }
 
-    @POST
-    @Path("/login-google")
-    @Consumes(APPLICATION_JSON)
-    @Produces(APPLICATION_JSON)
-    @UnitOfWork
-    public Session logInWithGoogle(GoogleCredentials credentials) {
-        String email = checkFound(googleAuth).verifyIdToken(credentials.getIdToken()).getEmail();
+    // @POST
+    // @Path("/login-google")
+    // @Consumes(APPLICATION_JSON)
+    // @Produces(APPLICATION_JSON)
+    // @UnitOfWork
+    // public Session logInWithGoogle(GoogleCredentials credentials) {
+    //     String email = checkFound(googleAuth).verifyIdToken(credentials.getIdToken()).getEmail();
 
-        User user = userStore.getUserByEmail(email).orElseThrow(ForbiddenException::new);
-        return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
-    }
+    //     User user = userStore.getUserByEmail(email).orElseThrow(ForbiddenException::new);
+    //     return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
+    // }
 
     @POST
     @Path("/login-sso")
@@ -98,7 +97,6 @@ public class SessionResource {
 
             RestTemplate restTemplate = new RestTemplate();
             String response = restTemplate.getForObject(validationUrl, String.class);
-
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(response)));
@@ -109,14 +107,15 @@ public class SessionResource {
                 // String ldapCn = doc.getElementsByTagName("cas:ldap_cn").item(0).getTextContent();
                 // String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
 
-                if (!userStore.getUserByEmail(email).isPresent()) {
+                if (!userStore.getUserByUsername(username).isPresent()) {
                     checkFound(userRegisterer).registerSsoUser(new SsoUserRegistrationData.Builder()
                             .username(username)
                             .email(email)
+                            .studentId(doc.getElementsByTagName("cas:npm").item(0).getTextContent())
                             .build());
                 }
 
-                User user = userStore.getUserByEmail(email).orElseThrow(ForbiddenException::new);
+                User user = userStore.getUserByUsername(username).orElseThrow(ForbiddenException::new);
                 return sessionStore.createSession(SessionTokenGenerator.newToken(), user.getJid());
             } else {
                 throw SessionErrors.ticketInvalid();

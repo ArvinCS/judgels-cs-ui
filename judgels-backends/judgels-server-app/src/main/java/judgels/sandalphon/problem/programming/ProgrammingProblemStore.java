@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 import judgels.fs.FileInfo;
 import judgels.fs.FileSystem;
+import judgels.gabriel.api.AutomatonRestriction;
 import judgels.gabriel.api.GradingConfig;
 import judgels.gabriel.api.LanguageRestriction;
 import judgels.gabriel.api.Osn2024Hacks;
@@ -34,8 +35,12 @@ public final class ProgrammingProblemStore extends BaseProblemStore {
         problemFs.createFile(getGradingHelpersDirPath(null, problemJid).resolve(".gitkeep"));
 
         problemFs.writeToFile(getGradingEngineFilePath(null, problemJid), gradingEngine);
-        problemFs.writeToFile(getLanguageRestrictionFilePath(null, problemJid), writeObj(LanguageRestriction.noRestriction()));
 
+        if (gradingEngine.equals("Automata") || gradingEngine.equals("AutomataWithSubtasks")) {
+            problemFs.writeToFile(getLanguageRestrictionFilePath(null, problemJid), writeObj(AutomatonRestriction.noRestriction()));
+        } else {
+            problemFs.writeToFile(getLanguageRestrictionFilePath(null, problemJid), writeObj(LanguageRestriction.noRestriction()));
+        }
         GradingConfig config = GradingEngineRegistry.getInstance().get(gradingEngine).createDefaultConfig();
         problemFs.writeToFile(getGradingConfigFilePath(null, problemJid), writeObj(config));
 
@@ -86,8 +91,23 @@ public final class ProgrammingProblemStore extends BaseProblemStore {
         }
     }
 
+    public AutomatonRestriction getAutomatonRestriction(String userJid, String problemJid) {
+        String automatonRestriction = problemFs.readFromFile(getLanguageRestrictionFilePath(userJid, problemJid));
+        try {
+            return mapper.readValue(automatonRestriction, AutomatonRestriction.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void updateLanguageRestriction(String userJid, String problemJid, LanguageRestriction languageRestriction) {
         problemFs.writeToFile(getLanguageRestrictionFilePath(userJid, problemJid), writeObj(languageRestriction));
+
+        updateGradingLastUpdateTime(userJid, problemJid);
+    }
+
+    public void updateAutomatonRestriction(String userJid, String problemJid, AutomatonRestriction automatonRestriction) {
+        problemFs.writeToFile(getLanguageRestrictionFilePath(userJid, problemJid), writeObj(automatonRestriction));
 
         updateGradingLastUpdateTime(userJid, problemJid);
     }
