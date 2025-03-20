@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class GradingConfigAdapterRegistry {
     private static final List<GradingConfigAdapter> ADAPTERS = ImmutableList.of(
+            new AutomataGradingConfigAdapter(),
+            new AutomataWithSubtasksGradingConfigAdapter(),
             new BatchGradingConfigAdapter(),
             new BatchWithSubtasksGradingConfigAdapter(),
             new InteractiveGradingConfigAdapter(),

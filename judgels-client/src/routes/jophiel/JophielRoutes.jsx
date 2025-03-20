@@ -22,7 +22,7 @@ function JophielRoutes() {
         <Route exact path="/registered" component={RegisteredPage} />
         <GuestRoute exact path="/login" component={LoginPage} />
         <UserRoute exact path="/logout" component={LogoutPage} />
-        <GuestRoute exact path="/register" component={RegisterPage} />
+        {/* <GuestRoute exact path="/register" component={RegisterPage} /> */}
         <GuestRoute exact path="/activate/:emailCode" component={ActivatePage} />
         <GuestRoute exact path="/forgot-password" component={ForgotPasswordPage} />
         <GuestRoute exact path="/need-activation" component={NeedActivationPage} />

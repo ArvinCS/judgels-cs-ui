@@ -14,6 +14,7 @@ public interface ContestUpdateData {
     Optional<ContestStyle> getStyle();
     Optional<Instant> getBeginTime();
     Optional<Duration> getDuration();
+    Optional<String> getBundleJid();
 
     class Builder extends ImmutableContestUpdateData.Builder {}
 }

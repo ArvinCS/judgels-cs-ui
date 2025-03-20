@@ -1,8 +1,9 @@
-import { Console } from '@blueprintjs/icons';
+import { Console, GroupItem } from '@blueprintjs/icons';
 import { Route, withRouter } from 'react-router';
 
 import ContentWithSidebar from '../../components/ContentWithSidebar/ContentWithSidebar';
 import { FullPageLayout } from '../../components/FullPageLayout/FullPageLayout';
+import BundlesPage from './bundles/BundlesPage/BundlesPage';
 import ContestsPage from './contests/ContestsPage/ContestsPage';
 
 function ContestsRoutes() {
@@ -13,6 +14,13 @@ function ContestsRoutes() {
       title: 'Contests',
       routeComponent: Route,
       component: ContestsPage,
+    },
+    {
+      id: 'bundle',
+      titleIcon: <GroupItem />,
+      title: 'Bundles',
+      routeComponent: Route,
+      component: BundlesPage,
     },
   ];
 

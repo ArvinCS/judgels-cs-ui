@@ -25,6 +25,7 @@ import judgels.jophiel.JophielClient;
 import judgels.persistence.api.Page;
 import judgels.service.actor.ActorChecker;
 import judgels.service.api.actor.AuthHeader;
+import judgels.uriel.api.bundle.ContestBundle;
 import judgels.uriel.api.contest.ActiveContestsResponse;
 import judgels.uriel.api.contest.Contest;
 import judgels.uriel.api.contest.ContestConfig;
@@ -34,18 +35,31 @@ import judgels.uriel.api.contest.ContestUpdateData;
 import judgels.uriel.api.contest.ContestsResponse;
 import judgels.uriel.api.contest.module.IcpcStyleModuleConfig;
 import judgels.uriel.api.contest.role.ContestRole;
+import judgels.uriel.bundle.ContestBundleRoleChecker;
+import judgels.uriel.bundle.ContestBundleStore;
+import judgels.uriel.bundle.contestant.ContestBundleContestantStore;
+import judgels.uriel.bundle.supervisor.ContestBundleSupervisorStore;
 import judgels.uriel.contest.contestant.ContestContestantStore;
 import judgels.uriel.contest.log.ContestLogger;
 import judgels.uriel.contest.module.ContestModuleStore;
+import judgels.uriel.contest.supervisor.ContestSupervisorStore;
 
 @Path("/api/v2/contests")
 public class ContestResource {
     private static final int PAGE_SIZE = 20;
+    private static final int BUNDLE_PAGE_SIZE = 6;
+    private static final int MAX_BOUND_AUTO_INSERT = 1000;
 
     @Inject protected ActorChecker actorChecker;
+    @Inject protected ContestBundleStore contestBundleStore;
+    @Inject protected ContestBundleSupervisorStore contestBundleSupervisorStore;
+    @Inject protected ContestBundleContestantStore contestBundleContestantStore;
+    @Inject protected ContestBundleRoleChecker contestBundleRoleChecker;
     @Inject protected ContestRoleChecker contestRoleChecker;
     @Inject protected ContestStore contestStore;
     @Inject protected ContestLogger contestLogger;
+    @Inject protected ContestSupervisorStore contestSupervisorStore;
+    @Inject protected ContestContestantStore contestContestantStore;
     @Inject protected ContestModuleStore moduleStore;
     @Inject protected ContestContestantStore contestantStore;
     @Inject protected JophielClient jophielClient;
@@ -101,6 +115,42 @@ public class ContestResource {
 
         checkAllowed(contestRoleChecker.canView(actorJid, contest));
         return contest;
+    }
+
+    @GET
+    @Path("/bundle/{bundleSlug}")
+    @Produces(APPLICATION_JSON)
+    @UnitOfWork(readOnly = true)
+    public ContestsResponse getContestByBundleSlug(
+            @HeaderParam(AUTHORIZATION) Optional<AuthHeader> authHeader,
+            @PathParam("bundleSlug") String bundleSlug,
+            @QueryParam("page") @DefaultValue("1") int pageNumber) {
+
+        String actorJid = actorChecker.check(authHeader);
+        boolean isAdmin = contestRoleChecker.canAdminister(actorJid);
+
+        ContestBundle bundle = checkFound(contestBundleStore.getContestBundleBySlug(bundleSlug));
+        Optional<String> userJid = isAdmin ? Optional.empty() : Optional.of(actorJid);
+
+        Page<Contest> contests = contestStore.getAllContestsByBundle(bundle.getJid(), userJid, pageNumber, BUNDLE_PAGE_SIZE);
+
+        Map<String, ContestRole> rolesMap = contests
+                .getPage()
+                .stream()
+                .collect(Collectors.toMap(
+                        Contest::getJid,
+                        contest -> contestRoleChecker.getRole(actorJid, contest)));
+
+        boolean canAdminister = contestRoleChecker.canAdminister(actorJid);
+        ContestConfig config = new ContestConfig.Builder()
+                .canAdminister(canAdminister)
+                .build();
+
+        return new ContestsResponse.Builder()
+                .data(contests)
+                .rolesMap(rolesMap)
+                .config(config)
+                .build();
     }
 
     @POST
@@ -201,10 +251,34 @@ public class ContestResource {
             ContestCreateData data) {
 
         String actorJid = actorChecker.check(authHeader);
-        checkAllowed(contestRoleChecker.canAdminister(actorJid));
+
+        if (data.getBundleJid().isPresent()) {
+            checkAllowed(contestBundleRoleChecker.canManage(actorJid, data.getBundleJid().get()));
+        } else {
+            checkAllowed(contestRoleChecker.canAdminister(actorJid));
+        }
 
         Contest contest = contestStore.createContest(data);
         moduleStore.upsertIcpcStyleModule(contest.getJid(), new IcpcStyleModuleConfig.Builder().build());
+        if (data.getBundleJid().isPresent()) {
+            String bundleJid = data.getBundleJid().get();
+            if (data.getIsInsertDefaultSupervisor().orElse(false) && data.getSupervisorPermissions().isPresent()) {
+                for (String supervisorJid : contestBundleSupervisorStore.getSupervisors(bundleJid, 1, MAX_BOUND_AUTO_INSERT).getPage()
+                        .stream()
+                        .map(s -> s.getUserJid())
+                        .collect(Collectors.toList())) {
+                    contestSupervisorStore.upsertSupervisor(contest.getJid(), supervisorJid, data.getSupervisorPermissions().get());
+                }
+            }
+            if (data.getIsInsertDefaultContestant().orElse(false)) {
+                for (String contestantJid : contestBundleContestantStore.getContestants(bundleJid, 1, MAX_BOUND_AUTO_INSERT).getPage()
+                        .stream()
+                        .map(c -> c.getUserJid())
+                        .collect(Collectors.toList())) {
+                    contestContestantStore.upsertContestant(contest.getJid(), contestantJid);
+                }
+            }
+        }
 
         contestLogger.log(contest.getJid(), "CREATE_CONTEST");
 
