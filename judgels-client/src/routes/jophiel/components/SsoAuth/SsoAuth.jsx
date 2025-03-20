@@ -55,7 +55,6 @@ class SsoAuth extends Component {
 
 const mapDispatchToProps = {
   onLogIn: ssoAuthActions.logIn,
-  onRegister: ssoAuthActions.register,
 };
 
 export default connect(undefined, mapDispatchToProps)(SsoAuth);
