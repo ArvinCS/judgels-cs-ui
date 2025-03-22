@@ -28,7 +28,7 @@ class BundleEditExportTab extends Component {
       <>
         <div className="option-row-container">
           <div className="option-row-description">
-            <p>Export your contest bundle settings here.</p>
+            <p>Contest Bundle Scoreboard</p>
           </div>
           <div className="option-row-action">
             <Button icon="export" intent={Intent.PRIMARY} text="Export" onClick={this.exportCSV} />

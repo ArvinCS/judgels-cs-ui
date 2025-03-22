@@ -2,6 +2,7 @@ import { push } from 'connected-react-router';
 
 import { BadRequestError } from '../../../../modules/api/error';
 import { ContestBundleErrors, contestBundleAPI } from '../../../../modules/api/uriel/contestBundle';
+import { SubmissionError } from '../../../../modules/form/submissionError';
 import { selectToken } from '../../../../modules/session/sessionSelectors';
 
 import * as toastActions from '../../../../modules/toast/toastActions';

@@ -4,7 +4,7 @@ import { APP_CONFIG } from '../../../conf';
 import { download, get, post } from '../http';
 
 export const ContestBundleErrors = {
-  SlugAlreadyExists: 'Uriel:BundleSlugAlreadyExists',
+  SlugAlreadyExists: 'Uriel:ContestBundleSlugAlreadyExists',
 };
 
 export const baseContestBundlesURL = `${APP_CONFIG.apiUrl}/contest-bundles`;

@@ -31,6 +31,7 @@ import judgels.uriel.api.contest.Contest;
 import judgels.uriel.api.contest.ContestConfig;
 import judgels.uriel.api.contest.ContestCreateData;
 import judgels.uriel.api.contest.ContestDescription;
+import judgels.uriel.api.contest.ContestErrors;
 import judgels.uriel.api.contest.ContestUpdateData;
 import judgels.uriel.api.contest.ContestsResponse;
 import judgels.uriel.api.contest.module.IcpcStyleModuleConfig;
@@ -95,6 +96,16 @@ public class ContestResource {
         Contest contest = checkFound(contestStore.getContestByJid(contestJid));
 
         checkAllowed(contestRoleChecker.canManage(actorJid, contest));
+
+        if (data.getBundleJid().isPresent()) {
+            Optional<ContestBundle> contestBundle = contestBundleStore.getContestBundleByJid(data.getBundleJid().get());
+            if (!contestBundle.isPresent()) {
+                throw ContestErrors.bundleDoesNotExist(data.getBundleJid().get());
+            }
+
+            checkAllowed(contestBundleRoleChecker.canManage(actorJid, data.getBundleJid().get()));
+        }
+
         contest = contestStore.updateContest(contestJid, data);
 
         contestLogger.log(contestJid, "UPDATE_CONTEST");
@@ -253,6 +264,11 @@ public class ContestResource {
         String actorJid = actorChecker.check(authHeader);
 
         if (data.getBundleJid().isPresent()) {
+            Optional<ContestBundle> contestBundle = contestBundleStore.getContestBundleByJid(data.getBundleJid().get());
+            if (!contestBundle.isPresent()) {
+                throw ContestErrors.bundleDoesNotExist(data.getBundleJid().get());
+            }
+
             checkAllowed(contestBundleRoleChecker.canManage(actorJid, data.getBundleJid().get()));
         } else {
             checkAllowed(contestRoleChecker.canAdminister(actorJid));

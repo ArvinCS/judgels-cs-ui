@@ -16,6 +16,7 @@ public class ContestErrors {
     public static final String PROBLEM_SLUGS_NOT_ALLOWED = "Uriel:ContestProblemSlugsNotAllowed";
     public static final String WRONG_PROBLEM_TYPE = "Uriel:WrongProblemType";
     public static final String CLARIFICATION_ALREADY_ANSWERED = "Uriel:ClarificationAlreadyAnswered";
+    public static final String BUNDLE_DOES_NOT_EXIST = "Uriel:BundleDoesNotExist";
 
     public static JudgelsServiceException jidAlreadyExists(String jid) {
         Map<String, Object> args = new HashMap<>();
@@ -45,5 +46,11 @@ public class ContestErrors {
         Map<String, Object> args = new HashMap<>();
         args.put("clarificationJid", clarificationJid);
         return new JudgelsServiceException(Status.BAD_REQUEST, CLARIFICATION_ALREADY_ANSWERED, args);
+    }
+
+    public static JudgelsServiceException bundleDoesNotExist(String bundleJid) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("bundleJid", bundleJid);
+        return new JudgelsServiceException(Status.BAD_REQUEST, BUNDLE_DOES_NOT_EXIST, args);
     }
 }

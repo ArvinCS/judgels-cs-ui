@@ -60,6 +60,7 @@ class BundleCard extends PureComponent {
                     />
                   </div>
                 )}
+                <div style={{ margin: '0 4px' }}></div>
                 <ContestRoleTag role={this.state.role} />
                 {this.state.isOpen ? (
                   <ChevronDown className="bundle-card-chevron" />

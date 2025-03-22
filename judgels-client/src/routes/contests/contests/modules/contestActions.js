@@ -21,6 +21,9 @@ export function createContest(data) {
       }
       throw error;
     }
+    if (error instanceof BadRequestError && error.message === ContestErrors.BundleDoesNotExist) {
+      throw new SubmissionError({ slug: 'Bundle does not exist' });
+    }
     dispatch(push(`/contests/${data.slug}`));
     dispatch(EditContest(true));
     toastActions.showSuccessToast('Contest created.');
@@ -35,6 +38,9 @@ export function updateContest(contestJid, contestSlug, data) {
     } catch (error) {
       if (error instanceof BadRequestError && error.message === ContestErrors.SlugAlreadyExists) {
         throw new SubmissionError({ slug: 'Slug already exists' });
+      }
+      if (error instanceof BadRequestError && error.message === ContestErrors.BundleDoesNotExist) {
+        throw new SubmissionError({ bundleJid: 'Bundle does not exist' });
       }
       throw error;
     }
