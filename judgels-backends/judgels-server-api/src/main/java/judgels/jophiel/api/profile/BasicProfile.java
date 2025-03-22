@@ -12,6 +12,7 @@ public interface BasicProfile {
     Optional<UserRating> getRating();
     Optional<String> getCountry();
     Optional<String> getName();
+    Optional<String> getStudentId();
 
     class Builder extends ImmutableBasicProfile.Builder {}
 }

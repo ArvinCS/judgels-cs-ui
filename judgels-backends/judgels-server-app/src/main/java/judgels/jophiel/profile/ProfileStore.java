@@ -87,6 +87,7 @@ public class ProfileStore {
                     .country(info.getCountry())
                     .rating(Optional.ofNullable(ratings.get(userJid)))
                     .name(info.getName())
+                    .studentId(info.getStudentId())
                     .build();
         });
     }
