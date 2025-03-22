@@ -6,7 +6,7 @@ import { getRatingClass } from '../../../../../../modules/api/jophiel/userRating
 
 import './BasicProfilePanel.scss';
 
-export function BasicProfilePanel({ avatarUrl, basicProfile: { username, name, country, rating } }) {
+export function BasicProfilePanel({ avatarUrl, basicProfile: { username, name, country, rating, studentId } }) {
   const renderMain = () => {
     return (
       <div className="basic-profile-card__main">
@@ -43,6 +43,10 @@ export function BasicProfilePanel({ avatarUrl, basicProfile: { username, name, c
             <tr>
               <td className="basic-profile-card__details-keys">Rating</td>
               <td className={getRatingClass(rating)}>{(rating && rating.publicRating) || '-'}</td>
+            </tr>
+            <tr>
+              <td className="basic-profile-card__details-keys">Student ID</td>
+              <td>{studentId || '-'}</td>
             </tr>
           </tbody>
         </HTMLTable>
