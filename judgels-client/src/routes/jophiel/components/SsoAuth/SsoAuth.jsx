@@ -1,8 +1,8 @@
 import { Component, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import * as ssoAuthActions from '../../modules/ssoAuthActions';
 import * as toastActions from '../../../../modules/toast/toastActions';
+import * as ssoAuthActions from '../../modules/ssoAuthActions';
 
 import './SsoAuth.scss';
 
