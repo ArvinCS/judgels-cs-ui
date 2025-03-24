@@ -15,6 +15,7 @@ export const ContestErrors = {
   SlugAlreadyExists: 'Uriel:ContestSlugAlreadyExists',
   ProblemSlugsNotAllowed: 'Uriel:ContestProblemSlugsNotAllowed',
   ClarificationAlreadyAnswered: 'Uriel:ClarificationAlreadyAnswered',
+  BundleDoesNotExist: 'Uriel:BundleDoesNotExist',
 };
 
 export const baseContestsURL = `${APP_CONFIG.apiUrl}/contests`;
