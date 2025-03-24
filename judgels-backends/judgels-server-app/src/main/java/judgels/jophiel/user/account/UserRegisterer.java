@@ -91,10 +91,14 @@ public class UserRegisterer {
                 .username(data.getUsername())
                 .email(data.getEmail())
                 .build());
-        userInfoStore.upsertInfo(user.getJid(), new UserInfo.Builder()
-                .institutionName("Universitas Indonesia")
-                .studentId(data.getStudentId())
-                .build());
+
+        UserInfo.Builder userInfoBuilder = new UserInfo.Builder()
+                .institutionName("Universitas Indonesia");
+        if (data.getStudentId().isPresent()) {
+            userInfoBuilder.studentId(data.getStudentId());
+        }
+        userInfoStore.upsertInfo(user.getJid(), userInfoBuilder.build());
+
         return user;
     }
 

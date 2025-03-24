@@ -2,6 +2,7 @@ import { Component, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import * as ssoAuthActions from '../../modules/ssoAuthActions';
+import * as toastActions from '../../../../modules/toast/toastActions';
 
 import './SsoAuth.scss';
 
@@ -25,11 +26,13 @@ class SsoAuth extends Component {
 
   handleLoginWithTicket = async (ticket, service, urlParams) => {
     try {
+      toastActions.showToast('Authenticating...');
       await this.props.onLogIn({
         ticket: ticket,
         serviceUrl: service,
       });
     } catch (error) {
+      toastActions.showErrorToast('Authentication failed');
       urlParams.delete('ticket');
       const newQuery = urlParams.toString();
       const newUrl = window.location.pathname + (newQuery ? '?' + newQuery : '');
