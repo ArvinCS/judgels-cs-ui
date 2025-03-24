@@ -108,11 +108,14 @@ public class SessionResource {
                 // String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
 
                 if (!userStore.getUserByUsername(username).isPresent()) {
-                    checkFound(userRegisterer).registerSsoUser(new SsoUserRegistrationData.Builder()
-                            .username(username)
-                            .email(email)
-                            .studentId(doc.getElementsByTagName("cas:npm").item(0).getTextContent())
-                            .build());
+                    SsoUserRegistrationData.Builder ssoBuilder = new SsoUserRegistrationData.Builder();
+                    ssoBuilder = ssoBuilder.username(username);
+                    ssoBuilder = ssoBuilder.email(email);
+
+                    if (doc.getElementsByTagName("cas:npm").item(0) != null) {
+                        ssoBuilder = ssoBuilder.studentId(doc.getElementsByTagName("cas:npm").item(0).getTextContent());
+                    }
+                    checkFound(userRegisterer).registerSsoUser(ssoBuilder.build());
                 }
 
                 User user = userStore.getUserByUsername(username).orElseThrow(ForbiddenException::new);
