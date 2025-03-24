@@ -14,10 +14,10 @@ class SsoAuth extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const service = urlParams.get('service');
     const ticket = urlParams.get('ticket');
-  
+
     const { protocol, hostname, port, pathname } = window.location;
     const baseUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}`;
-  
+
     if (ticket) {
       this.handleLoginWithTicket(ticket, service || baseUrl, urlParams);
     }

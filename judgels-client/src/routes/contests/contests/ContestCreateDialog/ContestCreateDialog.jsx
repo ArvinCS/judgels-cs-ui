@@ -24,12 +24,7 @@ export class ContestCreateDialog extends Component {
 
   renderButton = () => {
     return this.props.compact ? (
-      <Button
-        minimal
-        icon={<Plus />}
-        onClick={this.toggleDialog}
-        disabled={this.state.isDialogOpen}
-      />
+      <Button minimal icon={<Plus />} onClick={this.toggleDialog} disabled={this.state.isDialogOpen} />
     ) : (
       <Button intent={Intent.PRIMARY} icon={<Plus />} onClick={this.toggleDialog} disabled={this.state.isDialogOpen}>
         New contest
