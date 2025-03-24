@@ -19,6 +19,9 @@ export function createContest(data) {
       if (error instanceof BadRequestError && error.message === ContestErrors.SlugAlreadyExists) {
         throw new SubmissionError({ slug: 'Slug already exists' });
       }
+      if (error instanceof BadRequestError && error.message === ContestErrors.BundleDoesNotExist) {
+        throw new SubmissionError({ slug: 'Bundle does not exist' });
+      }
       throw error;
     }
     dispatch(push(`/contests/${data.slug}`));
@@ -35,6 +38,9 @@ export function updateContest(contestJid, contestSlug, data) {
     } catch (error) {
       if (error instanceof BadRequestError && error.message === ContestErrors.SlugAlreadyExists) {
         throw new SubmissionError({ slug: 'Slug already exists' });
+      }
+      if (error instanceof BadRequestError && error.message === ContestErrors.BundleDoesNotExist) {
+        throw new SubmissionError({ bundleJid: 'Bundle does not exist' });
       }
       throw error;
     }
