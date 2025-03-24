@@ -24,7 +24,6 @@ export default function BundleEditManagerForm({ onCancel, onSubmit, renderFormCo
   const handleFormSubmit = useCallback(() => {
     if (formData) {
       onSubmit(submitAction, formData);
-      console.log('submitted ' + submitAction);
     }
   }, [submitAction, formData, onSubmit]);
 
