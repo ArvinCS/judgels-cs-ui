@@ -76,7 +76,6 @@ export class ContestCreateDialog extends Component {
   }
 
   createContest = async data => {
-    console.log(data);
     if (this.state.hasBundle) {
       const { supervisorPermissions, ...restData } = data;
       data = {
