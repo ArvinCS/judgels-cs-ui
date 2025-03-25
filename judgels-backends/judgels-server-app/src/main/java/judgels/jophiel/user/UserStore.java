@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import judgels.jophiel.api.user.User;
 import judgels.jophiel.api.user.UserData;
 import judgels.jophiel.persistence.UserDao;
+import judgels.jophiel.persistence.UserDao.UserQueryBuilder;
 import judgels.jophiel.persistence.UserModel;
 import judgels.jophiel.persistence.UserModel_;
 import judgels.persistence.api.OrderDir;
@@ -79,8 +80,14 @@ public class UserStore {
         return userDao.selectByEmail(email).map(UserStore::fromModel);
     }
 
-    public Page<User> getUsers(int pageNumber, int pageSize, Optional<String> orderBy, Optional<OrderDir> orderDir) {
-        return userDao.select()
+    public Page<User> getUsers(int pageNumber, int pageSize, Optional<String> name, Optional<String> orderBy, Optional<OrderDir> orderDir) {
+        UserQueryBuilder query = userDao.select();
+
+        if (name.isPresent()) {
+            query.whereUsernameLike(name.get());
+        }
+
+        return query
                 .orderBy(orderBy.orElse(UserModel_.USERNAME), orderDir.orElse(OrderDir.ASC))
                 .paged(pageNumber, pageSize)
                 .mapPage(p -> Lists.transform(p, UserStore::fromModel));

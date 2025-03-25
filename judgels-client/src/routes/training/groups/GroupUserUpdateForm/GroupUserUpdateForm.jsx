@@ -5,7 +5,7 @@ import { Field, Form } from 'react-final-form';
 import { FormTextArea } from '../../../../components/forms/FormTextArea/FormTextArea';
 import { Max100Lines, Required, composeValidators } from '../../../../components/forms/validations';
 
-export default function BundleEditManagerForm({ onCancel, onSubmit, renderFormComponents }) {
+export default function GroupUserUpdateForm({ onCancel, onSubmit, renderFormComponents }) {
   const [submitAction, setSubmitAction] = useState(null);
   const [formData, setFormData] = useState(null);
 
@@ -19,7 +19,22 @@ export default function BundleEditManagerForm({ onCancel, onSubmit, renderFormCo
     autoFocus: true,
   };
 
-  const fields = <Field component={FormTextArea} {...usernamesField} />;
+  const groupsField = {
+    name: 'groups',
+    label: 'Groups',
+    labelHelper: '(one group per line, max 10 groups)',
+    rows: 10,
+    isCode: true,
+    validate: composeValidators(Required, Max100Lines),
+    autoFocus: true,
+  };
+
+  const fields = (
+    <>
+      <Field component={FormTextArea} {...usernamesField} />
+      <Field component={FormTextArea} {...groupsField} />
+    </>
+  );
 
   const handleFormSubmit = useCallback(() => {
     if (formData) {

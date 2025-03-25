@@ -1,5 +1,7 @@
 package judgels.jophiel.hibernate;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import judgels.jophiel.persistence.UserGroupDao;
@@ -19,4 +21,8 @@ public class UserGroupHibernateDao extends HibernateDao<UserGroupModel> implemen
         return select().where(columnEq(UserGroupModel_.userJid, userJid)).unique();
     }
 
+    @Override
+    public List<UserGroupModel> selectAllByUserJids(Collection<String> userJids) {
+        return select().where(columnIn(UserGroupModel_.userJid, userJids)).all();
+    }
 }

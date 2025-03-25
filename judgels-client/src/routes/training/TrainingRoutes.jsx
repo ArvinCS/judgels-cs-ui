@@ -1,4 +1,4 @@
-import { Box, PanelStats, PredictiveAnalysis, Properties } from '@blueprintjs/icons';
+import { Box, GroupItem, PanelStats, PredictiveAnalysis, Properties } from '@blueprintjs/icons';
 import { Route } from 'react-router';
 
 import { withBreadcrumb } from '../../components/BreadcrumbWrapper/BreadcrumbWrapper';
@@ -8,6 +8,7 @@ import { ScrollToTopOnMount } from '../../components/ScrollToTopOnMount/ScrollTo
 import ArchivesPage from './archives/ArchivesPage/ArchivesPage';
 import ChaptersPage from './chapters/ChaptersPage/ChaptersPage';
 import CoursesPage from './courses/CoursesPage/CoursesPage';
+import GroupsPage from './groups/GroupsPage/GroupsPage';
 import ProblemSetsPage from './problemsets/ProblemSetsPage/ProblemSetsPage';
 
 function TrainingRoutes() {
@@ -39,6 +40,13 @@ function TrainingRoutes() {
       title: 'Problemsets',
       routeComponent: Route,
       component: ProblemSetsPage,
+    },
+    {
+      id: 'groups',
+      titleIcon: <GroupItem />,
+      title: 'Groups',
+      routeComponent: Route,
+      component: GroupsPage,
     },
   ];
 

@@ -51,7 +51,7 @@ public class UserResource extends BaseAccountResource {
         Actor actor = actorChecker.check(req);
         checkAllowed(userRoleChecker.canAdminister(actor.getUserJid()));
 
-        Page<User> users = userStore.getUsers(pageNumber, PAGE_SIZE, Optional.empty(), Optional.empty());
+        Page<User> users = userStore.getUsers(pageNumber, PAGE_SIZE, Optional.empty(), Optional.empty(), Optional.empty());
 
         var userJids = Lists.transform(users.getPage(), User::getJid);
         Map<String, Instant> lastSessionTimesMap = sessionStore.getLatestSessionTimeByUserJids(userJids);
