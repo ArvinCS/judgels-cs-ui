@@ -94,6 +94,9 @@ public class UserRegisterer {
 
         UserInfo.Builder userInfoBuilder = new UserInfo.Builder()
                 .institutionName("Universitas Indonesia");
+        if (data.getFullName().isPresent()) {
+            userInfoBuilder.name(data.getFullName().get());
+        }
         if (data.getStudentId().isPresent()) {
             userInfoBuilder.studentId(data.getStudentId());
         }

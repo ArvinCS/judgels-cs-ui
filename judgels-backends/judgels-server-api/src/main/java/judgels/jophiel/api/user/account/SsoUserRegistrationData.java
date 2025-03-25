@@ -10,6 +10,7 @@ public interface SsoUserRegistrationData {
     String getUsername();
     String getEmail();
     Optional<String> getStudentId();
+    Optional<String> getFullName();
 
     class Builder extends ImmutableSsoUserRegistrationData.Builder {}
 }

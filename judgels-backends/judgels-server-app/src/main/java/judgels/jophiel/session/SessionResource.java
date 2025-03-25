@@ -100,7 +100,6 @@ public class SessionResource {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(response)));
-
             if (doc.getElementsByTagName("cas:authenticationSuccess").getLength() > 0) {
                 String username = doc.getElementsByTagName("cas:user").item(0).getTextContent();
                 String email = username + "@ui.ac.id";
@@ -115,6 +114,9 @@ public class SessionResource {
                     ssoBuilder = ssoBuilder.username(username);
                     ssoBuilder = ssoBuilder.email(email);
 
+                    if (doc.getElementsByTagName("cas:nama").item(0) != null) {
+                        ssoBuilder = ssoBuilder.fullName(doc.getElementsByTagName("cas:nama").item(0).getTextContent());
+                    }
                     if (doc.getElementsByTagName("cas:npm").item(0) != null) {
                         ssoBuilder = ssoBuilder.studentId(doc.getElementsByTagName("cas:npm").item(0).getTextContent());
                     }
