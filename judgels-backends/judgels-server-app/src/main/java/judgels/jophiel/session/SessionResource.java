@@ -104,8 +104,11 @@ public class SessionResource {
             if (doc.getElementsByTagName("cas:authenticationSuccess").getLength() > 0) {
                 String username = doc.getElementsByTagName("cas:user").item(0).getTextContent();
                 String email = username + "@ui.ac.id";
-                // String ldapCn = doc.getElementsByTagName("cas:ldap_cn").item(0).getTextContent();
-                // String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
+                String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
+
+                if (peranUser.equalsIgnoreCase("guest")) {
+                    throw SessionErrors.userNotAllowed();
+                }
 
                 if (!userStore.getUserByUsername(username).isPresent()) {
                     SsoUserRegistrationData.Builder ssoBuilder = new SsoUserRegistrationData.Builder();
