@@ -10,6 +10,7 @@ import { withSubmissionError } from '../../../../modules/form/submissionError';
 export default function CourseEditForm({ onSubmit, initialValues, renderFormComponents }) {
   const GroupsField = ({ name, label }) => {
     const [tags, setTags] = useState([]);
+    const [error, setError] = useState(undefined);
 
     const handleKeyDown = (event, input) => {
       if (event.key === 'Enter' && event.target.value.trim()) {
