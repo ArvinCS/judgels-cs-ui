@@ -105,7 +105,9 @@ public class SessionResource {
                 String email = username + "@ui.ac.id";
                 String peranUser = doc.getElementsByTagName("cas:peran_user").item(0).getTextContent();
 
-                if (peranUser.equalsIgnoreCase("guest")) {
+                if (peranUser.equalsIgnoreCase("guest")
+                        || peranUser.equalsIgnoreCase("tamu")
+                        || peranUser.equalsIgnoreCase("umum")) {
                     throw SessionErrors.userNotAllowed();
                 }
 
