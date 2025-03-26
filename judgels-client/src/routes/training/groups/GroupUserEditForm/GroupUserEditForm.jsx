@@ -4,10 +4,16 @@ import { Field, Form } from 'react-final-form';
 
 import { FormTextArea } from '../../../../components/forms/FormTextArea/FormTextArea';
 import { FormTextInput } from '../../../../components/forms/FormTextInput/FormTextInput';
-import { Required, Slug, composeValidators } from '../../../../components/forms/validations';
-import { withSubmissionError } from '../../../../modules/form/submissionError';
+import { Required, Slug, UserGroup, composeValidators } from '../../../../components/forms/validations';
+import { SubmissionError, withSubmissionError } from '../../../../modules/form/submissionError';
 
-export default function CourseEditForm({ onSubmit, initialValues, renderFormComponents }) {
+export default function GroupUserEditForm({
+  onSubmit = () => {
+    throw new SubmissionError({ _error: 'Submission failed!' });
+  },
+  initialValues,
+  renderFormComponents,
+}) {
   const GroupsField = ({ name, label }) => {
     const [tags, setTags] = useState([]);
     const [error, setError] = useState(undefined);
@@ -70,21 +76,6 @@ export default function CourseEditForm({ onSubmit, initialValues, renderFormComp
     );
   };
 
-  const slugField = {
-    name: 'slug',
-    label: 'Slug',
-    validate: composeValidators(Required, Slug),
-  };
-  const nameField = {
-    name: 'name',
-    label: 'Name',
-    validate: Required,
-  };
-  const descriptionField = {
-    name: 'description',
-    label: 'Description',
-    rows: 5,
-  };
   const groupsField = {
     name: 'groups',
     label: 'Groups',
@@ -92,9 +83,6 @@ export default function CourseEditForm({ onSubmit, initialValues, renderFormComp
 
   const fields = (
     <>
-      <Field component={FormTextInput} {...slugField} />
-      <Field component={FormTextInput} {...nameField} />
-      <Field component={FormTextArea} {...descriptionField} />
       <GroupsField {...groupsField} />
     </>
   );

@@ -9,6 +9,7 @@ public class SessionErrors {
     private SessionErrors() {}
 
     public static final String USER_NOT_ACTIVATED = "Jophiel:UserNotActivated";
+    public static final String USER_NOT_ALLOWED = "Jophiel:UserNotAllowed";
     public static final String USER_MAX_CONCURRENT_SESSIONS_EXCEEDED = "Jophiel:UserMaxConcurrentSessionsExceeded";
     public static final String LOGOUT_DISABLED = "Jophiel:LogoutDisabled";
     public static final String TICKET_INVALID = "Jophiel:TicketInvalid";
@@ -17,6 +18,10 @@ public class SessionErrors {
         Map<String, Object> args = new HashMap<>();
         args.put("email", email);
         return new JudgelsServiceException(Status.FORBIDDEN, USER_NOT_ACTIVATED, args);
+    }
+
+    public static JudgelsServiceException userNotAllowed() {
+        return new JudgelsServiceException(Status.FORBIDDEN, USER_NOT_ALLOWED);
     }
 
     public static JudgelsServiceException userMaxConcurrentSessionsExceeded() {

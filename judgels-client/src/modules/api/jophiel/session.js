@@ -3,6 +3,7 @@ import { post } from '../http';
 
 export const SessionErrors = {
   UserNotActivated: 'Jophiel:UserNotActivated',
+  UserNotAllowed: 'Jophiel:UserNotAllowed',
   UserMaxConcurrentSessionsExceeded: 'Jophiel:UserMaxConcurrentSessionsExceeded',
   LogoutDisabled: 'Jophiel:LogoutDisabled',
   TicketInvalid: 'Jophiel:TicketInvalid',

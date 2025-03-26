@@ -1,6 +1,10 @@
 package judgels.jophiel.user.group;
 
+import com.google.common.collect.ImmutableMap;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import judgels.jophiel.api.user.group.UserGroup;
@@ -19,6 +23,19 @@ public class UserGroupStore {
         return userGroupDao.selectByUserJid(userJid)
             .map(UserGroupStore::fromModel)
             .orElse(new UserGroup.Builder().userJid(userJid).groups(List.of()).build());
+    }
+
+    public Map<String, List<String>> getGroupByUserJids(Collection<String> userJids) {
+        Map<String, List<String>> groupsMap = new HashMap<>();
+        for (UserGroupModel m : userGroupDao.selectAllByUserJids(userJids)) {
+            groupsMap.put(m.userJid, m.groups);
+        }
+        for (String userJid : userJids) {
+            if (!groupsMap.containsKey(userJid)) {
+                groupsMap.put(userJid, List.of());
+            }
+        }
+        return ImmutableMap.copyOf(groupsMap);
     }
 
     public UserGroup upsertGroup(String userJid, UserGroup group) {
