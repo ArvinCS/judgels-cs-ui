@@ -63,7 +63,7 @@ public class UserResource {
         String actorJid = actorChecker.check(authHeader);
         checkAllowed(roleChecker.canAdminister(actorJid));
 
-        Page<User> users = userStore.getUsers(pageNumber, PAGE_SIZE, orderBy, orderDir);
+        Page<User> users = userStore.getUsers(pageNumber, PAGE_SIZE, Optional.empty(), orderBy, orderDir);
 
         var userJids = Lists.transform(users.getPage(), User::getJid);
         Map<String, Instant> lastSessionTimesMap = sessionStore.getLatestSessionTimeByUserJids(userJids);
