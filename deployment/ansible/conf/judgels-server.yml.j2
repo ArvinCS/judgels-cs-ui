@@ -11,8 +11,9 @@ server:
     appenders:
     - type: file
       currentLogFilename: var/log/judgels-server-request.log
-      archivedLogFilenamePattern: var/log/judgels-server-request-%d.log.gz
-      archivedFileCount: 14
+      archivedLogFilenamePattern: var/log/judgels-server-request-%i.log.gz
+      archivedFileCount: 4
+      maxFileSize: 2GB
 
 database:
   driverClass: com.mysql.jdbc.Driver
@@ -32,8 +33,9 @@ logging:
       threshold: INFO
     - type: file
       currentLogFilename: var/log/judgels-server.log
-      archivedLogFilenamePattern: var/log/judgels-server-%d.log.gz
-      archivedFileCount: 14
+      archivedLogFilenamePattern: var/log/judgels-server-%i.log.gz
+      archivedFileCount: 4
+      maxFileSize: 2GB
 
   loggers:
     org.hibernate.type.BasicTypeRegistry:
@@ -58,8 +60,8 @@ judgels:
 {% endif %}
 
 jophiel:
-  auth:
 {% if jophiel_auth_google_clientId is defined %}
+  auth:
     google:
       clientId: {{ jophiel_auth_google_clientId }}
 {% endif %}
@@ -69,11 +71,11 @@ jophiel:
     host: {{ jophiel_mailer_host }}
     port: {{ jophiel_mailer_port }}
     useSsl: {{ jophiel_mailer_useSsl }}
+    sender: {{ jophiel_mailer_sender }}
     {% if jophiel_mailer_username is defined %}
       username: {{ jophiel_mailer_username }}
       password: {{ jophiel_mailer_password }}
     {% endif %}
-    sender: {{ jophiel_mailer_sender }}
 {% endif %}
 
 {% if recaptcha_siteKey is defined %}
