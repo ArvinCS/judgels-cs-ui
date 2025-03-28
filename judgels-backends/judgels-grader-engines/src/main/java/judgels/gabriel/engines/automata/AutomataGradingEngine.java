@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import judgels.gabriel.aggregators.SumAggregator;
 import judgels.gabriel.api.Aggregator;
 import judgels.gabriel.api.Compiler;
@@ -91,7 +92,7 @@ public class AutomataGradingEngine extends BlackboxGradingEngine {
         compilerSandbox = sandboxFactory.newSandbox();
         compiler.prepare(compilerSandbox, compilationDir, language);
 
-        Scorer scorer = ScorerRegistry.getAndPrepare(null, helperFiles, scorerSandbox, evaluationDir);
+        Scorer scorer = ScorerRegistry.getAndPrepare(Optional.empty(), helperFiles, scorerSandbox, evaluationDir);
 
         evaluatorSandbox = sandboxFactory.newSandbox();
 
