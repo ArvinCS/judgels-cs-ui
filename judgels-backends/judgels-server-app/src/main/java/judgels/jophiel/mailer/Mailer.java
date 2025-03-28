@@ -17,7 +17,9 @@ public class Mailer {
                 HtmlEmail email = new HtmlEmail();
                 email.setHostName(config.getHost());
                 email.setSmtpPort(config.getPort());
-                email.setAuthenticator(new DefaultAuthenticator(config.getUsername(), config.getPassword()));
+                if (config.getUsername().isPresent() && config.getPassword().isPresent()) {
+                    email.setAuthenticator(new DefaultAuthenticator(config.getUsername().get(), config.getPassword().get()));
+                }
                 email.setSSLOnConnect(config.getUseSsl());
                 email.setFrom(config.getSender());
                 email.setSubject(subject);

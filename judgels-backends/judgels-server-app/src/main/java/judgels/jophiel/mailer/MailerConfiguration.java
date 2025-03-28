@@ -1,6 +1,7 @@
 package judgels.jophiel.mailer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Optional;
 import org.immutables.value.Value;
 
 @Value.Immutable
@@ -9,8 +10,8 @@ public interface MailerConfiguration {
     String getHost();
     int getPort();
     boolean getUseSsl();
-    String getUsername();
-    String getPassword();
+    Optional<String> getUsername();
+    Optional<String> getPassword();
     String getSender();
 
     class Builder extends ImmutableMailerConfiguration.Builder {}
