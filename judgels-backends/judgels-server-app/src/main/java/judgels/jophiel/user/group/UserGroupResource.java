@@ -27,6 +27,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import judgels.jerahmeel.role.RoleChecker;
 import judgels.jophiel.JophielClient;
 import judgels.jophiel.api.user.User;
 import judgels.jophiel.api.user.group.UserGroup;
@@ -35,7 +36,6 @@ import judgels.jophiel.api.user.group.UsersGroupDeleteResponse;
 import judgels.jophiel.api.user.group.UsersGroupResponse;
 import judgels.jophiel.api.user.group.UsersGroupUpsertData;
 import judgels.jophiel.api.user.group.UsersGroupUpsertResponse;
-import judgels.jophiel.user.UserRoleChecker;
 import judgels.jophiel.user.UserStore;
 import judgels.persistence.api.OrderDir;
 import judgels.persistence.api.Page;
@@ -47,7 +47,7 @@ public class UserGroupResource {
     private static final int PAGE_SIZE = 20;
 
     @Inject protected ActorChecker actorChecker;
-    @Inject protected UserRoleChecker roleChecker;
+    @Inject protected RoleChecker roleChecker;
     @Inject protected UserStore userStore;
     @Inject protected UserGroupStore userGroupStore;
     @Inject protected JophielClient jophielClient;
@@ -66,7 +66,7 @@ public class UserGroupResource {
             @QueryParam("page") @DefaultValue("1") int pageNumber) {
 
         String actorJid = actorChecker.check(authHeader);
-        checkAllowed(roleChecker.canAdminister(actorJid));
+        checkAllowed(roleChecker.isAdmin(actorJid));
 
         Page<User> users = userStore.getUsers(pageNumber, PAGE_SIZE, name, orderBy, orderDir);
 
@@ -88,7 +88,7 @@ public class UserGroupResource {
             UsersGroupUpsertData data) {
 
         String actorJid = actorChecker.check(authHeader);
-        checkAllowed(roleChecker.canAdminister(actorJid));
+        checkAllowed(roleChecker.isAdmin(actorJid));
 
         checkArgument(data.getUsernames().size() <= 100, "Cannot add more than 100 users.");
         checkArgument(data.getGroups().size() <= 10, "Cannot add more than 10 groups.");
@@ -133,7 +133,7 @@ public class UserGroupResource {
             UsersGroupDeleteData data) {
 
         String actorJid = actorChecker.check(authHeader);
-        checkAllowed(roleChecker.canAdminister(actorJid));
+        checkAllowed(roleChecker.isAdmin(actorJid));
 
         checkArgument(data.getUsernames().size() <= 100, "Cannot remove more than 100 users.");
         checkArgument(data.getGroups().size() <= 10, "Cannot remove more than 10 groups.");
@@ -177,7 +177,7 @@ public class UserGroupResource {
             @PathParam("userJid") String userJid) {
 
         String actorJid = actorChecker.check(authHeader);
-        checkAllowed(roleChecker.canManage(actorJid, userJid));
+        checkAllowed(roleChecker.isAdmin(actorJid));
 
         User user = checkFound(userStore.getUserByJid(userJid));
         return userGroupStore.getGroup(user.getJid());
@@ -193,7 +193,7 @@ public class UserGroupResource {
             @PathParam("userJid") String userJid,
             UserGroup userGroup) {
         String actorJid = actorChecker.check(authHeader);
-        checkAllowed(roleChecker.canManage(actorJid, userJid));
+        checkAllowed(roleChecker.isAdmin(actorJid));
 
         User user = checkFound(userStore.getUserByJid(userJid));
         return userGroupStore.upsertGroup(user.getJid(), userGroup);
