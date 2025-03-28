@@ -11,8 +11,9 @@ server:
     appenders:
     - type: file
       currentLogFilename: var/log/judgels-server-request.log
-      archivedLogFilenamePattern: var/log/judgels-server-request-%d.log.gz
-      archivedFileCount: 14
+      archivedLogFilenamePattern: var/log/judgels-server-request-%i.log.gz
+      archivedFileCount: 4
+      maxFileSize: 2GB
 
 database:
   driverClass: com.mysql.jdbc.Driver
@@ -32,8 +33,9 @@ logging:
       threshold: INFO
     - type: file
       currentLogFilename: var/log/judgels-server.log
-      archivedLogFilenamePattern: var/log/judgels-server-%d.log.gz
-      archivedFileCount: 14
+      archivedLogFilenamePattern: var/log/judgels-server-%i.log.gz
+      archivedFileCount: 4
+      maxFileSize: 2GB
 
   loggers:
     org.hibernate.type.BasicTypeRegistry:
