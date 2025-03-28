@@ -69,8 +69,10 @@ jophiel:
     host: {{ jophiel_mailer_host }}
     port: {{ jophiel_mailer_port }}
     useSsl: {{ jophiel_mailer_useSsl }}
-    username: {{ jophiel_mailer_username }}
-    password: {{ jophiel_mailer_password }}
+    {% if jophiel_mailer_username is defined %}
+      username: {{ jophiel_mailer_username }}
+      password: {{ jophiel_mailer_password }}
+    {% endif %}
     sender: {{ jophiel_mailer_sender }}
 {% endif %}
 
