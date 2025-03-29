@@ -1,0 +1,50 @@
+<h3>Deskripsi</h3>
+
+<p>Buatlah Finite State Automaton yang dapat menerima setiap string $S$ dengan kemunculan substring <code>bbac</code> sebanyak genap kali. <strong>Perhatikan bahwa tidak ada kemunculan sama sekali termasuk dalam kemunculan genap kali</strong>.</p>
+
+<h3>Batasan</h3>
+
+<ul>
+	<li>$|S| \leq 1000$</li>
+	<li>$S$ hanya terdiri dari huruf abjad kecil dari <code>a</code> - <code>c</code></li>
+</ul>
+
+<h3>Subtask</h3>
+
+<ol>
+	<li>(50 poin) $|S| \leq 10$</li>
+	<li>(50 poin) Tidak ada batasan tambahan</li>
+</ol>
+
+<h3>Masukan</h3>
+
+<pre>
+S</pre>
+
+<h3>Keluaran</h3>
+
+<p>Jika FSA menghasilkan <strong>accepts</strong>, maka output tertulis <code>true</code>. Sebaliknya, jika FSA menghasilkan <strong>rejects</strong>, maka output tertulis <code>false</code>.</p>
+
+<h3>Contoh Masukan 1</h3>
+
+<pre>
+bbacbbac</pre>
+
+<h3>Contoh Keluaran 1</h3>
+
+<pre>
+true</pre>
+
+<h3>Penjelasan Contoh 1</h3>
+
+<p>Perhatikan bahwa terdapat kemunculan substring <code>bbac</code> sebanyak $2$ kali, yaitu interval $[1, 4]$ dan $[5, 8]$.</p>
+
+<h3>Contoh Masukan 2</h3>
+
+<pre>
+bbccbaac</pre>
+
+<h3>Contoh Keluaran 2</h3>
+
+<pre>
+false</pre>
