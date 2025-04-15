@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -51,9 +52,9 @@ public final class LocalFileSystem implements FileSystem {
     @Override
     public void createDirectory(Path dirPath) {
         try {
-            Files.createDirectories(
-                    dirPath == null ? baseDir : baseDir.resolve(dirPath),
-                    PosixFilePermissions.asFileAttribute(PERMISSION_700));
+            Path resolvedPath = dirPath == null ? baseDir : baseDir.resolve(dirPath);
+            Files.createDirectories(resolvedPath, PosixFilePermissions.asFileAttribute(PERMISSION_700));
+            Files.setOwner(resolvedPath, FileSystems.getDefault().getUserPrincipalLookupService().lookupPrincipalByName(System.getProperty("user.name")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -98,6 +99,7 @@ public final class LocalFileSystem implements FileSystem {
             createDirectory(filePath.getParent());
             Files.copy(content, baseDir.resolve(filePath), StandardCopyOption.REPLACE_EXISTING);
             Files.setPosixFilePermissions(baseDir.resolve(filePath), PERMISSION_600);
+            Files.setOwner(baseDir.resolve(filePath), FileSystems.getDefault().getUserPrincipalLookupService().lookupPrincipalByName(System.getProperty("user.name")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
