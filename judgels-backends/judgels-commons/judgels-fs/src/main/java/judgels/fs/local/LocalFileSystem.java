@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -40,8 +39,8 @@ public final class LocalFileSystem implements FileSystem {
             "__MACOSX"
     );
 
-    private static final Set<PosixFilePermission> PERMISSION_700 = PosixFilePermissions.fromString("rwx------");
-    private static final Set<PosixFilePermission> PERMISSION_600 = PosixFilePermissions.fromString("rw-------");
+    private static final Set<PosixFilePermission> PERMISSION_770 = PosixFilePermissions.fromString("rwxrwx---");
+    private static final Set<PosixFilePermission> PERMISSION_660 = PosixFilePermissions.fromString("rw-rw----");
 
     private final Path baseDir;
 
@@ -53,8 +52,7 @@ public final class LocalFileSystem implements FileSystem {
     public void createDirectory(Path dirPath) {
         try {
             Path resolvedPath = dirPath == null ? baseDir : baseDir.resolve(dirPath);
-            Files.createDirectories(resolvedPath, PosixFilePermissions.asFileAttribute(PERMISSION_700));
-            Files.setOwner(resolvedPath, FileSystems.getDefault().getUserPrincipalLookupService().lookupPrincipalByName(System.getProperty("user.name")));
+            Files.createDirectories(resolvedPath, PosixFilePermissions.asFileAttribute(PERMISSION_770));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -98,8 +96,7 @@ public final class LocalFileSystem implements FileSystem {
         try {
             createDirectory(filePath.getParent());
             Files.copy(content, baseDir.resolve(filePath), StandardCopyOption.REPLACE_EXISTING);
-            Files.setPosixFilePermissions(baseDir.resolve(filePath), PERMISSION_600);
-            Files.setOwner(baseDir.resolve(filePath), FileSystems.getDefault().getUserPrincipalLookupService().lookupPrincipalByName(System.getProperty("user.name")));
+            Files.setPosixFilePermissions(baseDir.resolve(filePath), PERMISSION_660);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
