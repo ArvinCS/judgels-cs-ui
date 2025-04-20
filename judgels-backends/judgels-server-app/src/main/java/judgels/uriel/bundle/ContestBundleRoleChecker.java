@@ -1,12 +1,12 @@
 package judgels.uriel.bundle;
 
 import javax.inject.Inject;
-import judgels.jerahmeel.role.RoleChecker;
 import judgels.uriel.api.bundle.ContestBundle;
 import judgels.uriel.api.bundle.role.ContestBundleRole;
 import judgels.uriel.persistence.ContestBundleRoleDao;
 import judgels.uriel.persistence.ContestDao;
 import judgels.uriel.persistence.ContestRoleDao;
+import judgels.uriel.role.RoleChecker;
 
 public class ContestBundleRoleChecker {
     private final RoleChecker roleChecker;
