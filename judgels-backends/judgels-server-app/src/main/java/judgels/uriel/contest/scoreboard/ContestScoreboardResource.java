@@ -219,7 +219,7 @@ public class ContestScoreboardResource {
                     row.add(String.valueOf(entry.getTotalPoints()));
 
                     for (int j = 0; j < entry.getProblemStateList().size(); j++) {
-                        if (entry.getProblemStateList().get(i) == TrocScoreboard.TrocScoreboardProblemState.NOT_ACCEPTED) {
+                        if (entry.getProblemStateList().get(j) == TrocScoreboard.TrocScoreboardProblemState.NOT_ACCEPTED) {
                             row.add("0");
                         } else {
                             row.add(String.valueOf(problems.get(j).getPoints().orElse(0)));
@@ -280,7 +280,7 @@ public class ContestScoreboardResource {
                     row.add(String.valueOf(entry.getLastAffectingPenalty()));
 
                     for (int j = 0; j < entry.getScores().size(); j++) {
-                        row.add(entry.getScores().get(i).map(String::valueOf).orElse("0"));
+                        row.add(entry.getScores().get(j).map(String::valueOf).orElse("0"));
                     }
                     writer.writeNext(row.toArray(new String[0]), false);
                 }
@@ -339,7 +339,7 @@ public class ContestScoreboardResource {
                     row.add(String.valueOf(entry.getLastAcceptedPenalty()));
 
                     for (int j = 0; j < entry.getProblemStateList().size(); j++) {
-                        row.add(entry.getProblemStateList().get(i) == IcpcScoreboard.IcpcScoreboardProblemState.ACCEPTED ? "1" : "0");
+                        row.add(entry.getProblemStateList().get(j) == IcpcScoreboard.IcpcScoreboardProblemState.ACCEPTED ? "1" : "0");
                     }
                     writer.writeNext(row.toArray(new String[0]), false);
                 }
@@ -398,7 +398,7 @@ public class ContestScoreboardResource {
                     row.add(String.valueOf(entry.getLastAcceptedPenalty()));
 
                     for (int j = 0; j < entry.getProblemStateList().size(); j++) {
-                        row.add(entry.getProblemStateList().get(i) == IcpcScoreboard.IcpcScoreboardProblemState.ACCEPTED ? "1" : "0");
+                        row.add(entry.getProblemStateList().get(j) == IcpcScoreboard.IcpcScoreboardProblemState.ACCEPTED ? "1" : "0");
                     }
                     writer.writeNext(row.toArray(new String[0]), false);
                 }
