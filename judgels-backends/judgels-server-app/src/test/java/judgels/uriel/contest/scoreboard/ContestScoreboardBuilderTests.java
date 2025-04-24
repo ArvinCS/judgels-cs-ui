@@ -67,6 +67,7 @@ class ContestScoreboardBuilderTests {
         when(moduleStore.getScoreboardModuleConfig(CONTEST_JID)).thenReturn(
                 new ScoreboardModuleConfig.Builder()
                         .isIncognitoScoreboard(false)
+                        .topParticipantsCount(-1)
                         .build());
 
         raw = new RawContestScoreboard.Builder()
@@ -126,6 +127,7 @@ class ContestScoreboardBuilderTests {
         when(moduleStore.getScoreboardModuleConfig(CONTEST_JID)).thenReturn(
                 new ScoreboardModuleConfig.Builder()
                         .isIncognitoScoreboard(true)
+                        .topParticipantsCount(-1)
                         .build());
 
         Scoreboard incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, true);
