@@ -66,7 +66,7 @@ class ContestScoreboardTypeFetcherTests {
                 @BeforeEach
                 void before() {
                     when(moduleStore.getScoreboardModuleConfig(CONTEST_JID))
-                            .thenReturn(new ScoreboardModuleConfig.Builder().isIncognitoScoreboard(true).build());
+                            .thenReturn(new ScoreboardModuleConfig.Builder().isIncognitoScoreboard(true).topParticipantsCount(-1).build());
                 }
 
                 @Test
