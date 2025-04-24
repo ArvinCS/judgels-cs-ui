@@ -73,7 +73,7 @@ class ContestEditConfigsTab extends Component {
 
       let initialValues = {
         scoreboardIsIncognito: scoreboard.isIncognitoScoreboard,
-        scoreboardTopParticipantsCount: scoreboard.topParticipantsCount,
+        scoreboardTopParticipantsCount: parseInt(scoreboard.topParticipantsCount, 10),
       };
       if (trocStyle) {
         initialValues = {
@@ -177,7 +177,7 @@ class ContestEditConfigsTab extends Component {
     let config = {
       scoreboard: {
         isIncognitoScoreboard: data.scoreboardIsIncognito,
-        topParticipantsCount: data.scoreboardTopParticipantsCount,
+        topParticipantsCount: +data.scoreboardTopParticipantsCount,
       },
     };
     if (trocStyle) {

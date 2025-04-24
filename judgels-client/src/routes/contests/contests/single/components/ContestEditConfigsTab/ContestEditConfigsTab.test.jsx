@@ -42,6 +42,7 @@ describe('ContestEditConfigsTab', () => {
           },
           scoreboard: {
             isIncognitoScoreboard: true,
+            topParticipantsCount: -1,
           },
           clarificationTimeLimit: {
             clarificationDuration: parseDuration('2h'),
@@ -81,6 +82,10 @@ describe('ContestEditConfigsTab', () => {
         const scoreboardIsIncognito = wrapper.find('input[name="scoreboardIsIncognito"]');
         scoreboardIsIncognito.getDOMNode().checked = true;
         scoreboardIsIncognito.simulate('change');
+
+        const scoreboardTopParticipantsCount = wrapper.find('input[name="scoreboardTopParticipantsCount"]');
+        scoreboardTopParticipantsCount.getDOMNode().value = '-1';
+        scoreboardTopParticipantsCount.simulate('input');
 
         const clarificationTimeLimitDuration = wrapper.find('input[name="clarificationTimeLimitDuration"]');
         clarificationTimeLimitDuration.getDOMNode().value = '2h 5m';
@@ -128,6 +133,7 @@ describe('ContestEditConfigsTab', () => {
           },
           scoreboard: {
             isIncognitoScoreboard: true,
+            topParticipantsCount: -1,
           },
           clarificationTimeLimit: {
             clarificationDuration: 7500000,
@@ -163,7 +169,7 @@ describe('ContestEditConfigsTab', () => {
             languageRestriction: { allowedLanguageNames: ['C', 'Pascal'] },
             wrongSubmissionPenalty: 20,
           },
-          scoreboard: { isIncognitoScoreboard: false },
+          scoreboard: { isIncognitoScoreboard: false, topParticipantsCount: -1 },
         };
         render();
       });
@@ -186,7 +192,7 @@ describe('ContestEditConfigsTab', () => {
             languageRestriction: { allowedLanguageNames: [] },
             wrongSubmissionPenalty: 20,
           },
-          scoreboard: { isIncognitoScoreboard: false },
+          scoreboard: { isIncognitoScoreboard: false, topParticipantsCount: -1 },
         });
       });
     });
@@ -198,7 +204,7 @@ describe('ContestEditConfigsTab', () => {
             languageRestriction: { allowedLanguageNames: [] },
             wrongSubmissionPenalty: 20,
           },
-          scoreboard: { isIncognitoScoreboard: false },
+          scoreboard: { isIncognitoScoreboard: false, topParticipantsCount: -1 },
         };
         render();
       });
@@ -235,7 +241,7 @@ describe('ContestEditConfigsTab', () => {
             languageRestriction: { allowedLanguageNames: ['Pascal', 'Python3'] },
             wrongSubmissionPenalty: 20,
           },
-          scoreboard: { isIncognitoScoreboard: false },
+          scoreboard: { isIncognitoScoreboard: false, topParticipantsCount: -1 },
         });
       });
     });

@@ -7,7 +7,7 @@ import { FormRichTextArea } from '../../../../../../components/forms/FormRichTex
 import { FormTableCheckbox } from '../../../../../../components/forms/FormTableCheckbox/FormTableCheckbox';
 import { FormTableInput } from '../../../../../../components/forms/FormTableInput/FormTableInput';
 import { FormTableTextInput } from '../../../../../../components/forms/FormTableTextInput/FormTableTextInput';
-import { NonnegativeNumber, Required, composeValidators } from '../../../../../../components/forms/validations';
+import { NonnegativeNumber, Number, Required, composeValidators } from '../../../../../../components/forms/validations';
 import { getGradingLanguageName, gradingLanguages } from '../../../../../../modules/api/gabriel/language.js';
 
 import './ContestEditConfigsForm.scss';
@@ -242,7 +242,7 @@ export default function ContestEditConfigsForm({ onSubmit, initialValues, config
       name: 'scoreboardTopParticipantsCount',
       label: 'Show Top Participants',
       inputHelper: 'To show all participants, just use -1.',
-      validate: Required,
+      validate: composeValidators(Required, Number),
       keyClassName: 'contest-edit-configs-form__key',
     };
 
