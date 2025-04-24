@@ -34,9 +34,11 @@ export class ContestScoreboardPage extends Component {
 
     const queries = parse(this.props.location.search);
     const frozen = !!queries.frozen;
+    const topParticipantsOnly = !!queries.topParticipantsOnly;
     const showClosedProblems = !!queries.showClosedProblems;
     this.state = {
       response: undefined,
+      topParticipantsOnly,
       frozen,
       showClosedProblems,
       lastRefreshScoreboardTime: 0,
@@ -52,7 +54,7 @@ export class ContestScoreboardPage extends Component {
 
     return (
       <ContentCard className="contest-scoreboard-page">
-        <h3>Scoreboard</h3>
+        {this.state.topParticipantsOnly ? <h3>Top Leaderboard</h3> : <h3>Scoreboard</h3>}
         {this.renderScoreboardUpdatedTime()}
         <div className="clearfix" />
         <hr />

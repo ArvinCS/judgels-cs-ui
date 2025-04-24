@@ -31,6 +31,7 @@ public class ContestScoreboardFetcher {
             String userJid,
             boolean canSupervise,
             boolean frozen,
+            boolean topParticipantsOnly,
             boolean showAllProblems,
             int page,
             int pageSize) {
@@ -45,7 +46,7 @@ public class ContestScoreboardFetcher {
 
         return rawScoreboard.map(raw -> {
             Scoreboard scoreboard =
-                    scoreboardBuilder.buildScoreboard(raw, contest, userJid, canSupervise, showAllProblems);
+                    scoreboardBuilder.buildScoreboard(raw, contest, userJid, canSupervise, showAllProblems, topParticipantsOnly);
             Scoreboard scoreboardPage = scoreboardBuilder.paginateScoreboard(scoreboard, contest, page, pageSize);
             int totalEntries = scoreboard.getContent().getEntries().size();
             return new ContestScoreboard.Builder()
