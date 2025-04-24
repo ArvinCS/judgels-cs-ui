@@ -130,12 +130,12 @@ class ContestScoreboardBuilderTests {
                         .topParticipantsCount(-1)
                         .build());
 
-        Scoreboard incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, true);
+        Scoreboard incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, true, false);
         assertThat(incognitoScoreboard.getContent().getEntries().size()).isEqualTo(1);
         assertThat(incognitoScoreboard.getContent().getEntries().get(0).getRank()).isEqualTo(-1);
         assertThat(incognitoScoreboard.getContent().getEntries().get(0).getContestantJid()).isEqualTo(USER_JID);
 
-        incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, true, true);
+        incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, true, true, false);
         assertThat(incognitoScoreboard.getContent().getEntries().size()).isEqualTo(2);
     }
 
@@ -159,7 +159,7 @@ class ContestScoreboardBuilderTests {
                 .build();
         when(mapper.readValue(anyString(), eq(IoiScoreboard.class))).thenReturn(scoreboard);
 
-        Scoreboard incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, true);
+        Scoreboard incognitoScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, true, false);
         assertThat(incognitoScoreboard.getContent().getEntries().size()).isEqualTo(2);
 
     }
@@ -200,7 +200,7 @@ class ContestScoreboardBuilderTests {
 
         when(problemStore.getOpenProblemJids(CONTEST_JID)).thenReturn(ImmutableList.of("p1", "p3"));
 
-        Scoreboard filteredScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, false);
+        Scoreboard filteredScoreboard = scoreboardBuilder.buildScoreboard(raw, contest, USER_JID, false, false, false);
         assertThat(filteredScoreboard).isEqualTo(new IoiScoreboard.Builder()
                 .state(new ScoreboardState.Builder()
                         .addProblemJids("p1", "p3")

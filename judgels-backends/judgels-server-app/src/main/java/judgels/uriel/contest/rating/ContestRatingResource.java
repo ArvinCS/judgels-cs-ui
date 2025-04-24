@@ -105,7 +105,7 @@ public class ContestRatingResource {
             return new ContestRatingChanges.Builder().build();
         }
 
-        Scoreboard scoreboard = scoreboardBuilder.buildScoreboard(raw.get(), contest, "", true, true);
+        Scoreboard scoreboard = scoreboardBuilder.buildScoreboard(raw.get(), contest, "", true, true, false);
 
         Map<String, Integer> ranksMap = scoreboard.getContent().getEntries().stream()
                 .filter(ScoreboardEntry::hasSubmission)

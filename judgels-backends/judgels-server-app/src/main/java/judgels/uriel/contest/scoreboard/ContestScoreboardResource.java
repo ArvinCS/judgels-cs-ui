@@ -33,6 +33,7 @@ import judgels.jophiel.user.info.UserInfoStore;
 import judgels.service.actor.ActorChecker;
 import judgels.service.api.actor.AuthHeader;
 import judgels.uriel.api.contest.Contest;
+import judgels.uriel.api.contest.module.ContestModulesConfig;
 import judgels.uriel.api.contest.problem.ContestProblem;
 import judgels.uriel.api.contest.scoreboard.ContestScoreboard;
 import judgels.uriel.api.contest.scoreboard.ContestScoreboardConfig;
@@ -46,6 +47,7 @@ import judgels.uriel.api.contest.scoreboard.TrocScoreboard;
 import judgels.uriel.api.contest.scoreboard.TrocScoreboard.TrocScoreboardEntry;
 import judgels.uriel.contest.ContestStore;
 import judgels.uriel.contest.log.ContestLogger;
+import judgels.uriel.contest.module.ContestModuleStore;
 import judgels.uriel.contest.problem.ContestProblemStore;
 import judgels.uriel.contest.submission.ContestSubmissionRoleChecker;
 import liquibase.util.csv.CSVWriter;
@@ -58,6 +60,7 @@ public class ContestScoreboardResource {
     @Inject protected ContestStore contestStore;
     @Inject protected ContestProblemStore contestProblemStore;
     @Inject protected ContestLogger contestLogger;
+    @Inject protected ContestModuleStore contestModuleStore;
     @Inject protected ContestSubmissionRoleChecker submissionRoleChecker;
     @Inject protected ContestScoreboardRoleChecker scoreboardRoleChecker;
     @Inject protected ContestScoreboardFetcher scoreboardFetcher;
@@ -77,6 +80,7 @@ public class ContestScoreboardResource {
             @HeaderParam(AUTHORIZATION) Optional<AuthHeader> authHeader,
             @PathParam("contestJid") String contestJid,
             @QueryParam("frozen") boolean frozen,
+            @QueryParam("topParticipantsOnly") @DefaultValue("false") boolean topParticipantsOnly,
             @QueryParam("showClosedProblems") boolean showClosedProblems,
             @QueryParam("page") @DefaultValue("1") int pageNumber) {
 
@@ -95,15 +99,19 @@ public class ContestScoreboardResource {
                 .canViewSubmissions(canViewSubmissions)
                 .canRefresh(canManage)
                 .build();
+        ContestModulesConfig module = contestModuleStore.getConfig(contestJid, contest.getStyle());
 
         if (showClosedProblems) {
             checkAllowed(canSupervise);
+        }
+        if (!topParticipantsOnly) {
+            checkAllowed(canSupervise || module.getScoreboard().getTopParticipantsCount() < 0);
         }
 
         contestLogger.log(contestJid, "OPEN_SCOREBOARD");
 
         return scoreboardFetcher
-                .fetchScoreboard(contest, actorJid, canSupervise, frozen, showClosedProblems, pageNumber, PAGE_SIZE)
+                .fetchScoreboard(contest, actorJid, canSupervise, frozen, topParticipantsOnly, showClosedProblems, pageNumber, PAGE_SIZE)
                 .map(scoreboard -> {
                     var contestantJids = Lists.transform(scoreboard.getScoreboard().getContent().getEntries(), ScoreboardEntry::getContestantJid);
                     Map<String, Profile> profilesMap = jophielClient.getProfiles(contestantJids, contest.getBeginTime());
@@ -122,7 +130,12 @@ public class ContestScoreboardResource {
     @UnitOfWork(readOnly = true)
     public Response exportScoreboard(
             @HeaderParam(AUTHORIZATION) AuthHeader authHeader,
-            @PathParam("contestJid") String contestJid) {
+            @PathParam("contestJid") String contestJid,
+            @QueryParam("frozen") boolean frozen,
+            @QueryParam("topParticipantsOnly") @DefaultValue("false") boolean topParticipantsOnly,
+            @QueryParam("showClosedProblems") @DefaultValue("false") boolean showClosedProblems,
+            @QueryParam("page") @DefaultValue("1") int pageNumber,
+            @QueryParam("pageSize") @DefaultValue("1000") int pageSize) {
 
         String actorJid = actorChecker.check(authHeader);
         Contest contest = checkFound(contestStore.getContestByJid(contestJid));
@@ -133,16 +146,49 @@ public class ContestScoreboardResource {
 
         switch (contest.getStyle()) {
             case TROC:
-                scoreboardResult = exporter.getScoreboardTroc(actorJid, contest);
+                scoreboardResult = exporter.getScoreboardTroc(
+                    actorJid,
+                    contest,
+                    true,
+                    frozen,
+                    topParticipantsOnly,
+                    showClosedProblems,
+                    pageNumber,
+                    pageSize);
                 break;
             case IOI:
-                scoreboardResult = exporter.getScoreboardIOI(actorJid, contest);
+                scoreboardResult = exporter.getScoreboardIOI(
+                    actorJid,
+                    contest,
+                    true,
+                    frozen,
+                    topParticipantsOnly,
+                    showClosedProblems,
+                    pageNumber,
+                    pageSize);
                 break;
             case ICPC:
-                scoreboardResult = exporter.getScoreboardIcpc(actorJid, contest);
+                scoreboardResult = exporter.getScoreboardIcpc(
+                    actorJid,
+                    contest,
+                    true,
+                    frozen,
+                    topParticipantsOnly,
+                    showClosedProblems,
+                    pageNumber,
+                    pageSize);
                 break;
             case BUNDLE:
-
+                scoreboardResult = exporter.getScoreboardBundle(
+                    actorJid,
+                    contest,
+                    true,
+                    frozen,
+                    topParticipantsOnly,
+                    showClosedProblems,
+                    pageNumber,
+                    pageSize);
+                break;
             default:
                 throw new RuntimeException("Unsupported contest style");
         }
@@ -172,7 +218,15 @@ public class ContestScoreboardResource {
     }
 
     class ContestScoreboardExporter {
-        public String getScoreboardTroc(String actorJid, Contest contest) {
+        public String getScoreboardTroc(
+                String actorJid,
+                Contest contest,
+                boolean canSupervise,
+                boolean frozen,
+                boolean topParticipantsOnly,
+                boolean showClosedProblems,
+                int page,
+                int pageSize) {
             List<ContestProblem> problems = contestProblemStore.getProblems(contest.getJid());
 
             StringWriter csv = new StringWriter();
@@ -191,7 +245,7 @@ public class ContestScoreboardResource {
                 writer.writeNext(header.toArray(new String[0]), false);
 
                 Optional<ContestScoreboard> maybeScoreboard = scoreboardFetcher
-                        .fetchScoreboard(contest, actorJid, true, false, true, 1, 1000);
+                        .fetchScoreboard(contest, actorJid, canSupervise, frozen, topParticipantsOnly, showClosedProblems, page, pageSize);
 
                 if (maybeScoreboard.isEmpty()) {
                     return csv.toString();
@@ -233,7 +287,15 @@ public class ContestScoreboardResource {
             return csv.toString();
         }
 
-        public String getScoreboardIOI(String actorJid, Contest contest) {
+        public String getScoreboardIOI(
+                String actorJid,
+                Contest contest,
+                boolean canSupervise,
+                boolean frozen,
+                boolean topParticipantsOnly,
+                boolean showClosedProblems,
+                int page,
+                int pageSize) {
             List<ContestProblem> problems = contestProblemStore.getProblems(contest.getJid());
 
             StringWriter csv = new StringWriter();
@@ -252,7 +314,7 @@ public class ContestScoreboardResource {
                 writer.writeNext(header.toArray(new String[0]), false);
 
                 Optional<ContestScoreboard> maybeScoreboard = scoreboardFetcher
-                        .fetchScoreboard(contest, actorJid, true, false, true, 1, 1000);
+                        .fetchScoreboard(contest, actorJid, canSupervise, frozen, topParticipantsOnly, showClosedProblems, page, pageSize);
 
                 if (maybeScoreboard.isEmpty()) {
                     return csv.toString();
@@ -290,7 +352,15 @@ public class ContestScoreboardResource {
             return csv.toString();
         }
 
-        public String getScoreboardIcpc(String actorJid, Contest contest) {
+        public String getScoreboardIcpc(
+                String actorJid,
+                Contest contest,
+                boolean canSupervise,
+                boolean frozen,
+                boolean topParticipantsOnly,
+                boolean showClosedProblems,
+                int page,
+                int pageSize) {
             List<ContestProblem> problems = contestProblemStore.getProblems(contest.getJid());
 
             StringWriter csv = new StringWriter();
@@ -310,7 +380,7 @@ public class ContestScoreboardResource {
                 writer.writeNext(header.toArray(new String[0]), false);
 
                 Optional<ContestScoreboard> maybeScoreboard = scoreboardFetcher
-                        .fetchScoreboard(contest, actorJid, true, false, true, 1, 1000);
+                        .fetchScoreboard(contest, actorJid, canSupervise, frozen, topParticipantsOnly, showClosedProblems, page, pageSize);
 
                 if (maybeScoreboard.isEmpty()) {
                     return csv.toString();
@@ -349,7 +419,15 @@ public class ContestScoreboardResource {
             return csv.toString();
         }
 
-        public String getScoreboardBundle(String actorJid, Contest contest) {
+        public String getScoreboardBundle(
+                String actorJid,
+                Contest contest,
+                boolean canSupervise,
+                boolean frozen,
+                boolean topParticipantsOnly,
+                boolean showClosedProblems,
+                int page,
+                int pageSize) {
             List<ContestProblem> problems = contestProblemStore.getProblems(contest.getJid());
 
             StringWriter csv = new StringWriter();
@@ -369,7 +447,7 @@ public class ContestScoreboardResource {
                 writer.writeNext(header.toArray(new String[0]), false);
 
                 Optional<ContestScoreboard> maybeScoreboard = scoreboardFetcher
-                        .fetchScoreboard(contest, actorJid, true, false, true, 1, 1000);
+                        .fetchScoreboard(contest, actorJid, canSupervise, frozen, topParticipantsOnly, showClosedProblems, page, pageSize);
 
                 if (maybeScoreboard.isEmpty()) {
                     return csv.toString();

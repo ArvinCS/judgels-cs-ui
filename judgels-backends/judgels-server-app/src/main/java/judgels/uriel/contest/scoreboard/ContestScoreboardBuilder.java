@@ -45,13 +45,16 @@ public class ContestScoreboardBuilder {
             Contest contest,
             String userJid,
             boolean canSupervise,
-            boolean showAllProblems) {
+            boolean showAllProblems,
+            boolean topParticipantsOnly) {
 
         ScoreboardProcessor processor = processorRegistry.get(contest.getStyle());
 
         Scoreboard scoreboard = processor.parse(mapper, raw.getScoreboard());
         scoreboard = filterContestantJidsIfNecessary(scoreboard, processor, contest, userJid, canSupervise);
-        scoreboard = filterTopContestantsIfNecessary(scoreboard, processor, contest, userJid, canSupervise);
+        if (topParticipantsOnly) {
+            scoreboard = filterTopContestantsIfNecessary(scoreboard, processor, contest, userJid, canSupervise);
+        }
         scoreboard = filterProblemJidsIfNecessary(scoreboard, processor, contest, showAllProblems, canSupervise);
 
         return scoreboard;
@@ -159,11 +162,11 @@ public class ContestScoreboardBuilder {
             entries.stream()
                     .filter(e -> e.getContestantJid().equals(userJid))
                     .findFirst()
+                    .map(processor::clearEntryRank)
                     .ifPresent(topEntries::add);
         }
 
         List<? extends ScoreboardEntry> filteredEntries = topEntries.stream()
-                .map(processor::clearEntryRank)
                 .collect(Collectors.toList());
 
         return processor.create(scoreboard.getState(), filteredEntries);

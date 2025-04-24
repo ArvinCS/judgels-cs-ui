@@ -11,6 +11,7 @@ public interface ContestScoreboardClient {
     class GetScoreboardParams {
         public boolean frozen;
         public boolean showClosedProblems;
+        public boolean topParticipantsOnly;
     }
 
     @RequestLine("GET /api/v2/contests/{contestJid}/scoreboard")

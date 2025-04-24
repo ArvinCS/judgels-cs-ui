@@ -73,6 +73,7 @@ public class ContestBundleScoreboardResource {
             @HeaderParam(AUTHORIZATION) AuthHeader authHeader,
             @PathParam("bundleJid") String contestBundleJid,
             @QueryParam("frozen") boolean frozen,
+            @QueryParam("topParticipantsOnly") @DefaultValue("false") boolean topParticipantsOnly,
             @QueryParam("showClosedProblems") @DefaultValue("false") boolean showClosedProblems,
             @QueryParam("page") @DefaultValue("1") int pageNumber,
             @QueryParam("pageSize") @DefaultValue("1000") int pageSize) {
@@ -95,7 +96,7 @@ public class ContestBundleScoreboardResource {
             header.add("Email");
             for (Contest contest : contests) {
                 Optional<ContestScoreboard> maybeScoreboard = scoreboardFetcher
-                        .fetchScoreboard(contest, actorJid, true, frozen, showClosedProblems, pageNumber, pageSize);
+                        .fetchScoreboard(contest, actorJid, true, frozen, topParticipantsOnly, showClosedProblems, pageNumber, pageSize);
 
                 if (!maybeScoreboard.isPresent()) {
                     continue;

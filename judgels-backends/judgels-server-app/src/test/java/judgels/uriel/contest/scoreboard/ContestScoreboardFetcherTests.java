@@ -96,13 +96,13 @@ class ContestScoreboardFetcherTests {
         when(scoreboardStore.getScoreboard(CONTEST_JID, OFFICIAL))
                 .thenReturn(Optional.of(officialRaw));
 
-        when(scoreboardBuilder.buildScoreboard(officialRaw, contest, USER_JID, false, false))
+        when(scoreboardBuilder.buildScoreboard(officialRaw, contest, USER_JID, false, false, false))
                 .thenReturn(icpcScoreboard);
 
         when(scoreboardBuilder.paginateScoreboard(icpcScoreboard, contest, 1, 50))
                 .thenReturn(icpcScoreboard);
 
-        assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, 1, 50))
+        assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, false, 1, 50))
                 .contains(officialScoreboard);
     }
 
@@ -114,13 +114,13 @@ class ContestScoreboardFetcherTests {
         when(scoreboardStore.getScoreboard(CONTEST_JID, FROZEN))
                 .thenReturn(Optional.of(frozenRaw));
 
-        when(scoreboardBuilder.buildScoreboard(frozenRaw, contest, USER_JID, false, false))
+        when(scoreboardBuilder.buildScoreboard(frozenRaw, contest, USER_JID, false, false, false))
                 .thenReturn(icpcScoreboard);
 
         when(scoreboardBuilder.paginateScoreboard(icpcScoreboard, contest, 1, 50))
                 .thenReturn(icpcScoreboard);
 
-        assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, 1, 50))
+        assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, false, 1, 50))
                 .contains(frozenScoreboard);
     }
 
@@ -132,13 +132,13 @@ class ContestScoreboardFetcherTests {
         when(scoreboardStore.getScoreboard(CONTEST_JID, OFFICIAL))
                 .thenReturn(Optional.of(officialRaw));
 
-        when(scoreboardBuilder.buildScoreboard(officialRaw, contest, USER_JID, false, false))
+        when(scoreboardBuilder.buildScoreboard(officialRaw, contest, USER_JID, false, false, false))
                 .thenReturn(icpcScoreboard);
 
         when(scoreboardBuilder.paginateScoreboard(icpcScoreboard, contest, 1, 50))
                 .thenReturn(icpcScoreboard);
 
-        assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, 1, 50))
+        assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, false, 1, 50))
                 .contains(officialScoreboard);
     }
 }
