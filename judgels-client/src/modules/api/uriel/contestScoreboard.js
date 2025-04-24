@@ -11,8 +11,8 @@ export const ContestScoreboardType = {
 const baseURL = contestJid => `${baseContestURL(contestJid)}/scoreboard`;
 
 export const contestScoreboardAPI = {
-  getScoreboard: (token, contestJid, frozen, showClosedProblems, page) => {
-    const params = stringify({ frozen, showClosedProblems, page });
+  getScoreboard: (token, contestJid, frozen, topParticipantsOnly, showClosedProblems, page) => {
+    const params = stringify({ frozen, topParticipantsOnly, showClosedProblems, page });
     return get(`${baseURL(contestJid)}?${params}`, token);
   },
 

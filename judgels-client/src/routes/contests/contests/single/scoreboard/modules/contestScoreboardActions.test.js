@@ -22,6 +22,7 @@ describe('contestScoreboardActions', () => {
 
   describe('getScoreboard()', () => {
     const frozen = true;
+    const topParticipantsOnly = false;
     const showClosedProblems = false;
     const page = 1;
     const responseBody = {
@@ -31,11 +32,11 @@ describe('contestScoreboardActions', () => {
     it('calls API', async () => {
       nockUriel()
         .get(`/contests/${contestJid}/scoreboard`)
-        .query({ frozen, showClosedProblems, page })
+        .query({ frozen, topParticipantsOnly, showClosedProblems, page })
         .reply(200, responseBody);
 
       const response = await store.dispatch(
-        contestScoreboardActions.getScoreboard(contestJid, frozen, showClosedProblems, page)
+        contestScoreboardActions.getScoreboard(contestJid, frozen, topParticipantsOnly, showClosedProblems, page)
       );
       expect(response).toEqual(responseBody);
     });
