@@ -8,7 +8,14 @@ import * as toastActions from '../../../../../../modules/toast/toastActions';
 export function getScoreboard(contestJid, frozen, topParticipantsOnly, showClosedProblems, page) {
   return async (dispatch, getState) => {
     const token = selectToken(getState());
-    return await contestScoreboardAPI.getScoreboard(token, contestJid, frozen, topParticipantsOnly, showClosedProblems, page);
+    return await contestScoreboardAPI.getScoreboard(
+      token,
+      contestJid,
+      frozen,
+      topParticipantsOnly,
+      showClosedProblems,
+      page
+    );
   };
 }
 

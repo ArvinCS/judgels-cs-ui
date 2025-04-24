@@ -85,7 +85,12 @@ export class ContestScoreboardPage extends Component {
   };
 
   onChangePage = async nextPage => {
-    const scoreboard = await this.refreshScoreboard(nextPage, this.state.frozen, this.state.topParticipantsOnly, this.state.showClosedProblems);
+    const scoreboard = await this.refreshScoreboard(
+      nextPage,
+      this.state.frozen,
+      this.state.topParticipantsOnly,
+      this.state.showClosedProblems
+    );
     if (scoreboard) {
       return scoreboard.data.totalEntries;
     } else {
@@ -94,7 +99,13 @@ export class ContestScoreboardPage extends Component {
   };
 
   refreshScoreboard = async (nextPage, frozen, topParticipantsOnly, showClosedProblems) => {
-    const response = await this.props.onGetScoreboard(this.props.contest.jid, frozen, topParticipantsOnly, showClosedProblems, nextPage);
+    const response = await this.props.onGetScoreboard(
+      this.props.contest.jid,
+      frozen,
+      topParticipantsOnly,
+      showClosedProblems,
+      nextPage
+    );
     this.setState({ response: response ? [response] : [], frozen, showClosedProblems });
     return response;
   };
