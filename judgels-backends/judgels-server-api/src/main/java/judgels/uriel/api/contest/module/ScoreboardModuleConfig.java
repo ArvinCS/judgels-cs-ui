@@ -15,7 +15,10 @@ public interface ScoreboardModuleConfig extends ModuleConfig {
             .build();
 
     boolean getIsIncognitoScoreboard();
-    int getTopParticipantsCount();
+    @Value.Default
+    default int getTopParticipantsCount() {
+        return -1;
+    }
 
     class Builder extends ImmutableScoreboardModuleConfig.Builder {}
 }
