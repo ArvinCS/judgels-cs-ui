@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.Optional;
 import judgels.uriel.api.contest.Contest;
 import judgels.uriel.api.contest.ContestStyle;
+import judgels.uriel.api.contest.module.ScoreboardModuleConfig;
 import judgels.uriel.api.contest.scoreboard.ContestScoreboard;
 import judgels.uriel.api.contest.scoreboard.ContestScoreboardType;
 import judgels.uriel.api.contest.scoreboard.IcpcScoreboard;
@@ -19,6 +20,7 @@ import judgels.uriel.api.contest.scoreboard.IcpcScoreboard.IcpcScoreboardContent
 import judgels.uriel.api.contest.scoreboard.IcpcScoreboard.IcpcScoreboardEntry;
 import judgels.uriel.api.contest.scoreboard.Scoreboard;
 import judgels.uriel.api.contest.scoreboard.ScoreboardState;
+import judgels.uriel.contest.module.ContestModuleStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,6 +29,7 @@ class ContestScoreboardFetcherTests {
     private static final String CONTEST_JID = "contestJid";
     private static final String USER_JID = "userJid";
 
+    @Mock private ContestModuleStore scoreboardModuleStore;
     @Mock private ContestScoreboardTypeFetcher typeFetcher;
     @Mock private ContestScoreboardStore scoreboardStore;
     @Mock private ContestScoreboardBuilder scoreboardBuilder;
@@ -43,7 +46,7 @@ class ContestScoreboardFetcherTests {
     void before() {
         initMocks(this);
 
-        scoreboardFetcher = new ContestScoreboardFetcher(typeFetcher, scoreboardStore, scoreboardBuilder);
+        scoreboardFetcher = new ContestScoreboardFetcher(scoreboardModuleStore, typeFetcher, scoreboardStore, scoreboardBuilder);
 
         contest = new Contest.Builder()
                 .id(1)
@@ -102,6 +105,9 @@ class ContestScoreboardFetcherTests {
         when(scoreboardBuilder.paginateScoreboard(icpcScoreboard, contest, 1, 50))
                 .thenReturn(icpcScoreboard);
 
+        when(scoreboardModuleStore.getScoreboardModuleConfig(CONTEST_JID))
+                .thenReturn(ScoreboardModuleConfig.DEFAULT);
+
         assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, false, 1, 50))
                 .contains(officialScoreboard);
     }
@@ -120,6 +126,9 @@ class ContestScoreboardFetcherTests {
         when(scoreboardBuilder.paginateScoreboard(icpcScoreboard, contest, 1, 50))
                 .thenReturn(icpcScoreboard);
 
+        when(scoreboardModuleStore.getScoreboardModuleConfig(CONTEST_JID))
+                .thenReturn(ScoreboardModuleConfig.DEFAULT);
+
         assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, false, 1, 50))
                 .contains(frozenScoreboard);
     }
@@ -137,6 +146,9 @@ class ContestScoreboardFetcherTests {
 
         when(scoreboardBuilder.paginateScoreboard(icpcScoreboard, contest, 1, 50))
                 .thenReturn(icpcScoreboard);
+
+        when(scoreboardModuleStore.getScoreboardModuleConfig(CONTEST_JID))
+                .thenReturn(ScoreboardModuleConfig.DEFAULT);
 
         assertThat(scoreboardFetcher.fetchScoreboard(contest, USER_JID, false, false, false, false, 1, 50))
                 .contains(officialScoreboard);

@@ -54,7 +54,7 @@ export class ContestScoreboardPage extends Component {
 
     return (
       <ContentCard className="contest-scoreboard-page">
-        {this.state.topParticipantsOnly ? <h3>Top Leaderboard</h3> : <h3>Scoreboard</h3>}
+        <h3>Scoreboard</h3>
         {this.renderScoreboardUpdatedTime()}
         <div className="clearfix" />
         <hr />
@@ -85,7 +85,7 @@ export class ContestScoreboardPage extends Component {
   };
 
   onChangePage = async nextPage => {
-    const scoreboard = await this.refreshScoreboard(nextPage, this.state.frozen, this.state.showClosedProblems);
+    const scoreboard = await this.refreshScoreboard(nextPage, this.state.frozen, this.state.topParticipantsOnly, this.state.showClosedProblems);
     if (scoreboard) {
       return scoreboard.data.totalEntries;
     } else {
@@ -93,8 +93,8 @@ export class ContestScoreboardPage extends Component {
     }
   };
 
-  refreshScoreboard = async (nextPage, frozen, showClosedProblems) => {
-    const response = await this.props.onGetScoreboard(this.props.contest.jid, frozen, showClosedProblems, nextPage);
+  refreshScoreboard = async (nextPage, frozen, topParticipantsOnly, showClosedProblems) => {
+    const response = await this.props.onGetScoreboard(this.props.contest.jid, frozen, topParticipantsOnly, showClosedProblems, nextPage);
     this.setState({ response: response ? [response] : [], frozen, showClosedProblems });
     return response;
   };
@@ -209,15 +209,18 @@ export class ContestScoreboardPage extends Component {
 
   onChangeShowClosedProblems = ({ target }) => this.onChange(this.state.frozen, target.checked);
 
-  onChange = (frozen, showClosedProblems) => {
-    this.setState({ frozen, showClosedProblems });
-    this.refreshScoreboard(1, frozen, showClosedProblems);
+  onChange = (frozen, topParticipantsOnly, showClosedProblems) => {
+    this.setState({ frozen, topParticipantsOnly, showClosedProblems });
+    this.refreshScoreboard(1, frozen, topParticipantsOnly, showClosedProblems);
     this.setState({ lastRefreshScoreboardTime: new Date().getTime() });
 
     let queries = parse(this.props.location.search);
-    queries = { ...queries, frozen: undefined, showClosedProblems: undefined };
+    queries = { ...queries, frozen: undefined, topParticipantsOnly: undefined, showClosedProblems: undefined };
     if (frozen) {
       queries = { ...queries, frozen };
+    }
+    if (topParticipantsOnly) {
+      queries = { ...queries, topParticipantsOnly };
     }
     if (showClosedProblems) {
       queries = { ...queries, showClosedProblems };
