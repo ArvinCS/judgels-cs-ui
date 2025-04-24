@@ -141,12 +141,17 @@ export function ContestEditConfigsTable({ config }) {
     );
   };
 
-  const renderScoreboardConfig = ({ isIncognitoScoreboard }) => {
+  const renderScoreboardConfig = ({ isIncognitoScoreboard, topParticipantsCount }) => {
     const rows = [
       {
         key: 'isIncognitoScoreboard',
         title: 'Incognito scoreboard?',
         value: isIncognitoScoreboard ? <SmallTick /> : <SmallCross />,
+      },
+      {
+        key: 'topParticipantsCount',
+        title: 'Top Participants Count',
+        value: topParticipantsCount < 0 ? <p>All</p> : <p>{topParticipantsCount}</p>,
       },
     ];
     return (
