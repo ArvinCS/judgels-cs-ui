@@ -104,9 +104,6 @@ public class ContestScoreboardResource {
         if (showClosedProblems) {
             checkAllowed(canSupervise);
         }
-        if (!topParticipantsOnly) {
-            checkAllowed(canSupervise || module.getScoreboard().getTopParticipantsCount() < 0);
-        }
 
         contestLogger.log(contestJid, "OPEN_SCOREBOARD");
 
