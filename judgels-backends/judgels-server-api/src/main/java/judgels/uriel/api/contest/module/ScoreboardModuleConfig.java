@@ -11,9 +11,11 @@ import org.immutables.value.Value;
 public interface ScoreboardModuleConfig extends ModuleConfig {
     ScoreboardModuleConfig DEFAULT = new Builder()
             .isIncognitoScoreboard(false)
+            .topParticipantsCount(-1)
             .build();
 
     boolean getIsIncognitoScoreboard();
+    int getTopParticipantsCount();
 
     class Builder extends ImmutableScoreboardModuleConfig.Builder {}
 }

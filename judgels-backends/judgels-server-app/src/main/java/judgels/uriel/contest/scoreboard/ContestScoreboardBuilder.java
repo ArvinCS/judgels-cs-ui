@@ -51,6 +51,7 @@ public class ContestScoreboardBuilder {
 
         Scoreboard scoreboard = processor.parse(mapper, raw.getScoreboard());
         scoreboard = filterContestantJidsIfNecessary(scoreboard, processor, contest, userJid, canSupervise);
+        scoreboard = filterTopContestantsIfNecessary(scoreboard, processor, contest, userJid, canSupervise);
         scoreboard = filterProblemJidsIfNecessary(scoreboard, processor, contest, showAllProblems, canSupervise);
 
         return scoreboard;
@@ -126,5 +127,45 @@ public class ContestScoreboardBuilder {
             return ioiProcessor.filterProblemJids(ioiScoreboard, ImmutableSet.copyOf(openProblemJids), config);
         }
         return scoreboard;
+    }
+
+    private Scoreboard filterTopContestantsIfNecessary(
+            Scoreboard scoreboard,
+            ScoreboardProcessor processor,
+            Contest contest,
+            String userJid,
+            boolean canSupervise) {
+
+        if (canSupervise) {
+            return scoreboard;
+        }
+
+        ScoreboardModuleConfig scoreboardModuleConfig = moduleStore.getScoreboardModuleConfig(contest.getJid());
+        if (scoreboardModuleConfig.getTopParticipantsCount() < 0) {
+            return scoreboard;
+        }
+
+        List<? extends ScoreboardEntry> entries = scoreboard.getContent().getEntries();
+        int topCount = scoreboardModuleConfig.getTopParticipantsCount();
+
+        List<ScoreboardEntry> topEntries = entries.stream()
+                .limit(topCount)
+                .collect(Collectors.toCollection(Lists::newArrayList));
+
+        boolean userInTop = topEntries.stream()
+                .anyMatch(e -> e.getContestantJid().equals(userJid));
+
+        if (!userInTop) {
+            entries.stream()
+                    .filter(e -> e.getContestantJid().equals(userJid))
+                    .findFirst()
+                    .ifPresent(topEntries::add);
+        }
+
+        List<? extends ScoreboardEntry> filteredEntries = topEntries.stream()
+                .map(processor::clearEntryRank)
+                .collect(Collectors.toList());
+
+        return processor.create(scoreboard.getState(), filteredEntries);
     }
 }

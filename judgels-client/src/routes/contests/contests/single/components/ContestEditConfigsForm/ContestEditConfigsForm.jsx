@@ -238,6 +238,13 @@ export default function ContestEditConfigsForm({ onSubmit, initialValues, config
       label: 'Incognito scoreboard?',
       keyClassName: 'contest-edit-configs-form__key',
     };
+    const scoreboardTopParticipantsCount = {
+      name: 'scoreboardTopParticipantsCount',
+      label: 'Show Top Participants',
+      inputHelper: 'To show all participants, just use -1.',
+      validate: Required,
+      keyClassName: 'contest-edit-configs-form__key',
+    };
 
     return (
       <div className="contest-edit-configs-form__config">
@@ -245,6 +252,7 @@ export default function ContestEditConfigsForm({ onSubmit, initialValues, config
         <HTMLTable striped>
           <tbody>
             <Field component={FormTableCheckbox} {...scoreboardIsIncognitoField} />
+            <Field component={FormTableTextInput} {...scoreboardTopParticipantsCount} />
           </tbody>
         </HTMLTable>
       </div>
