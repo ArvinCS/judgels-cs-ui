@@ -32,8 +32,10 @@ import judgels.gabriel.api.Verdict;
 import judgels.gabriel.cache.ProblemCache;
 import judgels.gabriel.engines.GradingEngineRegistry;
 import judgels.gabriel.languages.GradingLanguageRegistry;
+import judgels.gabriel.languages.sql.SqlGradingLanguage;
 import judgels.gabriel.sandboxes.fake.FakeSandboxFactory;
 import judgels.gabriel.sandboxes.isolate.IsolateSandboxFactory;
+import judgels.gabriel.sandboxes.postgrelate.PostgrelateSandboxFactory;
 import judgels.messaging.MessageClient;
 import judgels.messaging.api.Message;
 import org.slf4j.Logger;
@@ -49,6 +51,7 @@ public class GradingWorker {
     private final ProblemCache problemCache;
     private final MessageClient messageClient;
     private final Optional<IsolateSandboxFactory> isolateSandboxFactory;
+    private final Optional<PostgrelateSandboxFactory> postgrelateSandboxFactory;
 
     private Message message;
     private GradingRequest request;
@@ -76,13 +79,15 @@ public class GradingWorker {
             @Named("workersDir") Path workersDir,
             ProblemCache problemCache,
             MessageClient messageClient,
-            Optional<IsolateSandboxFactory> isolateSandboxFactory) {
+            Optional<IsolateSandboxFactory> isolateSandboxFactory,
+            Optional<PostgrelateSandboxFactory> postgrelateSandboxFactory) {
 
         this.gradingConfig = gradingConfig;
         this.workersDir = workersDir;
         this.problemCache = problemCache;
         this.messageClient = messageClient;
         this.isolateSandboxFactory = isolateSandboxFactory;
+        this.postgrelateSandboxFactory = postgrelateSandboxFactory;
     }
 
     public void process(Message message) {
@@ -215,6 +220,17 @@ public class GradingWorker {
     }
 
     private SandboxFactory getSandboxFactory(Path workerDir) throws IOException {
+        if (language instanceof SqlGradingLanguage) {
+            Path sandboxesDir = workerDir.resolve("sandboxes");
+            Files.createDirectories(sandboxesDir);
+
+            if (postgrelateSandboxFactory.isPresent()) {
+                return postgrelateSandboxFactory.get();
+            } else {
+                throw new IOException("Postgrelate sandbox factory is not available!");
+            }
+        }
+
         if (isolateSandboxFactory.isPresent()) {
             return isolateSandboxFactory.get();
         } else {

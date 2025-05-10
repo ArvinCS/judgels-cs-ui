@@ -25,6 +25,7 @@ import judgels.gabriel.languages.pascal.PascalGradingLanguage;
 import judgels.gabriel.languages.python.PyPy3GradingLanguage;
 import judgels.gabriel.languages.python.Python3GradingLanguage;
 import judgels.gabriel.languages.rust.Rust2021GradingLanguage;
+import judgels.gabriel.languages.sql.SqlGradingLanguage;
 
 public class GradingLanguageRegistry {
     private static final GradingLanguageRegistry INSTANCE = new GradingLanguageRegistry();
@@ -42,6 +43,7 @@ public class GradingLanguageRegistry {
             new PyPy3GradingLanguage(),
             new Python3GradingLanguage(),
             new Rust2021GradingLanguage(),
+            new SqlGradingLanguage(),
             new OutputOnlyGradingLanguage());
 
     private static final List<AutomatonMachine> AUTOMATONS = ImmutableList.of(
@@ -118,6 +120,7 @@ public class GradingLanguageRegistry {
 
     private static String getSimpleNameGradingLanguage(GradingLanguage language) {
         String name = language.getClass().getSimpleName();
+        System.out.println(name);
         return name.substring(0, name.length() - "GradingLanguage".length());
     }
 

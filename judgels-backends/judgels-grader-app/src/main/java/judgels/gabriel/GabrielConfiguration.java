@@ -6,7 +6,9 @@ import java.util.Optional;
 import judgels.gabriel.cache.CacheConfiguration;
 import judgels.gabriel.grading.GradingConfiguration;
 import judgels.gabriel.isolate.IsolateConfiguration;
+import judgels.gabriel.postgrelate.PostgrelateConfiguration;
 import org.immutables.value.Value;
+
 
 @Value.Immutable
 @JsonDeserialize(as = ImmutableGabrielConfiguration.class)
@@ -19,6 +21,9 @@ public interface GabrielConfiguration {
 
     @JsonProperty("isolate")
     Optional<IsolateConfiguration> getIsolateConfig();
+
+    @JsonProperty("postgrelate")
+    Optional<PostgrelateConfiguration> getPostgrelateConfig();
 
     class Builder extends ImmutableGabrielConfiguration.Builder {}
 }
